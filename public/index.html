@@ -7,7 +7,6 @@
     <!-- Tailwind CSS 최신 브라우저 컴파일러 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        /* 🚨 아래 url 안의 주소를 GitHub에서 복사한 raw.githubusercontent.com/... 주소로 교체하세요! */
         body {
             background-image: url('https://raw.githubusercontent.com/HoonPD/worldcup-prediction-2026/refs/heads/main/world-cup%20ai.png') !important;
             background-size: cover !important;
@@ -25,26 +24,26 @@
     <!-- 메인 대시보드 컨테이너 (스크롤이 필요 없는 한 화면 콤팩트 레이아웃) -->
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-5xl w-full overflow-hidden z-10 grid grid-cols-1 lg:grid-cols-12 relative">
         
-        <!-- 🎯 [왼쪽 사이드] 타이틀 및 실시간 대진 현황 (푸른색 테마 음영 반영) -->
+        <!-- 🎯 [왼쪽 사이드] 타이틀 및 실시간 대진 현황 -->
         <div class="lg:col-span-5 bg-gradient-to-b from-blue-700 to-indigo-900 p-5 text-white flex flex-col justify-between shadow-inner">
             <div>
                 <span class="inline-block bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full mb-1">
                     FIFA World Cup 2026
                 </span>
                 <h1 class="text-2xl font-black tracking-tight drop-shadow-md">
-                    🏆 4강 & 우승 예측
+                    🏆 결승 진출 & 스코어 예측
                 </h1>
-                <p class="text-blue-200 text-xs mt-1 font-medium">실시간 스코어를 기반으로 매칭을 완성하세요.</p>
+                <p class="text-blue-200 text-xs mt-1 font-medium">4강 대진을 보고 최종 결승 시나리오를 완성하세요.</p>
             </div>
             
-            <!-- ⚽ [푸른색 음영 처리] 이미 결정된 결과 부분 (국가 마크 제거) -->
+            <!-- ⚽ 실시간 토너먼트 상황판 -->
             <div class="bg-blue-950/70 rounded-xl p-4 border border-blue-500/40 shadow-xs mt-4 lg:mt-0 space-y-3">
                 <div class="flex items-center gap-1.5 border-b border-blue-500/30 pb-2">
                     <span class="flex h-1.5 w-1.5 relative">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-300"></span>
                     </span>
-                    <h2 class="font-bold text-blue-200 text-xs tracking-tight">실시간 토너먼트 (결과 확정 구역)</h2>
+                    <h2 class="font-bold text-blue-200 text-xs tracking-tight">실시간 토너먼트 (4강 대진 고정)</h2>
                 </div>
                 
                 <div class="grid grid-cols-1 gap-1.5 text-[11px]">
@@ -76,11 +75,11 @@
             </div>
         </div>
 
-        <!-- 📝 [오른쪽 메인 보드] 예측 입력 및 컴포넌트 폼 구역 -->
+        <!-- 📝 [오른쪽 메인 보드] 예측 입력 폼 구역 -->
         <div class="lg:col-span-7 p-5 sm:p-6 flex flex-col justify-between space-y-4">
             <form id="predictForm" class="space-y-4">
                 
-                <!-- 🟧 [오렌지 음영 처리] 입력해야 하는 부분: 닉네임 -->
+                <!-- 🟧 1. 닉네임 입력 -->
                 <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs">
                     <label class="block font-bold text-orange-950 text-xs mb-1.5 tracking-tight">🔥 예측 참가자 닉네임 입력</label>
                     <input type="text" id="nickname" required 
@@ -88,52 +87,56 @@
                            placeholder="리더보드에 등록될 이름을 적어주세요">
                 </div>
 
-                <!-- 🟦 [푸른색 음영 처리] 이미 확정된 4강 진출팀 안내 구역 (국가 마크 제거) -->
-                <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl shadow-xs">
-                    <label class="block font-bold text-blue-950 text-xs mb-2 tracking-tight">🔷 4강 진출 확정 국가 (결정 완료)</label>
-                    <div class="grid grid-cols-4 gap-2 text-center">
-                        <div class="p-2 bg-white border border-blue-100 rounded-lg shadow-2xs">
-                            <span class="block text-[9px] font-bold text-slate-400">A블록 1</span>
-                            <div class="text-xs font-black text-slate-700">프랑스</div>
-                            <input type="hidden" id="match1" value="프랑스">
+                <!-- 🟧 2. 결승 진출국 선택 (각 매치별 승자 선택) -->
+                <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs">
+                    <label class="block font-bold text-orange-950 text-xs mb-2 tracking-tight">📢 4강 매치별 결승 진출국 선택 (각 15점)</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-orange-800 mb-1">준결승 1 승자</label>
+                            <select id="finalistA" class="w-full p-2 text-xs border border-orange-300 bg-white rounded-lg font-bold text-orange-950 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition" required>
+                                <option value="">선택하세요</option>
+                                <option value="프랑스">프랑스</option>
+                                <option value="스페인">스페인</option>
+                            </select>
                         </div>
-                        <div class="p-2 bg-white border border-blue-100 rounded-lg shadow-2xs">
-                            <span class="block text-[9px] font-bold text-slate-400">A블록 2</span>
-                            <div class="text-xs font-black text-slate-700">스페인</div>
-                            <input type="hidden" id="match2" value="스페인">
-                        </div>
-                        <div class="p-2 bg-white border border-blue-100 rounded-lg shadow-2xs">
-                            <span class="block text-[9px] font-bold text-slate-400">B블록 1</span>
-                            <div class="text-xs font-black text-slate-700">잉글랜드</div>
-                            <input type="hidden" id="match3" value="잉글랜드">
-                        </div>
-                        <div class="p-2 bg-white border border-blue-100 rounded-lg shadow-2xs">
-                            <span class="block text-[9px] font-bold text-slate-400">B블록 2</span>
-                            <div class="text-xs font-black text-slate-700">아르헨티나</div>
-                            <input type="hidden" id="match4" value="아르헨티나">
+                        <div>
+                            <label class="block text-[10px] font-bold text-orange-800 mb-1">준결승 2 승자</label>
+                            <select id="finalistB" class="w-full p-2 text-xs border border-orange-300 bg-white rounded-lg font-bold text-orange-950 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition" required>
+                                <option value="">선택하세요</option>
+                                <option value="잉글랜드">잉글랜드</option>
+                                <option value="아르헨티나">아르헨티나</option>
+                            </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- 🟧 [오렌지 음영 처리] 입력해야 하는 부분: 결승 예측 셀렉트 박스 -->
-                <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs">
-                    <h3 class="font-bold text-xs text-orange-950 mb-2.5 flex items-center gap-1 tracking-tight">
-                        📢 우승 및 준우승 최종 선택
+                <!-- 🟧 3. 결승전 필드 스코어 및 최종 우승팀 선택 -->
+                <div id="finalSection" class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs opacity-50 pointer-events-none transition-all duration-300">
+                    <h3 class="font-bold text-xs text-orange-950 mb-2.5 tracking-tight">
+                        ⚽ 결승전 스코어 및 최종 우승국 예측
                     </h3>
                     
-                    <div class="grid grid-cols-2 gap-3">
+                    <!-- 스코어 입력창 -->
+                    <div class="grid grid-cols-2 gap-3 mb-3">
                         <div>
-                            <label class="block text-[10px] font-bold text-orange-800 mb-1">우승팀 (40점)</label>
-                            <select id="winner" class="w-full p-2 text-xs border border-orange-300 bg-white rounded-lg font-bold text-orange-950 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition" required>
-                                <option value="">선택하세요</option>
-                            </select>
+                            <label id="labelTeamA" class="block text-[10px] font-bold text-slate-600 mb-1">결승 팀 A 스코어</label>
+                            <input type="number" id="scoreA" min="0" max="99" placeholder="0" required
+                                   class="w-full p-2 text-xs border border-slate-300 bg-white rounded-lg font-bold text-center focus:outline-none focus:border-orange-500 transition">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-600 mb-1">준우승팀 (20점)</label>
-                            <select id="runnerUp" class="w-full p-2 text-xs border border-slate-200 bg-white rounded-lg font-semibold text-slate-800 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition" required>
-                                <option value="">선택하세요</option>
-                            </select>
+                            <label id="labelTeamB" class="block text-[10px] font-bold text-slate-600 mb-1">결승 팀 B 스코어</label>
+                            <input type="number" id="scoreB" min="0" max="99" placeholder="0" required
+                                   class="w-full p-2 text-xs border border-slate-300 bg-white rounded-lg font-bold text-center focus:outline-none focus:border-orange-500 transition">
                         </div>
+                    </div>
+
+                    <!-- 우승국 선택 -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-orange-800 mb-1">최종 우승팀 선택 (30점)</label>
+                        <select id="winner" class="w-full p-2 text-xs border border-orange-300 bg-white rounded-lg font-bold text-orange-950 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition" required>
+                            <option value="">결승 진출국을 먼저 고르세요</option>
+                        </select>
+                        <p class="text-[10px] text-slate-400 mt-1">* 연장전 포함 스코어입니다. 무승부(승부차기행) 입력 시 우승팀을 자유롭게 지정할 수 있습니다.</p>
                     </div>
                 </div>
 
@@ -145,7 +148,7 @@
             
             <!-- 하단 네비게이션 링크 -->
             <div class="text-center pt-2 border-t border-slate-100 flex justify-between items-center text-xs">
-                <p class="text-slate-400 font-medium">* 대진 로직에 충족하는 국가들만 노출됩니다.</p>
+                <p class="text-slate-400 font-medium">* 대진 규칙에 맞는 국가만 매칭됩니다.</p>
                 <a href="dashboard.html" class="inline-flex items-center gap-0.5 font-bold text-blue-600 hover:text-blue-700 hover:underline group">
                     📊 대시보드 보기
                     <span class="group-hover:translate-x-0.5 transition-transform">→</span>
@@ -156,64 +159,98 @@
 
     <!-- 비즈니스 로직 스크립트 영역 -->
     <script>
-        const match1Value = document.getElementById('match1').value;
-        const match2Value = document.getElementById('match2').value;
-        const match3Value = document.getElementById('match3').value;
-        const match4Value = document.getElementById('match4').value;
-
+        const finalistASelect = document.getElementById('finalistA');
+        const finalistBSelect = document.getElementById('finalistB');
+        const finalSection = document.getElementById('finalSection');
+        
+        const labelTeamA = document.getElementById('labelTeamA');
+        const labelTeamB = document.getElementById('labelTeamB');
+        const scoreAInput = document.getElementById('scoreA');
+        const scoreBInput = document.getElementById('scoreB');
         const winnerSelect = document.getElementById('winner');
-        const runnerUpSelect = document.getElementById('runnerUp');
 
-        const blockA = [match1Value, match2Value];
-        const blockB = [match3Value, match4Value];
-        const allTeams = [...blockA, ...blockB];
+        // 4강 선택 시 결승전 폼 활성화 및 라벨 바인딩 함수
+        function updateFinalSection() {
+            const teamA = finalistASelect.value;
+            const teamB = finalistBSelect.value;
 
-        function initWinnerOptions() {
-            winnerSelect.innerHTML = '<option value="">선택하세요</option>';
-            allTeams.forEach(team => {
-                winnerSelect.innerHTML += `<option value="${team}">${team}</option>`;
-            });
-            runnerUpSelect.innerHTML = '<option value="">선택하세요</option>';
+            if (teamA && teamB) {
+                // 결승 폼 활성화 UI
+                finalSection.classList.remove('opacity-50', 'pointer-events-none');
+                labelTeamA.textContent = `${teamA} 스코어`;
+                labelTeamB.textContent = `${teamB} 스코어`;
+
+                // 우승국 셀렉트박스 옵션 동적 동기화
+                const currentWinner = winnerSelect.value;
+                winnerSelect.innerHTML = `
+                    <option value="">선택하세요</option>
+                    <option value="${teamA}">${teamA}</option>
+                    <option value="${teamB}">${teamB}</option>
+                `;
+                if ([teamA, teamB].includes(currentWinner)) {
+                    winnerSelect.value = currentWinner;
+                }
+            } else {
+                // 비활성화
+                finalSection.classList.add('opacity-50', 'pointer-events-none');
+                winnerSelect.innerHTML = '<option value="">결승 진출국을 먼저 고르세요</option>';
+            }
         }
 
-        winnerSelect.addEventListener('change', () => {
-            const winner = winnerSelect.value;
-            runnerUpSelect.innerHTML = '<option value="">선택하세요</option>';
+        finalistASelect.addEventListener('change', updateFinalSection);
+        finalistBSelect.addEventListener('change', updateFinalSection);
 
-            if (!winner) return;
+        // 스코어 입력 시 점수 차이에 따른 우승국 자동 선택/제한 로직 (UX 편의 기능)
+        function handleScoreChange() {
+            const sA = parseInt(scoreAInput.value);
+            const sB = parseInt(scoreBInput.value);
+            const teamA = finalistASelect.value;
+            const teamB = finalistBSelect.value;
 
-            let runnerUpCandidates = [];
-            if (blockA.includes(winner)) {
-                runnerUpCandidates = blockB; 
-            } else if (blockB.includes(winner)) {
-                runnerUpCandidates = blockA; 
+            if (isNaN(sA) || isNaN(sB)) return;
+
+            if (sA > sB) {
+                winnerSelect.value = teamA; // A팀 승리 시 자동 매핑
+            } else if (sB > sA) {
+                winnerSelect.value = teamB; // B팀 승리 시 자동 매핑
             }
+            // 동점일 경우 승부차기 케이스이므로 선택권을 유저에게 유지
+        }
 
-            runnerUpCandidates.forEach(team => {
-                runnerUpSelect.innerHTML += `<option value="${team}">${team}</option>`;
-            });
-        });
+        scoreAInput.addEventListener('input', handleScoreChange);
+        scoreBInput.addEventListener('input', handleScoreChange);
 
-        initWinnerOptions();
-
+        // 폼 최종 제출 및 모순 검증
         document.getElementById('predictForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const semiFinals = [match1Value, match2Value, match3Value, match4Value];
             const nickname = document.getElementById('nickname').value;
+            const finalistA = finalistASelect.value;
+            const finalistB = finalistBSelect.value;
             const winner = winnerSelect.value;
-            const runnerUp = runnerUpSelect.value;
+            const scoreA = parseInt(scoreAInput.value);
+            const scoreB = parseInt(scoreBInput.value);
             const submittedAt = new Date().toISOString(); 
-        
+
+            // 클라이언트 사이드 최종 모순 검사
+            if (scoreA > scoreB && winner !== finalistA) {
+                alert(`오류: 스코어상 ${finalistA}가 승리해야 하지만, 우승국이 ${winner}로 설정되어 있습니다.`);
+                return;
+            }
+            if (scoreB > scoreA && winner !== finalistB) {
+                alert(`오류: 스코어상 ${finalistB}가 승리해야 하지만, 우승국이 ${winner}로 설정되어 있습니다.`);
+                return;
+            }
+
             try {
                 const res = await fetch('/api/predict', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nickname, semiFinals, winner, runnerUp, submittedAt }) 
+                    body: JSON.stringify({ nickname, finalistA, finalistB, winner, scoreA, scoreB, submittedAt }) 
                 });
                 const data = await res.json();
                 
-                if(data.success) {
+                if (data.success) {
                     localStorage.setItem('worldcup_nickname', nickname);
                     alert(data.message);
                     location.href = 'dashboard.html';
