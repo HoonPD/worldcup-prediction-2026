@@ -14,78 +14,78 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// [설정] 마감 시간: 4강 1경기 시작 시간 (2026년 7월 15일 오전 04:00 KST)
+// 📅 [설정] 마감 시간: 4강 1경기 시작 시간 (2026년 7월 15일 오전 04:00 KST)
 const DEADLINE = new Date('2026-07-15T04:00:00+09:00');
 
-// 🏆 [실시간 경기 결과 입력창] 경기가 끝날 때마다 이 객체만 업데이트해 주시면 됩니다.
+// 🏆 [실시간 경기 결과 입력창] 결승전까지 완전히 끝난 후 이 객체만 업데이트해 주시면 실시간 랭킹이 정산됩니다.
 const ACTUAL_RESULT = {
-    semiFinals: ["프랑스", "스페인", "잉글랜드", "아르헨티나"], // 예시: ["프랑스", "스페인", "잉글랜드", "네덜란드"]
-    winner: "",            // 최종 우승국
-    runnerUp: ""           // 최종 준우승국
+    finalists: ["프랑스", "아르헨티나"], // 실제 결승에 진출한 2개 팀 기입
+    winner: "아르헨티나",               // 최종 우승국 기입
+    scoreA: 3,                          // 결승전 필드 최종 스코어 A (연장전 포함, 승부차기 제외)
+    scoreB: 3                           // 결승전 필드 최종 스코어 B (연장전 포함, 승부차기 제외)
 };
 
-// 🎯 [점수 계산 체계]
+// 🎯 [새로운 100점 만점 점수 계산 체계]
 function calculateScore(pred) {
     let score = 0;
     
-    // 1. 4강 진출팀 적중 (각 10점, 최대 40점)
-    pred.semi_finals.forEach(team => {
-        if (ACTUAL_RESULT.semiFinals.includes(team)) {
-            score += 10;
-        }
-    });
+    // 1. 결승 진출국 적중 (각 15점, 최대 30점)
+    if (ACTUAL_RESULT.finalists.includes(pred.finalist_a)) score += 15;
+    if (ACTUAL_RESULT.finalists.includes(pred.finalist_b)) score += 15;
 
-    // 2. 최종 우승팀 적중 (40점)
+    // 2. 최종 우승팀 적중 (30점)
     if (ACTUAL_RESULT.winner && pred.winner === ACTUAL_RESULT.winner) {
-        score += 40;
+        score += 30;
     }
 
-    // 3. 최종 준우승팀 적중 (30점)
-    if (ACTUAL_RESULT.runner_up && pred.runner_up === ACTUAL_RESULT.runnerUp) {
-        score += 30;
+    // 3. 결승전 필드 스코어 적중 (40점)
+    // 유저가 [A팀: 3점, B팀: 2점]으로 예측했든 [A팀: 2점, B팀: 3점]으로 예측했든 순서 무관하게 스코어 라인 매칭 검증
+    if (ACTUAL_RESULT.scoreA !== undefined && ACTUAL_RESULT.scoreB !== undefined) {
+        const isScoreMatch = (pred.score_a === ACTUAL_RESULT.scoreA && pred.score_b === ACTUAL_RESULT.scoreB) ||
+                             (pred.score_a === ACTUAL_RESULT.scoreB && pred.score_b === ACTUAL_RESULT.scoreA);
+        if (isScoreMatch) {
+            score += 40;
+        }
     }
     
     return score;
 }
 
-// 1. 예측 제출 API (DB에 Upsert 방식으로 안전하게 저장 및 시간 동기화)
+// 1. 예측 제출 API (새로운 결승 폼 규격에 맞게 매핑 및 데이터 유효성 검사)
 app.post('/api/predict', async (req, res) => {
+    // ⏱️ 마감 시간 체크
     if (new Date() > DEADLINE) {
         return res.status(403).json({ success: false, message: "마감 시간이 지나 제출할 수 없습니다." });
     }
 
-    // 프론트엔드에서 넘어온 submittedAt 추가 수신
-    const { nickname, semiFinals, winner, runnerUp, submittedAt } = req.body;
-    if (!nickname || !semiFinals || semiFinals.length !== 4 || !winner || !runnerUp) {
+    const { nickname, finalistA, finalistB, winner, scoreA, scoreB, submittedAt } = req.body;
+    
+    // 입력값 누락 검증 (스코어는 0점일 수 있으므로 undefined 조건으로 체크)
+    if (!nickname || !finalistA || !finalistB || !winner || scoreA === undefined || scoreB === undefined) {
         return res.status(400).json({ success: false, message: "모든 항목을 올바르게 입력해주세요." });
     }
 
-    if (semiFinals[0] !== "프랑스") {
-        return res.status(400).json({ success: false, message: "매치 1은 이미 프랑스 승리로 종료되었습니다." });
+    // ⚽ 모순 검증 로직 (필드 스코어로 승패가 났을 때, 우승국 선택과 매칭이 맞는지 확인)
+    const sA = parseInt(scoreA);
+    const sB = parseInt(scoreB);
+    if (sA > sB && winner !== finalistA) {
+        return res.status(400).json({ success: false, message: `예측 스코어상 ${finalistA}가 승리하지만, 우승국은 ${winner}로 설정되어 모순이 발생합니다.` });
     }
-
-    if (semiFinals[1] !== "스페인") {
-        return res.status(400).json({ success: false, message: "매치 2은 이미 스페인 승리로 종료되었습니다." });
-    }
-
-    if (semiFinals[2] !== "잉글랜드") {
-        return res.status(400).json({ success: false, message: "매치 3은 이미 잉글랜드 승리로 종료되었습니다." });
-    }
-
-    if (semiFinals[3] !== "아르헨티나") {
-        return res.status(400).json({ success: false, message: "매치 4은 이미 아르헨티나 승리로 종료되었습니다." });
+    if (sB > sA && winner !== finalistB) {
+        return res.status(400).json({ success: false, message: `예측 스코어상 ${finalistB}가 승리하지만, 우승국은 ${winner}로 설정되어 모순이 발생합니다.` });
     }
 
     try {
-        // 중복된 닉네임이 있으면 덮어쓰고(Update), 없으면 새로 삽입(Insert)하는 안전한 DB 쿼리
+        // Supabase DB 스키마 필드명에 맞추어 변환 및 Upsert 진행
         const { error } = await supabase
             .from('predictions')
             .upsert({
                 nickname,
-                semi_finals: semiFinals,
+                finalist_a: finalistA,
+                finalist_b: finalistB,
                 winner,
-                runner_up: runnerUp,
-                // 클라이언트 제출 시간이 유효하면 파싱하여 저장하고 없으면 서버 시간 반영
+                score_a: sA,
+                score_b: sB,
                 created_at: submittedAt ? new Date(submittedAt) : new Date()
             }, { onConflict: 'nickname' });
 
@@ -101,24 +101,25 @@ app.post('/api/predict', async (req, res) => {
 // 2. 전체 결과 및 실시간 랭킹 조회 API
 app.get('/api/results', async (req, res) => {
     try {
-        // DB에서 전 유저 데이터 조회
         const { data: predictions, error } = await supabase
             .from('predictions')
             .select('*');
 
         if (error) throw error;
 
-        // 최신 ACTUAL_RESULT를 바탕으로 실시간 점수 계산 및 프론트 전달 규격 조율
+        // 새로운 100점 만점 계산기(calculateScore)를 적용하여 데이터 매핑
         const resultsWithScores = predictions.map(p => ({
             nickname: p.nickname,
-            semiFinals: p.semi_finals,
+            finalistA: p.finalist_a,
+            finalistB: p.finalist_b,
             winner: p.winner,
-            runnerUp: p.runner_up,
+            scoreA: p.score_a,
+            scoreB: p.score_b,
             score: calculateScore(p),
             timestamp: p.created_at
         }));
 
-        // 점수 기준 정렬 (동점이면 먼저 제출한 순)
+        // ⏱️ 동점자 처리: 1순위 총점(내림차순) -> 2순위 제출 시간(오름차순 / 빠른 순)
         resultsWithScores.sort((a, b) => {
             if (b.score !== a.score) return b.score - a.score;
             return new Date(a.timestamp) - new Date(b.timestamp);
