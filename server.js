@@ -29,6 +29,16 @@ const ACTUAL_RESULT = {
 function calculateScore(pred) {
     let score = 0;
     
+    // [실제 결과 데이터 예시 구조 정의]
+    // const ACTUAL_RESULT = {
+    //     finalists: ["프랑스", "아르헨티나"],
+    //     teamA: "프랑스",       // 실제 결승전 왼쪽에 배치된 팀
+    //     teamB: "아르헨티나",   // 실제 결승전 오른쪽에 배치된 팀
+    //     scoreA: 3,            // teamA의 실제 골 수
+    //     scoreB: 1,            // teamB의 실제 골 수
+    //     winner: "프랑스"
+    // };
+
     // 1. 결승 진출국 적중 (각 15점, 최대 30점)
     if (ACTUAL_RESULT.finalists.includes(pred.finalist_a)) score += 15;
     if (ACTUAL_RESULT.finalists.includes(pred.finalist_b)) score += 15;
@@ -38,12 +48,51 @@ function calculateScore(pred) {
         score += 30;
     }
 
-    // 3. 결승전 필드 스코어 적중 (40점)
+    // 3. 결승전 필드 스코어 적중 (방식 1 반영: 최대 40점)
     if (ACTUAL_RESULT.scoreA !== undefined && ACTUAL_RESULT.scoreB !== undefined) {
-        const isScoreMatch = (pred.score_a === ACTUAL_RESULT.scoreA && pred.score_b === ACTUAL_RESULT.scoreB) ||
-                             (pred.score_a === ACTUAL_RESULT.scoreB && pred.score_b === ACTUAL_RESULT.scoreA);
-        if (isScoreMatch) {
-            score += 40;
+        
+        // 유저가 예측한 A팀과 B팀의 스코어를 실제 결과 국가(teamA, teamB)에 맞게 재정렬
+        let predScoreA = null;
+        let predScoreB = null;
+
+        // 유저 예측 A가 실제 teamA인 경우
+        if (pred.finalist_a === ACTUAL_RESULT.teamA) {
+            predScoreA = pred.score_a;
+            predScoreB = pred.score_b;
+        } 
+        // 유저 예측 A가 실제 teamB인 경우 (순서가 뒤바뀐 경우)
+        else if (pred.finalist_a === ACTUAL_RESULT.teamB) {
+            predScoreA = pred.score_b;
+            predScoreB = pred.score_a;
+        }
+
+        // 유저가 예측한 팀들이 결승에 실제로 진출했을 때만 스코어 점수 계산 시작
+        if (predScoreA !== null && predScoreB !== null) {
+            
+            // ① 승무패 및 골득실 차이 적중 여부 계산 (+15점)
+            const actualDiff = ACTUAL_RESULT.scoreA - ACTUAL_RESULT.scoreB;
+            const predDiff = predScoreA - predScoreB;
+            
+            // 양수/음수/0의 방향이 같고, 골득실 차이의 절대값까지 같아야 함
+            // (ex: 실제 3:1(+2) 이고 예측 2:0(+2) 이면 적중)
+            const isOutcomeMatch = (Math.sign(actualDiff) === Math.sign(predDiff)) && (actualDiff === predDiff);
+            
+            if (isOutcomeMatch) {
+                score += 15;
+            }
+
+            // ② 각 팀별 정확한 스코어 개별 적중 여부 (+10점씩, 최대 20점)
+            const isTeamAMatch = (predScoreA === ACTUAL_RESULT.scoreA);
+            const isTeamBMatch = (predScoreB === ACTUAL_RESULT.scoreB);
+
+            if (isTeamAMatch) score += 10;
+            if (isTeamBMatch) score += 10;
+
+            // ③ 올킬 보너스 (+5점)
+            // 승무패도 맞고, 두 팀의 스코어도 모두 완벽하게 맞은 경우
+            if (isOutcomeMatch && isTeamAMatch && isTeamBMatch) {
+                score += 5;
+            }
         }
     }
     
