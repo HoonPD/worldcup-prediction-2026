@@ -7,15 +7,25 @@
     <!-- Tailwind CSS 최신 브라우저 컴파일러 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
+        /* 1. 배경 이미지에만 투명도 10% 적용하기 위한 가상 요소 처리 */
         body {
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
             background-image: url('https://raw.githubusercontent.com/HoonPD/worldcup-prediction-2026/refs/heads/main/world-cup%20ai.png') !important;
             background-size: cover !important;
             background-position: center center !important;
             background-repeat: no-repeat !important;
             background-attachment: fixed !important;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
+            opacity: 0.1; /* 투명도 10% 적용 */
+            z-index: -1;
         }
     </style>
 </head>
@@ -24,7 +34,7 @@
     <!-- 메인 대시보드 컨테이너 (스크롤이 필요 없는 한 화면 콤팩트 레이아웃) -->
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-5xl w-full overflow-hidden z-10 grid grid-cols-1 lg:grid-cols-12 relative">
         
-        <!-- 🎯 [왼쪽 사이드] 타이틀 및 게임 안내 / 이벤트 정보 -->
+        <!-- 🎯 [왼쪽 사이드] 타이틀 및 게임 안내 / 4강 매치 정보 -->
         <div class="lg:col-span-5 bg-gradient-to-b from-blue-700 to-indigo-900 p-5 text-white flex flex-col justify-between shadow-inner">
             <div>
                 <span class="inline-block bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full mb-1">
@@ -67,18 +77,51 @@
                         <span class="text-blue-300">결승전 스코어 적중</span>
                         <span class="text-amber-300 font-bold">40점</span>
                     </div>
-                    <p class="text-[10px] text-blue-400 mt-1 pl-1">* 동점 발생 시, 예측 제출 시간이 빠른 순으로 순위가 결정됩니다.</p>
                 </div>
 
-                <!-- 🎁 상품 요약 (하이라이트 구역) -->
-                <div class="bg-amber-500/15 border-2 border-amber-500/40 rounded-lg p-2.5 text-[11px]">
-                    <p class="font-bold text-amber-300 flex items-center gap-1 mb-1">
-                        🎁 리더보드 TOP 리워드 상품
-                    </p>
-                    <p class="text-white leading-tight font-medium">
-                        최종 누적 예측 점수 <span class="text-amber-300 font-bold">1등</span>에게는 월드컵 공인구 및 스페셜 굿즈 패키지를 선물로 드립니다! 자세한 상품 내역은 대시보드에서 확인하세요.
-                    </p>
+                <!-- 📅 준결승 토너먼트 매치 매치업 및 국기 -->
+                <div class="border-t border-blue-500/30 pt-3 space-y-2">
+                    <p class="font-bold text-white text-[11px] mb-1.5 flex items-center gap-1">🗓️ 준결승 토너먼트 일정</p>
+                    
+                    <!-- 준결승 1 매치 -->
+                    <div class="bg-gradient-to-r from-blue-900/80 to-indigo-950/80 rounded-lg p-2 border border-blue-500/20 flex flex-col gap-1.5">
+                        <div class="flex justify-between text-[9px] text-blue-300 font-bold px-0.5">
+                            <span>MATCH 111 (준결승 1)</span>
+                            <span class="text-amber-400">7월 15일 09:00</span>
+                        </div>
+                        <div class="flex items-center justify-center gap-3 py-0.5 bg-black/20 rounded-md">
+                            <div class="flex items-center gap-1.5 w-20 justify-end">
+                                <span class="text-xs font-bold text-white">프랑스</span>
+                                <img src="https://flagcdn.com/w40/fr.png" alt="France" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
+                            </div>
+                            <span class="text-[10px] font-black text-blue-400">VS</span>
+                            <div class="flex items-center gap-1.5 w-20 justify-start">
+                                <img src="https://flagcdn.com/w40/es.png" alt="Spain" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
+                                <span class="text-xs font-bold text-white">스페인</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 준결승 2 매치 -->
+                    <div class="bg-gradient-to-r from-blue-900/80 to-indigo-950/80 rounded-lg p-2 border border-blue-500/20 flex flex-col gap-1.5">
+                        <div class="flex justify-between text-[9px] text-blue-300 font-bold px-0.5">
+                            <span>MATCH 112 (준결승 2)</span>
+                            <span class="text-amber-400">7월 16일 09:00</span>
+                        </div>
+                        <div class="flex items-center justify-center gap-3 py-0.5 bg-black/20 rounded-md">
+                            <div class="flex items-center gap-1.5 w-20 justify-end">
+                                <span class="text-xs font-bold text-white">잉글랜드</span>
+                                <img src="https://flagcdn.com/w40/gb-eng.png" alt="England" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
+                            </div>
+                            <span class="text-[10px] font-black text-blue-400">VS</span>
+                            <div class="flex items-center gap-1.5 w-20 justify-start">
+                                <img src="https://flagcdn.com/w40/ar.png" alt="Argentina" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
+                                <span class="text-xs font-bold text-white">아르헨티나</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -86,12 +129,12 @@
         <div class="lg:col-span-7 p-5 sm:p-6 flex flex-col justify-between space-y-4">
             <form id="predictForm" class="space-y-4">
                 
-                <!-- 🟧 1. 닉네임 입력 -->
+                <!-- 🟧 1. 닉네임 입력 (안내 문구 디테일 수정 완료) -->
                 <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs">
                     <label class="block font-bold text-orange-950 text-xs mb-1.5 tracking-tight">🔥 예측 참가자 닉네임 입력</label>
                     <input type="text" id="nickname" required 
-                           class="w-full p-2 text-sm border border-orange-300 bg-white rounded-lg font-medium focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition" 
-                           placeholder="리더보드에 등록될 이름을 적어주세요">
+                           class="w-full p-2 text-xs border border-orange-300 bg-white rounded-lg font-medium focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition placeholder-slate-400" 
+                           placeholder="본인임을 나타낼 수 있는 성함 또는 닉네임으로 부탁드립니다. (ex. SJH, 정배, 곽, rlawlsdnd 등)">
                 </div>
 
                 <!-- 🟧 2. 결승 진출국 선택 (각 매치별 승자 선택) -->
@@ -176,18 +219,15 @@
         const scoreBInput = document.getElementById('scoreB');
         const winnerSelect = document.getElementById('winner');
 
-        // 4강 선택 시 결승전 폼 활성화 및 라벨 바인딩 함수
         function updateFinalSection() {
             const teamA = finalistASelect.value;
             const teamB = finalistBSelect.value;
 
             if (teamA && teamB) {
-                // 결승 폼 활성화 UI
                 finalSection.classList.remove('opacity-50', 'pointer-events-none');
                 labelTeamA.textContent = `${teamA} 스코어`;
                 labelTeamB.textContent = `${teamB} 스코어`;
 
-                // 우승국 셀렉트박스 옵션 동적 동기화
                 const currentWinner = winnerSelect.value;
                 winnerSelect.innerHTML = `
                     <option value="">선택하세요</option>
@@ -198,7 +238,6 @@
                     winnerSelect.value = currentWinner;
                 }
             } else {
-                // 비활성화
                 finalSection.classList.add('opacity-50', 'pointer-events-none');
                 winnerSelect.innerHTML = '<option value="">결승 진출국을 먼저 고르세요</option>';
             }
@@ -207,7 +246,6 @@
         finalistASelect.addEventListener('change', updateFinalSection);
         finalistBSelect.addEventListener('change', updateFinalSection);
 
-        // 스코어 입력 시 점수 차이에 따른 우승국 자동 선택/제한 로직 (UX 편의 기능)
         function handleScoreChange() {
             const sA = parseInt(scoreAInput.value);
             const sB = parseInt(scoreBInput.value);
@@ -217,16 +255,15 @@
             if (isNaN(sA) || isNaN(sB)) return;
 
             if (sA > sB) {
-                winnerSelect.value = teamA; // A팀 승리 시 자동 매핑
+                winnerSelect.value = teamA;
             } else if (sB > sA) {
-                winnerSelect.value = teamB; // B팀 승리 시 자동 매핑
+                winnerSelect.value = teamB;
             }
         }
 
         scoreAInput.addEventListener('input', handleScoreChange);
         scoreBInput.addEventListener('input', handleScoreChange);
 
-        // 폼 최종 제출 및 모순 검증
         document.getElementById('predictForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -238,7 +275,6 @@
             const scoreB = parseInt(scoreBInput.value);
             const submittedAt = new Date().toISOString(); 
 
-            // 클라이언트 사이드 최종 모순 검사
             if (scoreA > scoreB && winner !== finalistA) {
                 alert(`오류: 스코어상 ${finalistA}가 승리해야 하지만, 우승국이 ${winner}로 설정되어 있습니다.`);
                 return;
