@@ -234,19 +234,25 @@
                 </div>
             </div>
 
-            <!-- 4) 가장 빈번하게 예측한 사람 카드 -->
+            <!-- 4) AI_Predictor 와 싱크로율 비교 카드 (수정된 부분) -->
             <div class="bg-gradient-to-br from-rose-50 to-orange-50 p-5 rounded-xl shadow-md border border-rose-100 flex flex-col justify-between relative overflow-hidden">
-                <div class="absolute -right-4 -bottom-4 text-rose-200/40 text-7xl font-extrabold">🔥</div>
+                <div class="absolute -right-4 -bottom-4 text-rose-200/40 text-7xl font-extrabold">🤖</div>
                 <div>
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Most Active</span>
-                        <h2 class="text-sm font-bold text-rose-900">가장 빈번하게 예측(수정)한 사람</h2>
+                        <span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">AI Sync</span>
+                        <h2 class="text-sm font-bold text-rose-900">AI_Predictor 와의 예측 싱크로율</h2>
                     </div>
-                    <p class="text-xs text-rose-700/80">생각이 바뀌어 예측 폼을 가장 많이 제출/수정한 열정적인 참가자입니다.</p>
+                    <p class="text-xs text-rose-700/80">AI의 시뮬레이션 결과와 가장 유사한 예측을 한 사람과 가장 다른 사람입니다.</p>
                 </div>
-                <div class="mt-4 bg-white/80 p-3 rounded-lg border border-rose-200/50 flex justify-between items-center">
-                    <span id="frequentUserNickname" class="font-extrabold text-base text-gray-800">집계 중...</span>
-                    <span id="frequentUserCount" class="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-md">0회 제출</span>
+                <div class="mt-4 space-y-2">
+                    <div class="bg-white/80 p-2.5 rounded-lg border border-rose-200/50 flex justify-between items-center text-xs">
+                        <span class="text-gray-500 font-medium">🧬 가장 가까운 1인:</span>
+                        <span id="aiClosestUser" class="font-extrabold text-gray-800">집계 중...</span>
+                    </div>
+                    <div class="bg-white/80 p-2.5 rounded-lg border border-rose-200/50 flex justify-between items-center text-xs">
+                        <span class="text-gray-500 font-medium">🌌 가장 먼 1인:</span>
+                        <span id="aiFarthestUser" class="font-extrabold text-gray-800">집계 중...</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -513,16 +519,40 @@
                 document.getElementById('fastestUserTime').innerText = formatDate(timeSorted[0].submittedAt || timeSorted[0].timestamp);
             }
 
-            // 4) 가장 빈번하게 예측(수정)한 사람 추출 (rawPredictions 빈도 수 계산)
-            const frequencyMap = {};
-            rawPredictions.forEach(p => {
-                if(p.nickname && p.nickname !== '🤖 AI_Predictor') frequencyMap[p.nickname] = (frequencyMap[p.nickname] || 0) + 1;
-            });
-            const sortedFrequency = Object.entries(frequencyMap).sort((a,b) => b[1] - a[1]);
+            // 4) 🤖 AI_Predictor와 가장 가까운 1인 & 가장 먼 1인 추출 (수정된 로직)
+            const aiPredictor = currentPredictions.find(p => p.nickname === '🤖 AI_Predictor');
+            if (aiPredictor && activeHumanUsers.length > 0) {
+                const similarityList = activeHumanUsers.map(user => {
+                    let diffScore = 0;
+                    
+                    // 결승 진출국 비교 (포함 여부에 따라 유사도 판별)
+                    const aiFinalists = [aiPredictor.finalistA, aiPredictor.finalistB];
+                    if (aiFinalists.includes(user.finalistA)) diffScore += 15;
+                    if (aiFinalists.includes(user.finalistB)) diffScore += 15;
+                    
+                    // 우승국 비교
+                    if (user.winner === aiPredictor.winner) diffScore += 30;
+                    
+                    // 스코어 비교 (팀 매칭 고려)
+                    const isScoreMatch = 
+                        (user.finalistA === aiPredictor.finalistA && user.scoreA === aiPredictor.scoreA && user.scoreB === aiPredictor.scoreB) ||
+                        (user.finalistA === aiPredictor.finalistB && user.scoreA === aiPredictor.scoreB && user.scoreB === aiPredictor.scoreA);
+                    if (isScoreMatch) diffScore += 40;
 
-            if(sortedFrequency.length > 0) {
-                document.getElementById('frequentUserNickname').innerText = `👤 ${sortedFrequency[0][0]}`;
-                document.getElementById('frequentUserCount').innerText = `${sortedFrequency[0][1]}회 제출`;
+                    return { nickname: user.nickname, diffScore: diffScore };
+                });
+
+                // 유사도 점수 기준 정렬 (내림차순 -> 가장 가까운 사람이 맨 위)
+                similarityList.sort((a, b) => b.diffScore - a.diffScore);
+
+                const closest = similarityList[0];
+                const farthest = similarityList[similarityList.length - 1];
+
+                document.getElementById('aiClosestUser').innerText = `👤 ${closest.nickname} (${closest.diffScore}점 일치)`;
+                document.getElementById('aiFarthestUser').innerText = `👤 ${farthest.nickname} (${farthest.diffScore}점 일치)`;
+            } else {
+                document.getElementById('aiClosestUser').innerText = '데이터 없음';
+                document.getElementById('aiFarthestUser').innerText = '데이터 없음';
             }
         }
 
@@ -550,7 +580,6 @@
                 }
 
                 // 🤖 [AI 전략 매칭 데이터 반영] 
-                // 네이버 스포츠 전술 매치업 시뮬레이션: 스페인의 장악력 및 잉글랜드의 스쿼드 뎁스 우세 연산 반영
                 const aiPredictMock = {
                     nickname: "🤖 AI_Predictor",
                     finalistA: "스페인",
@@ -561,7 +590,7 @@
                     submittedAt: new String(new Date().toISOString())
                 };
 
-                // AI 데이터 상단 바 매핑 (전술 분석 득표율 기준 가중치 처리)
+                // AI 데이터 상단 바 매핑
                 document.getElementById('aiPredictedWinner').innerText = `🇪🇸 ${aiPredictMock.winner} (58%)`;
                 document.getElementById('aiPredictedFinals').innerText = `${aiPredictMock.finalistA} vs ${aiPredictMock.finalistB}`;
                 document.getElementById('aiPredictedScore').innerText = `${aiPredictMock.scoreA} : ${aiPredictMock.scoreB}`;
