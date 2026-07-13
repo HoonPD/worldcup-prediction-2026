@@ -7,7 +7,28 @@
     <!-- Tailwind CSS 최신 브라우저 컴파일러 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        /* 가로 스크롤바 미세 조정 */
+        /* 1. 배경 이미지에만 투명도 20% 적용하기 위한 가상 요소 처리 */
+        body {
+            position: relative;
+            min-height: 100vh; /* 컨텐츠가 많아지면 스크롤이 가능하도록 height 대신 min-height 권장 */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        body::before {
+            content: "";
+            position: fixed; /* 페이지 스크롤 시에도 배경이 고정되도록 고정(fixed) 처리 */
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://raw.githubusercontent.com/HoonPD/worldcup-prediction-2026/refs/heads/main/Gemini_Generated_Image_v1eb3bv1eb3bv1eb.png') !important;
+            background-size: cover !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+            opacity: 0.2; /* 투명도 20% */
+            z-index: -1;
+        }
+
+        /* 2. 가로 스크롤바 미세 조정 */
         .custom-scrollbar::-webkit-scrollbar {
             height: 6px;
         }
