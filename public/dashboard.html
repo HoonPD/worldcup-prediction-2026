@@ -39,7 +39,7 @@
             </a>
         </div>
 
-        <!-- 🎁 1. 예측 성공 경품 안내 배너 -->
+        <!-- 🎁 예측 성공 경품 안내 배너 -->
         <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-xl shadow-sm">
             <div class="flex items-center gap-2 mb-3 border-b border-emerald-100 pb-2">
                 <span class="text-xl">🎁</span>
@@ -146,10 +146,67 @@
             </div>
         </div>
 
+        <!-- 📊 [NEW] 참여자 데이터 기반 인사이트 통계 섹션 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 1) 최다 우승 예측 국가 그래프 -->
+            <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
+                <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
+                    <span class="text-lg">🥇</span>
+                    <h2 class="text-base font-bold text-gray-800">참전자 선택: 최다 우승 예측 국가 Top 3</h2>
+                </div>
+                <div id="predictedWinnerStats" class="space-y-3">
+                    <p class="text-gray-400 text-xs text-center py-4">참여자 통계를 집계하고 있습니다...</p>
+                </div>
+            </div>
+
+            <!-- 2) 최다 결승 진출 예측 국가 그래프 -->
+            <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
+                <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
+                    <span class="text-lg">⚽</span>
+                    <h2 class="text-base font-bold text-gray-800">참전자 선택: 최다 결승 진출 예측 국가 Top 3</h2>
+                </div>
+                <div id="predictedFinalistStats" class="space-y-3">
+                    <p class="text-gray-400 text-xs text-center py-4">참여자 통계를 집계하고 있습니다...</p>
+                </div>
+            </div>
+
+            <!-- 3) 가장 빠르게 참여한 사람 카드 -->
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-xl shadow-md border border-indigo-100 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 text-indigo-200/40 text-7xl font-extrabold">⚡</div>
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">First Mover</span>
+                        <h2 class="text-sm font-bold text-indigo-900">가장 빠르게 참여한 사람</h2>
+                    </div>
+                    <p class="text-xs text-indigo-700/80">대시보드 오픈 후 최초로 예측을 전송한 얼리버드 참가자입니다.</p>
+                </div>
+                <div class="mt-4 bg-white/80 p-3 rounded-lg border border-indigo-200/50 flex justify-between items-center">
+                    <span id="fastestUserNickname" class="font-extrabold text-base text-gray-800">집계 중...</span>
+                    <span id="fastestUserTime" class="text-xs text-gray-400 font-mono">-</span>
+                </div>
+            </div>
+
+            <!-- 4) 가장 빈번하게 예측한 사람 카드 -->
+            <div class="bg-gradient-to-br from-rose-50 to-orange-50 p-5 rounded-xl shadow-md border border-rose-100 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 text-rose-200/40 text-7xl font-extrabold">🔥</div>
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Most Active</span>
+                        <h2 class="text-sm font-bold text-rose-900">가장 빈번하게 예측(수정)한 사람</h2>
+                    </div>
+                    <p class="text-xs text-rose-700/80">생각이 바뀌어 예측 폼을 가장 많이 제출/수정한 열정적인 참가자입니다.</p>
+                </div>
+                <div class="mt-4 bg-white/80 p-3 rounded-lg border border-rose-200/50 flex justify-between items-center">
+                    <span id="frequentUserNickname" class="font-extrabold text-base text-gray-800">집계 중...</span>
+                    <span id="frequentUserCount" class="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-md">0회 제출</span>
+                </div>
+            </div>
+        </div>
+
         <!-- 📜 피파 월드컵 전체 우승 역사 요약 -->
         <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
             <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
-                <span class="text-lg">⚽</span>
+                <span class="text-lg">🏆</span>
                 <h2 class="text-base font-bold text-gray-800">피파 월드컵 전체 우승 역사 요약 (1930 ~ 2022)</h2>
             </div>
             <div class="flex gap-2 overflow-x-auto pb-3 custom-scrollbar">
@@ -183,151 +240,12 @@
                     <span class="text-lg block">🇧🇷</span>
                     <span class="font-bold text-gray-800 block truncate">브라질</span>
                 </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1998 프랑스</span>
-                    <span class="text-lg block">🇫🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">프랑스</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1994 미국</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1990 이탈리아</span>
-                    <span class="text-lg block">🇩🇪</span>
-                    <span class="font-bold text-gray-800 block truncate">서독</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1986 멕시코</span>
-                    <span class="text-lg block">🇦🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">아르헨티나</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1982 스페인</span>
-                    <span class="text-lg block">🇮🇹</span>
-                    <span class="font-bold text-gray-800 block truncate">이탈리아</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1978 아르헨티나</span>
-                    <span class="text-lg block">🇦🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">아르헨티나</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1974 서독</span>
-                    <span class="text-lg block">🇩🇪</span>
-                    <span class="font-bold text-gray-800 block truncate">서독</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1970 멕시코</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1966 잉글랜드</span>
-                    <span class="text-lg block">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-                    <span class="font-bold text-gray-800 block truncate">잉글랜드</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1962 칠레</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1958 스웨덴</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1954 스위스</span>
-                    <span class="text-lg block">🇩🇪</span>
-                    <span class="font-bold text-gray-800 block truncate">서독</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1950 브라질</span>
-                    <span class="text-lg block">🇺🇾</span>
-                    <span class="font-bold text-gray-800 block truncate">우루과이</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1938 프랑스</span>
-                    <span class="text-lg block">🇮🇹</span>
-                    <span class="font-bold text-gray-800 block truncate">이탈리아</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1934 이탈리아</span>
-                    <span class="text-lg block">🇮🇹</span>
-                    <span class="font-bold text-gray-800 block truncate">이탈리아</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1930 우루과이</span>
-                    <span class="text-lg block">🇺🇾</span>
-                    <span class="font-bold text-gray-800 block truncate">우루과이</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 📊 국가별 최다 우승 랭킹 그래프 -->
-        <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
-            <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
-                <span class="text-lg">📊</span>
-                <h2 class="text-base font-bold text-gray-800">국가별 역대 우승 횟수 랭킹 (전체 역사 기준)</h2>
-            </div>
-            <div class="space-y-2.5">
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇧🇷 브라질</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-amber-500 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 100%">5회 우승</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇩🇪 독일 (서독 포함)</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-slate-700 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 80%">4회 우승</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇮🇹 이탈리아</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-blue-700 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 80%">4회 우승</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇦🇷 아르헨티나</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-cyan-500 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 60%">3회 우승</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇫🇷 프랑스</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-indigo-900 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 40%">2회 우승</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇺🇾 우루과이</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-sky-400 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 40%">2회 우승</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🏴󠁧󠁢󠁥󠁮󠁧󠁿 잉글랜드</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-red-600 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 20%">1회 우승</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇪🇸 스페인</div>
-                    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                        <div class="bg-red-500 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white" style="width: 20%">1회 우승</div>
-                    </div>
-                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-        // 시간 포맷 가공 함수 (MM/DD HH:mm)
         function formatDate(isoString) {
             if (!isoString) return "-";
             const date = new Date(isoString);
@@ -339,28 +257,86 @@
             return `${month}/${day} ${hours}:${minutes}`;
         }
 
-        // 각 유저별 프론트엔드 실시간 점수 계산기 함수
         function calculateUserScore(user, actual) {
             let total = 0;
-            
-            // 1. 결승 대진 적중 계산 (팀당 15점, 최대 30점)
             if (actual.finalistA && [user.finalistA, user.finalistB].includes(actual.finalistA)) total += 15;
             if (actual.finalistB && [user.finalistA, user.finalistB].includes(actual.finalistB)) total += 15;
-            
-            // 2. 결승 스코어 적중 계산 (정밀 일치 시 40점)
             if (actual.scoreA !== null && actual.scoreB !== null) {
                 const isScoreMatch = 
                     (user.finalistA === actual.finalistA && user.scoreA === actual.scoreA && user.scoreB === actual.scoreB) ||
                     (user.finalistA === actual.finalistB && user.scoreA === actual.scoreB && user.scoreB === actual.scoreA);
                 if (isScoreMatch) total += 40;
             }
-            
-            // 3. 우승국 적중 계산 (30점)
-            if (actual.winner && user.winner === actual.winner) {
-                total += 30;
-            }
-            
+            if (actual.winner && user.winner === actual.winner) total += 30;
             return total;
+        }
+
+        // [통계 집계 전용 함수]
+        function renderInsights(rawPredictions, currentPredictions) {
+            if (!rawPredictions || rawPredictions.length === 0) return;
+
+            // 1) 최다 우승 예측 국가 집계 (최종 고유 유저 기준)
+            const winnerCounts = {};
+            currentPredictions.forEach(p => {
+                if(p.winner) winnerCounts[p.winner] = (winnerCounts[p.winner] || 0) + 1;
+            });
+            const sortedWinners = Object.entries(winnerCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
+            const totalWinnerVotes = currentPredictions.filter(p => p.winner).length || 1;
+
+            const winnerContainer = document.getElementById('predictedWinnerStats');
+            winnerContainer.innerHTML = sortedWinners.map(([country, count], idx) => {
+                const percent = Math.round((count / totalWinnerVotes) * 100);
+                const colors = ['bg-amber-500', 'bg-slate-400', 'bg-amber-700'];
+                return `
+                    <div class="flex items-center gap-3">
+                        <div class="w-20 text-xs font-bold text-gray-700 truncate">${idx+1}위 ${country}</div>
+                        <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                            <div class="${colors[idx] || 'bg-gray-500'} h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white transition-all duration-500" style="width: ${percent}%">${count}표 (${percent}%)</div>
+                        </div>
+                    </div>`;
+            }).join('') || '<p class="text-gray-400 text-xs text-center py-4">집계된 데이터가 없습니다.</p>';
+
+            // 2) 최다 결승 진출 예측 국가 집계 (최종 고유 유저 기준)
+            const finalistCounts = {};
+            currentPredictions.forEach(p => {
+                if(p.finalistA) finalistCounts[p.finalistA] = (finalistCounts[p.finalistA] || 0) + 1;
+                if(p.finalistB) finalistCounts[p.finalistB] = (finalistCounts[p.finalistB] || 0) + 1;
+            });
+            const sortedFinalists = Object.entries(finalistCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
+            const totalFinalistVotes = (currentPredictions.length * 2) || 1;
+
+            const finalistContainer = document.getElementById('predictedFinalistStats');
+            finalistContainer.innerHTML = sortedFinalists.map(([country, count], idx) => {
+                const percent = Math.round((count / totalFinalistVotes) * 100);
+                return `
+                    <div class="flex items-center gap-3">
+                        <div class="w-20 text-xs font-bold text-gray-700 truncate">${idx+1}위 ${country}</div>
+                        <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                            <div class="bg-blue-600 h-full rounded-full flex items-center pl-3 text-[10px] font-black text-white transition-all duration-500" style="width: ${percent}%">${count}표 (${percent}%)</div>
+                        </div>
+                    </div>`;
+            }).join('') || '<p class="text-gray-400 text-xs text-center py-4">집계된 데이터가 없습니다.</p>';
+
+            // 3) 가장 빠르게 참여한 사람 추출 (rawPredictions 전체 DB 타임스탬프 기준 최소값)
+            const timeSorted = [...rawPredictions].filter(p => p.submittedAt || p.timestamp)
+                .sort((a,b) => new Date(a.submittedAt || a.timestamp) - new Date(b.submittedAt || b.timestamp));
+            
+            if(timeSorted.length > 0) {
+                document.getElementById('fastestUserNickname').innerText = `👤 ${timeSorted[0].nickname}`;
+                document.getElementById('fastestUserTime').innerText = formatDate(timeSorted[0].submittedAt || timeSorted[0].timestamp);
+            }
+
+            // 4) 가장 빈번하게 예측(수정)한 사람 추출 (rawPredictions 빈도 수 계산)
+            const frequencyMap = {};
+            rawPredictions.forEach(p => {
+                if(p.nickname) frequencyMap[p.nickname] = (frequencyMap[p.nickname] || 0) + 1;
+            });
+            const sortedFrequency = Object.entries(frequencyMap).sort((a,b) => b[1] - a[1]);
+
+            if(sortedFrequency.length > 0) {
+                document.getElementById('frequentUserNickname').innerText = `👤 ${sortedFrequency[0][0]}`;
+                document.getElementById('frequentUserCount').innerText = `${sortedFrequency[0][1]}회 제출`;
+            }
         }
 
         async function loadDashboard() {
@@ -373,42 +349,35 @@
 
                 const rawPredictions = data.results || []; 
                 
-                // 새로운 API 규격 데이터 구조 세팅
                 const actual = data.actualResult || { 
-                    finalistA: "", 
-                    finalistB: "", 
-                    scoreA: null, 
-                    scoreB: null, 
-                    winner: "", 
-                    runnerUp: "" 
+                    finalistA: "", finalistB: "", scoreA: null, scoreB: null, winner: "", runnerUp: "" 
                 };
 
-                // 1. [상단 결과 카드 동적 업데이트]
+                // 상단 오피셜 카드 업데이트
                 document.getElementById('officialWinner').innerText = actual.winner ? `🎉 ${actual.winner}` : '결정 대기 중';
                 document.getElementById('officialRunnerUp').innerText = actual.runnerUp ? actual.runnerUp : '결정 대기 중';
-                
                 if (actual.scoreA !== null && actual.scoreB !== null) {
                     document.getElementById('officialScore').innerText = `${actual.finalistA} ${actual.scoreA} : ${actual.scoreB} ${actual.finalistB}`;
                 } else {
                     document.getElementById('officialScore').innerText = '결전 대기 중';
                 }
 
-                // 2. [실시간 점수 동적 맵핑 로직]
-                // 서버 점수가 없거나 실시간 동기화를 위해 오피셜 기준으로 스코어를 재연산합니다.
+                // 실시간 스코어 계산 매핑
                 const predictions = rawPredictions.map(user => {
                     const computedScore = calculateUserScore(user, actual);
                     return { ...user, score: computedScore };
                 });
 
-                // 3. [동점 시간 정렬 로직 적용]
+                // 동점 시간 정렬
                 predictions.sort((a, b) => {
-                    if (b.score !== a.score) {
-                        return b.score - a.score;
-                    }
+                    if (b.score !== a.score) return b.score - a.score;
                     return new Date(a.submittedAt || a.timestamp) - new Date(b.submittedAt || b.timestamp);
                 });
 
-                // 4. [로그인 유저 전용 실시간 일대일 비교 분석 보드 계산]
+                // 랭킹 테이블 아래 [인사이트 통계 렌더링 함수 호출]
+                renderInsights(rawPredictions, predictions);
+
+                // 로그인 유저 1:1 비교 보드
                 const myData = predictions.find(p => p.nickname === myNickname);
                 const comparisonBoard = document.getElementById('myComparisonBoard');
                 
@@ -447,9 +416,8 @@
                     comparisonBoard.classList.add('hidden');
                 }
 
-                // 5. [랭킹 테이블 내부 마크업 빌드 및 DOM 렌더링]
+                // 랭킹 테이블 DOM 렌더링
                 tbody.innerHTML = '';
-
                 if (predictions.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-gray-500">참여한 유저 데이터가 없습니다.</td></tr>`;
                     return;
@@ -463,24 +431,15 @@
                     const isFinAHit = actual.finalistA && [user.finalistA, user.finalistB].includes(actual.finalistA);
                     const isFinBHit = actual.finalistB && [user.finalistA, user.finalistB].includes(actual.finalistB);
                     
-                    const finAMarkup = isFinAHit 
-                        ? `<span class="text-green-600 font-bold">✓ ${user.finalistA}</span>` 
-                        : `<span class="text-gray-700">${user.finalistA || '-'}</span>`;
-                    const finBMarkup = isFinBHit 
-                        ? `<span class="text-green-600 font-bold">✓ ${user.finalistB}</span>` 
-                        : `<span class="text-gray-700">${user.finalistB || '-'}</span>`;
+                    const finAMarkup = isFinAHit ? `<span class="text-green-600 font-bold">✓ ${user.finalistA}</span>` : `<span>${user.finalistA || '-'}</span>`;
+                    const finBMarkup = isFinBHit ? `<span class="text-green-600 font-bold">✓ ${user.finalistB}</span>` : `<span>${user.finalistB || '-'}</span>`;
 
                     const isScoreMatch = actual.scoreA !== null && 
                         ((user.finalistA === actual.finalistA && user.scoreA === actual.scoreA && user.scoreB === actual.scoreB) ||
                          (user.finalistA === actual.finalistB && user.scoreA === actual.scoreB && user.scoreB === actual.scoreA));
                     
-                    const scoreMarkup = isScoreMatch
-                        ? `<span class="text-green-600 font-black">🎯 ${user.scoreA} : ${user.scoreB}</span>`
-                        : `<span class="text-gray-600">${user.scoreA} : ${user.scoreB}</span>`;
-
-                    const winnerMarkup = actual.winner && user.winner === actual.winner
-                        ? `<span class="text-green-600 font-black">✓ ${user.winner}</span>`
-                        : `<span>${user.winner || '-'}</span>`;
+                    const scoreMarkup = isScoreMatch ? `<span class="text-green-600 font-black">🎯 ${user.scoreA} : ${user.scoreB}</span>` : `<span>${user.scoreA} : ${user.scoreB}</span>`;
+                    const winnerMarkup = actual.winner && user.winner === actual.winner ? `<span class="text-green-600 font-black">✓ ${user.winner}</span>` : `<span>${user.winner || '-'}</span>`;
 
                     tbody.innerHTML += `
                         <tr class="${rowClass} transition-colors">
@@ -501,8 +460,8 @@
                 });
 
             } catch (error) {
-                console.error("대시보드 실시간 순위 연산 로직 에러:", error);
-                tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-red-500 font-semibold">데이터 동적 로드 중 네트워크 오류가 발생했습니다.</td></tr>`;
+                console.error("대시보드 인사이트 연산 에러:", error);
+                tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-red-500 font-semibold">데이터 동적 로드 중 오류가 발생했습니다.</td></tr>`;
             }
         }
 
