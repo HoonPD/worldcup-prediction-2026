@@ -20,7 +20,7 @@ const DEADLINE = new Date('2026-07-15T04:00:00+09:00');
 // 🏆 [실시간 경기 결과 입력창] 결승전까지 완전히 끝난 후 이 객체만 업데이트해 주시면 실시간 랭킹이 정산됩니다.
 const ACTUAL_RESULT = {
     finalists: ["프랑스", "아르헨티나"], // 실제 결승에 진출한 2개 팀 기입
-    winner: "아르헨티나",               // 최종 우승국 기입
+    winner: "아르헨티나",                // 최종 우승국 기입
     scoreA: 3,                          // 결승전 필드 최종 스코어 A (연장전 포함, 승부차기 제외)
     scoreB: 3                           // 결승전 필드 최종 스코어 B (연장전 포함, 승부차기 제외)
 };
@@ -39,7 +39,6 @@ function calculateScore(pred) {
     }
 
     // 3. 결승전 필드 스코어 적중 (40점)
-    // 유저가 [A팀: 3점, B팀: 2점]으로 예측했든 [A팀: 2점, B팀: 3점]으로 예측했든 순서 무관하게 스코어 라인 매칭 검증
     if (ACTUAL_RESULT.scoreA !== undefined && ACTUAL_RESULT.scoreB !== undefined) {
         const isScoreMatch = (pred.score_a === ACTUAL_RESULT.scoreA && pred.score_b === ACTUAL_RESULT.scoreB) ||
                              (pred.score_a === ACTUAL_RESULT.scoreB && pred.score_b === ACTUAL_RESULT.scoreA);
@@ -76,7 +75,8 @@ app.post('/api/predict', async (req, res) => {
     }
 
     try {
-        // Supabase DB 스키마 필드명에 맞추어 변환 및 Upsert 진행
+        // ⏱️ 내용과 시간을 모두 덮어씌웁니다. 
+        // 닉네임이 같으면 최신 데이터 및 현재 시간(또는 프론트 전달 시간)으로 완전히 업데이트됩니다.
         const { error } = await supabase
             .from('predictions')
             .upsert({
@@ -86,12 +86,12 @@ app.post('/api/predict', async (req, res) => {
                 winner,
                 score_a: sA,
                 score_b: sB,
-                created_at: submittedAt ? new Date(submittedAt) : new Date()
+                created_at: submittedAt ? new Date(submittedAt) : new Date() // 수정 완료 시점의 최신 시간으로 리셋
             }, { onConflict: 'nickname' });
 
         if (error) throw error;
 
-        res.json({ success: true, message: "안전하게 데이터베이스에 저장되었습니다!" });
+        res.json({ success: true, message: "예측이 성공적으로 저장(업데이트)되었습니다!" });
     } catch (error) {
         console.error("DB 저장 실패:", error);
         res.status(500).json({ success: false, message: "데이터베이스 오류가 발생했습니다." });
@@ -119,7 +119,9 @@ app.get('/api/results', async (req, res) => {
             timestamp: p.created_at
         }));
 
-        // ⏱️ 동점자 처리: 1순위 총점(내림차순) -> 2순위 제출 시간(오름차순 / 빠른 순)
+        // ⏱️ 동점자 처리 규칙: 
+        // 1순위: 총점 높은 순 (내림차순)
+        // 2순위: 제출(또는 마지막 수정) 시간이 빠른 순 (오름차순) -> 변경 이력이 있으면 그 최신 시점으로 비교됨!
         resultsWithScores.sort((a, b) => {
             if (b.score !== a.score) return b.score - a.score;
             return new Date(a.timestamp) - new Date(b.timestamp);
