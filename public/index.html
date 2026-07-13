@@ -209,10 +209,20 @@
                     </div>
                 </div>
 
-                <!-- 제출 버튼 -->
-                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-3 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition shadow-md cursor-pointer text-sm">
-                    나의 예측 데이터 제출하기
-                </button>
+                <!-- 제출 버튼 및 실시간 타이머 영역 -->
+                <div class="space-y-2">
+                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-3 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition shadow-md cursor-pointer text-sm">
+                        나의 예측 데이터 제출하기
+                    </button>
+                    
+                    <!-- ⏱️ 실시간 카운트다운 타이머 (제출 버튼 바로 밑에 위치) -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-center shadow-inner">
+                        <p class="text-[11px] font-medium text-slate-500 mb-0.5">⏳ 예측 제출 마감까지 남은 시간 (4강 1경기 시작 전)</p>
+                        <p id="countdown" class="text-sm font-black text-rose-600 tracking-wide font-mono animate-pulse">
+                            계산 중...
+                        </p>
+                    </div>
+                </div>
             </form>
             
             <!-- 하단 네비게이션 링크 -->
@@ -237,6 +247,40 @@
         const scoreAInput = document.getElementById('scoreA');
         const scoreBInput = document.getElementById('scoreB');
         const winnerSelect = document.getElementById('winner');
+        const submitBtn = document.getElementById('submitBtn');
+        const countdownEl = document.getElementById('countdown');
+
+        // ⏱️ 실시간 카운트다운 타이머 로직 (준결승 1경기 시작 기준: 2026-07-15 04:00)
+        const targetDate = new Date('2026-07-15T04:00:00+09:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                countdownEl.textContent = "⏱️ 예측 제출이 마감되었습니다.";
+                countdownEl.classList.remove('text-rose-600', 'animate-pulse');
+                countdownEl.classList.add('text-slate-400');
+                submitBtn.disabled = true;
+                submitBtn.classList.replace('from-blue-600', 'from-slate-400');
+                submitBtn.classList.replace('to-indigo-600', 'to-slate-500');
+                submitBtn.classList.add('cursor-not-allowed');
+                return;
+            }
+
+            // 시간, 분, 초 단위 계산
+            const hours = Math.floor(distance / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // 두 자리 포맷팅하여 텍스트 반영
+            countdownEl.textContent = `${hours}시간 ${minutes}분 ${seconds}초 남음`;
+        }
+
+        // 즉시 한 번 실행 후 1초 간격으로 무한 반복
+        updateCountdown();
+        const timerInterval = setInterval(updateCountdown, 1000);
 
         function updateFinalSection() {
             const teamA = finalistASelect.value;
