@@ -90,6 +90,33 @@
             </div>
         </div>
 
+        <!-- 🤖 [NEW] AI 예측 시나리오 요약 섹션 -->
+        <div class="bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-5 rounded-xl shadow-md">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="bg-purple-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider animate-pulse">AI Prediction</span>
+                <h2 class="text-lg font-bold">인공지능 시뮬레이션 최적 예측 모델</h2>
+            </div>
+            <p class="text-purple-200 text-xs mb-3">빅데이터 분석 및 시뮬레이션을 통해 AI가 도출한 최종 스코어 보드입니다.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs bg-black/20 p-4 rounded-lg">
+                <div>
+                    <span class="text-purple-300 block text-[11px]">AI 선정 우승 확률 1위</span>
+                    <span id="aiPredictedWinner" class="text-sm font-bold mt-0.5 block text-yellow-300">연산 중...</span>
+                </div>
+                <div>
+                    <span class="text-purple-300 block text-[11px]">AI 예측 결승 대진</span>
+                    <span id="aiPredictedFinals" class="text-sm font-bold mt-0.5 block">-</span>
+                </div>
+                <div>
+                    <span class="text-purple-300 block text-[11px]">AI 예측 결승 스코어</span>
+                    <span id="aiPredictedScore" class="text-sm font-bold mt-0.5 block">-</span>
+                </div>
+                <div>
+                    <span class="text-purple-300 block text-[11px]">참여자 대비 AI 백분위</span>
+                    <span id="aiPerformanceRank" class="text-sm font-extrabold text-purple-400 mt-0.5 block">-</span>
+                </div>
+            </div>
+        </div>
+
         <!-- 🔍 내 예측 vs 오피셜 결과 실시간 일대일 비교 보드 -->
         <div id="myComparisonBoard" class="bg-blue-600 text-white p-5 rounded-xl shadow-md hidden">
             <div class="flex items-center gap-2 mb-2">
@@ -416,10 +443,11 @@
             // 1) 최다 우승 예측 국가 집계 (최종 고유 유저 기준)
             const winnerCounts = {};
             currentPredictions.forEach(p => {
-                if(p.winner) winnerCounts[p.winner] = (winnerCounts[p.winner] || 0) + 1;
+                // AI 인스턴스는 집계 통계에서 제외 (순수 참여자 통계 유지 목적)
+                if(p.winner && p.nickname !== '🤖 AI_Predictor') winnerCounts[p.winner] = (winnerCounts[p.winner] || 0) + 1;
             });
             const sortedWinners = Object.entries(winnerCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
-            const totalWinnerVotes = currentPredictions.filter(p => p.winner).length || 1;
+            const totalWinnerVotes = currentPredictions.filter(p => p.winner && p.nickname !== '🤖 AI_Predictor').length || 1;
 
             const winnerContainer = document.getElementById('predictedWinnerStats');
             winnerContainer.innerHTML = sortedWinners.map(([country, count], idx) => {
@@ -436,12 +464,13 @@
 
             // 2) 최다 결승 진출 예측 국가 집계 (최종 고유 유저 기준)
             const finalistCounts = {};
-            currentPredictions.forEach(p => {
+            const activeHumanUsers = currentPredictions.filter(p => p.nickname !== '🤖 AI_Predictor');
+            activeHumanUsers.forEach(p => {
                 if(p.finalistA) finalistCounts[p.finalistA] = (finalistCounts[p.finalistA] || 0) + 1;
                 if(p.finalistB) finalistCounts[p.finalistB] = (finalistCounts[p.finalistB] || 0) + 1;
             });
             const sortedFinalists = Object.entries(finalistCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
-            const totalFinalistVotes = (currentPredictions.length * 2) || 1;
+            const totalFinalistVotes = (activeHumanUsers.length * 2) || 1;
 
             const finalistContainer = document.getElementById('predictedFinalistStats');
             finalistContainer.innerHTML = sortedFinalists.map(([country, count], idx) => {
@@ -456,7 +485,7 @@
             }).join('') || '<p class="text-gray-400 text-xs text-center py-4">집계된 데이터가 없습니다.</p>';
 
             // 3) 가장 빠르게 참여한 사람 추출 (rawPredictions 전체 DB 타임스탬프 기준 최소값)
-            const timeSorted = [...rawPredictions].filter(p => p.submittedAt || p.timestamp)
+            const timeSorted = [...rawPredictions].filter(p => (p.submittedAt || p.timestamp) && p.nickname !== '🤖 AI_Predictor')
                 .sort((a,b) => new Date(a.submittedAt || a.timestamp) - new Date(b.submittedAt || b.timestamp));
             
             if(timeSorted.length > 0) {
@@ -467,7 +496,7 @@
             // 4) 가장 빈번하게 예측(수정)한 사람 추출 (rawPredictions 빈도 수 계산)
             const frequencyMap = {};
             rawPredictions.forEach(p => {
-                if(p.nickname) frequencyMap[p.nickname] = (frequencyMap[p.nickname] || 0) + 1;
+                if(p.nickname && p.nickname !== '🤖 AI_Predictor') frequencyMap[p.nickname] = (frequencyMap[p.nickname] || 0) + 1;
             });
             const sortedFrequency = Object.entries(frequencyMap).sort((a,b) => b[1] - a[1]);
 
@@ -485,7 +514,7 @@
                 const res = await fetch('/api/results'); 
                 const data = await res.json(); 
 
-                const rawPredictions = data.results || []; 
+                let rawPredictions = data.results || []; 
                 
                 const actual = data.actualResult || { 
                     finalistA: "", finalistB: "", scoreA: null, scoreB: null, winner: "", runnerUp: "" 
@@ -500,6 +529,25 @@
                     document.getElementById('officialScore').innerText = '결전 대기 중';
                 }
 
+                // 🤖 [NEW] AI 고유 예측값 설정 (예시 데이터: 백엔드 API 응답 구조에 맞춰 조정 가능)
+                const aiPredictMock = data.aiResult || {
+                    nickname: "🤖 AI_Predictor",
+                    finalistA: "브라질",
+                    finalistB: "프랑스",
+                    scoreA: 2,
+                    scoreB: 1,
+                    winner: "브라질",
+                    submittedAt: new String(new Date().toISOString())
+                };
+
+                // AI 데이터 상단 바에 매핑
+                document.getElementById('aiPredictedWinner').innerText = `🇧🇷 ${aiPredictMock.winner} (74%)`;
+                document.getElementById('aiPredictedFinals').innerText = `${aiPredictMock.finalistA} vs ${aiPredictMock.finalistB}`;
+                document.getElementById('aiPredictedScore').innerText = `${aiPredictMock.scoreA} : ${aiPredictMock.scoreB}`;
+
+                // 랭킹 테이블 내 순위 비교를 위해 참여자 어레이에 AI 오브젝트 추가 삽입
+                rawPredictions.push(aiPredictMock);
+
                 // 실시간 스코어 계산 매핑
                 const predictions = rawPredictions.map(user => {
                     const computedScore = calculateUserScore(user, actual);
@@ -511,6 +559,15 @@
                     if (b.score !== a.score) return b.score - a.score;
                     return new Date(a.submittedAt || a.timestamp) - new Date(b.submittedAt || b.timestamp);
                 });
+
+                // 🤖 [NEW] AI 성능 순위 백분위 계산
+                const aiCurrentIndex = predictions.findIndex(p => p.nickname === '🤖 AI_Predictor');
+                if (aiCurrentIndex !== -1 && predictions.length > 1) {
+                    const percentile = Math.round(((predictions.length - (aiCurrentIndex + 1)) / (predictions.length - 1)) * 100);
+                    document.getElementById('aiPerformanceRank').innerText = `상위 ${100 - percentile}% (${aiCurrentIndex + 1}위)`;
+                } else {
+                    document.getElementById('aiPerformanceRank').innerText = "측정 불가";
+                }
 
                 // 랭킹 테이블 아래 [인사이트 통계 렌더링 함수 호출]
                 renderInsights(rawPredictions, predictions);
@@ -563,7 +620,13 @@
 
                 predictions.forEach((user, index) => {
                     const isMe = user.nickname === myNickname;
-                    const rowClass = isMe ? 'bg-yellow-50 font-semibold border-2 border-yellow-300' : 'hover:bg-gray-50';
+                    const isAi = user.nickname === '🤖 AI_Predictor';
+                    
+                    // 🤖 AI 행의 고유 스타일 정의 (퍼플 테두리 및 배경색 처리)
+                    let rowClass = 'hover:bg-gray-50';
+                    if (isMe) rowClass = 'bg-yellow-50 font-semibold border-2 border-yellow-300';
+                    else if (isAi) rowClass = 'bg-purple-50 font-semibold border-2 border-purple-300';
+
                     const rankBadge = index === 0 ? '🥇 1등' : index === 1 ? '🥈 2등' : index === 2 ? '🥉 3등' : `${index + 1}등`;
                     
                     const isFinAHit = actual.finalistA && [user.finalistA, user.finalistB].includes(actual.finalistA);
@@ -586,13 +649,14 @@
                                 <div class="flex items-center gap-1.5">
                                     <span class="truncate max-w-[100px] sm:max-w-none">${user.nickname}</span>
                                     ${isMe ? '<span class="bg-yellow-200 text-yellow-800 text-[9px] px-1.5 py-0.5 rounded-full font-bold">MY</span>' : ''}
+                                    ${isAi ? '<span class="bg-purple-200 text-purple-800 text-[9px] px-1.5 py-0.5 rounded-full font-bold">AI</span>' : ''}
                                 </div>
                             </td>
                             <td class="px-4 py-3 font-medium">${finAMarkup} <span class="text-gray-300 mx-1">vs</span> ${finBMarkup}</td>
                             <td class="px-4 py-3 text-center">${scoreMarkup}</td>
                             <td class="px-4 py-3 text-center font-bold text-amber-600">${winnerMarkup}</td>
                             <td class="px-4 py-3 text-center font-extrabold text-blue-600 text-sm sm:text-base">${user.score || 0}점</td>
-                            <td class="px-4 py-3 text-center text-[11px] text-gray-400">${formatDate(user.submittedAt || user.timestamp)}</td>
+                            <td class="px-4 py-3 text-center text-[11px] text-gray-400">${isAi ? 'Realtime' : formatDate(user.submittedAt || user.timestamp)}</td>
                         </tr>
                     `;
                 });
