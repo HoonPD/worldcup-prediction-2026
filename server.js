@@ -16,7 +16,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 // 📅 [설정] 마감 시간: 4강 1경기 시작 시간 (2026년 7월 15일 오전 04:00 KST)
 // 호스팅 서버의 로컬 시간대에 영향받지 않도록 밀리초(ms) 절대값으로 환산하여 관리합니다.
-const DEADLINE_MS = new Date('2026-07-31T04:00:00+09:00').getTime();
+const DEADLINE_MS = new Date('2026-07-15T04:00:00+09:00').getTime();
 
 // 🏆 [실시간 경기 결과 입력창]
 // 경기 진행 상황에 따라 확정된 값만 채워 넣으시면 실시간으로 점수가 순차 반영됩니다!
