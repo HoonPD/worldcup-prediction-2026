@@ -265,25 +265,24 @@
         const submitBtn = document.getElementById('submitBtn');
         const countdownEl = document.getElementById('countdown');
 
-        // ⏱️ 타임존 파싱 에러 방지를 위한 표준 ISO 8601 포맷 설정 (KST 한국 시간 기준)
-        const targetDate = new Date('2026-07-15T04:00:00+09:00').getTime();
+        // ⏱️ 타임존 계산 파싱 에러를 완벽하게 방지하기 위해 UTC 타임스탬프로 환산하여 비교
+        // 한국 시간(KST) 2026-07-15 04:00:00은 UTC 시간으로 2026-07-14 19:00:00입니다.
+        const targetDate = Date.UTC(2026, 6, 14, 19, 0, 0); // JavaScript Month는 0부터 시작하므로 7월은 6입니다.
 
         function updateCountdown() {
-            const now = new Date().getTime();
+            const now = Date.now(); // 브라우저 시스템 독립적인 UTC 타임스탬프 획득
             const distance = targetDate - now;
 
-            // 시간 파싱 오류(NaN)가 생기거나 마감 시간(0 미만)이 지났을 경우 완벽 대응
-            if (isNaN(distance) || distance < 0) {
-                clearInterval(timerInterval);
+            if (isNaN(distance) || distance <= 0) {
+                if (timerInterval) clearInterval(timerInterval);
                 countdownEl.textContent = "⏱️ 예측 제출이 마감되었습니다.";
                 countdownEl.classList.remove('text-rose-600', 'animate-pulse');
                 countdownEl.classList.add('text-slate-400');
                 
-                // 제출 폼 비활성화 처리 및 텍스트 변경
+                // 제출 폼 비활성화 처리 및 스타일 변경
                 submitBtn.disabled = true;
-                submitBtn.classList.replace('from-blue-600', 'from-slate-400');
-                submitBtn.classList.replace('to-indigo-600', 'to-slate-500');
-                submitBtn.classList.add('cursor-not-allowed');
+                submitBtn.classList.remove('from-blue-600', 'to-indigo-600', 'hover:from-blue-700', 'hover:to-indigo-700', 'cursor-pointer');
+                submitBtn.classList.add('from-slate-400', 'to-slate-500', 'cursor-not-allowed');
                 submitBtn.textContent = "제출이 마감되었습니다";
                 return;
             }
@@ -295,7 +294,7 @@
             countdownEl.textContent = `${hours}시간 ${minutes}분 ${seconds}초 남음`;
         }
 
-        // 스크립트가 호출되자마자 대기 시간(1초) 없이 즉시 판단하여 마감 전환
+        // 선언 후 즉시 호출하여 첫 프레임부터 마감 처리 반영
         updateCountdown();
         const timerInterval = setInterval(updateCountdown, 1000);
 
@@ -339,7 +338,6 @@
             } else if (sB > sA) {
                 winnerSelect.value = teamB;
             } else {
-                // 무승부 시 우승팀 지정을 초기화하여 유연하게 직접 선택하도록 설정
                 winnerSelect.value = "";
             }
         }
@@ -350,8 +348,7 @@
         document.getElementById('predictForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // 개발자 도구 등을 사용해 인위적으로 이벤트를 발생시키는 행위를 서버 전송 전에 원천 차단
-            if (new Date().getTime() > targetDate) {
+            if (Date.now() > targetDate) {
                 alert("예측 제출 시간이 이미 마감되었습니다.");
                 return;
             }
@@ -364,7 +361,6 @@
             const scoreB = parseInt(scoreBInput.value);
             const submittedAt = new Date().toISOString(); 
 
-            // 예측 정보 무결성 검증
             if (scoreA > scoreB && winner !== finalistA) {
                 alert(`오류: 스코어상 ${finalistA}가 승리해야 하지만, 우승국이 ${winner}로 설정되어 있습니다.`);
                 return;
