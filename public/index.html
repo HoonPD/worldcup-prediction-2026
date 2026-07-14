@@ -62,7 +62,7 @@
                     2026 월드컵의 주인공을 내 손으로 예측해보세요! 4강 진출국을 바탕으로 결승 대진과 최종 스코어를 맞히는 실시간 챌린지입니다.
                 </div>
 
-                <!-- 점수 계산 방식 (방식 1 반영 완료) -->
+                <!-- 점수 계산 방식 -->
                 <div class="text-[11px] text-blue-100 space-y-1">
                     <p class="font-bold text-white mb-1">🔢 승리 포인트 계산법 (최대 100점)</p>
                     <div class="flex justify-between items-center bg-blue-950/60 px-2.5 py-1.5 rounded border border-blue-500/20">
@@ -74,7 +74,7 @@
                         <span class="text-amber-300 font-bold">30점</span>
                     </div>
                     
-                    <!-- 세부 스코어 보너스 규칙 추가 구역 -->
+                    <!-- 세부 스코어 보너스 규칙 -->
                     <div class="bg-blue-900/40 p-2 rounded-lg border border-indigo-500/30 space-y-1 mt-1.5">
                         <p class="text-[10px] font-bold text-amber-400 mb-1">⚽ 결승 필드 스코어 상세 (최대 40점)</p>
                         <div class="flex justify-between text-[10px] px-1">
@@ -143,9 +143,9 @@
                             <span class="text-amber-400">7월 20일 04:00</span>
                         </div>
                         <div class="flex items-center justify-center gap-3 py-0.5 bg-black/30 rounded-md">
-                            <div class="flex items-center gap-1.5 w-20 justify-end">
-                                <span class="text-xs font-bold text-slate-300">미정</span>
-                                <div class="h-3.5 w-5 bg-slate-700 rounded-sm border border-slate-600 flex items-center justify-center text-[8px] text-slate-400 font-bold">?</div>
+                            <div class="flex items-center gap-1.5 w-20 justify-start">
+                                <span class="text-xs font-bold text-white">스페인</span>
+                                <img src="https://flagcdn.com/w40/es.png" alt="Spain" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
                             </div>
                             <span class="text-[10px] font-black text-amber-400 animate-pulse">VS</span>
                             <div class="flex items-center gap-1.5 w-20 justify-start">
@@ -265,22 +265,26 @@
         const submitBtn = document.getElementById('submitBtn');
         const countdownEl = document.getElementById('countdown');
 
-        // ⏱️ 실시간 카운트다운 타이머 로직 (준결승 1경기 시작 기준: 2026-07-15 04:00)
+        // ⏱️ 타임존 파싱 에러 방지를 위한 표준 ISO 8601 포맷 설정 (KST 한국 시간 기준)
         const targetDate = new Date('2026-07-15T04:00:00+09:00').getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = targetDate - now;
 
-            if (distance < 0) {
+            // 시간 파싱 오류(NaN)가 생기거나 마감 시간(0 미만)이 지났을 경우 완벽 대응
+            if (isNaN(distance) || distance < 0) {
                 clearInterval(timerInterval);
                 countdownEl.textContent = "⏱️ 예측 제출이 마감되었습니다.";
                 countdownEl.classList.remove('text-rose-600', 'animate-pulse');
                 countdownEl.classList.add('text-slate-400');
+                
+                // 제출 폼 비활성화 처리 및 텍스트 변경
                 submitBtn.disabled = true;
                 submitBtn.classList.replace('from-blue-600', 'from-slate-400');
                 submitBtn.classList.replace('to-indigo-600', 'to-slate-500');
                 submitBtn.classList.add('cursor-not-allowed');
+                submitBtn.textContent = "제출이 마감되었습니다";
                 return;
             }
 
@@ -291,6 +295,7 @@
             countdownEl.textContent = `${hours}시간 ${minutes}분 ${seconds}초 남음`;
         }
 
+        // 스크립트가 호출되자마자 대기 시간(1초) 없이 즉시 판단하여 마감 전환
         updateCountdown();
         const timerInterval = setInterval(updateCountdown, 1000);
 
@@ -334,7 +339,7 @@
             } else if (sB > sA) {
                 winnerSelect.value = teamB;
             } else {
-                // 무승부(승부차기행)인 경우 사용자가 직접 우승팀을 유연하게 선택할 수 있도록 비워줌
+                // 무승부 시 우승팀 지정을 초기화하여 유연하게 직접 선택하도록 설정
                 winnerSelect.value = "";
             }
         }
@@ -345,6 +350,12 @@
         document.getElementById('predictForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // 개발자 도구 등을 사용해 인위적으로 이벤트를 발생시키는 행위를 서버 전송 전에 원천 차단
+            if (new Date().getTime() > targetDate) {
+                alert("예측 제출 시간이 이미 마감되었습니다.");
+                return;
+            }
+            
             const nickname = document.getElementById('nickname').value;
             const finalistA = finalistASelect.value;
             const finalistB = finalistBSelect.value;
@@ -353,7 +364,7 @@
             const scoreB = parseInt(scoreBInput.value);
             const submittedAt = new Date().toISOString(); 
 
-            // 제출 전 스코어와 우승국 매칭 최종 검증
+            // 예측 정보 무결성 검증
             if (scoreA > scoreB && winner !== finalistA) {
                 alert(`오류: 스코어상 ${finalistA}가 승리해야 하지만, 우승국이 ${winner}로 설정되어 있습니다.`);
                 return;
@@ -370,7 +381,6 @@
                     body: JSON.stringify({ nickname, finalistA, finalistB, winner, scoreA, scoreB, submittedAt }) 
                 });
                 
-                // 서버가 500이나 404 에러를 내며 HTML 템플릿 페이지 등을 리턴했을 때 res.json()에서 에러가 터지지 않게 가드 처리
                 if (!res.ok) {
                     const errorText = await res.text();
                     throw new Error(errorText || `서버 에러가 발생했습니다. (Status: ${res.status})`);
