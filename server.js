@@ -17,40 +17,41 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // 📅 [설정] 마감 시간: 4강 1경기 시작 시간 (2026년 7월 15일 오전 04:00 KST)
 const DEADLINE = new Date('2026-07-15T04:00:00+09:00');
 
-// 🏆 [실시간 경기 결과 입력창] 결승전까지 완전히 끝난 후 이 객체만 업데이트해 주시면 실시간 랭킹이 정산됩니다.
+// 🏆 [실시간 경기 결과 입력창] 
+// 경기 진행 상황에 따라 확정된 값만 채워 넣으시면 실시간으로 점수가 순차 반영됩니다!
+// (예: 4강이 끝나면 finalists와 teamA, teamB만 먼저 적고 winner, scoreA, scoreB는 null로 유지)
 const ACTUAL_RESULT = {
-    finalists: [],      // 경기 전에는 빈 배열 []로 둠 (예: ["프랑스", "아르헨티나"])
-    winner: null,       // 경기 전에는 null로 둠 (예: "아르헨티나")
-    scoreA: null,       // 경기 전에는 null로 둠 (예: 3)
-    scoreB: null        // 경기 전에는 null로 둠 (예: 3)
+    finalists: ["스페인"],      // 1단계: 결승 진출국 확정 시 입력 (예: ["프랑스", "아르헨티나"])
+    teamA: "스페인",        // 결승전 왼쪽 배치 팀 (예: "프랑스")
+    teamB: null,        // 결승전 오른쪽 배치 팀 (예: "아르헨티나")
+    winner: null,       // 2단계: 최종 우승팀 확정 시 입력 (예: "아르헨티나")
+    scoreA: null,       // 3단계: 결승전 최종 스코어 확정 시 입력 (예: 3)
+    scoreB: null        // 3단계: 결승전 최종 스코어 확정 시 입력 (예: 1)
 };
 
-// 🎯 [새로운 100점 만점 점수 계산 체계]
+// 🎯 [단계별 실시간 점수 계산 체계]
 function calculateScore(pred) {
     let score = 0;
-    
-    // [실제 결과 데이터 예시 구조 정의]
-    // const ACTUAL_RESULT = {
-    //     finalists: ["프랑스", "아르헨티나"],
-    //     teamA: "프랑스",       // 실제 결승전 왼쪽에 배치된 팀
-    //     teamB: "아르헨티나",   // 실제 결승전 오른쪽에 배치된 팀
-    //     scoreA: 3,            // teamA의 실제 골 수
-    //     scoreB: 1,            // teamB의 실제 골 수
-    //     winner: "프랑스"
-    // };
 
-    // 1. 결승 진출국 적중 (각 15점, 최대 30점)
-    if (ACTUAL_RESULT.finalists.includes(pred.finalist_a)) score += 15;
-    if (ACTUAL_RESULT.finalists.includes(pred.finalist_b)) score += 15;
+    // 1. 결승 진출국 적중 계산 (각 15점, 최대 30점)
+    // finalists 배열에 국가가 채워졌을 때만 작동합니다.
+    if (ACTUAL_RESULT.finalists && ACTUAL_RESULT.finalists.length > 0) {
+        if (ACTUAL_RESULT.finalists.includes(pred.finalist_a)) score += 15;
+        if (ACTUAL_RESULT.finalists.includes(pred.finalist_b)) score += 15;
+    }
 
-    // 2. 최종 우승팀 적중 (30점)
+    // 2. 최종 우승팀 적중 계산 (30점)
+    // winner 값이 null이 아닐 때만 작동합니다.
     if (ACTUAL_RESULT.winner && pred.winner === ACTUAL_RESULT.winner) {
         score += 30;
     }
 
-    // 3. 결승전 필드 스코어 적중 (방식 1 반영: 최대 40점)
-    if (ACTUAL_RESULT.scoreA !== undefined && ACTUAL_RESULT.scoreB !== undefined) {
-        
+    // 3. 결승전 필드 스코어 적중 계산 (최대 40점)
+    // scoreA와 scoreB가 모두 null이나 undefined가 아닐 때만 작동합니다.
+    if (
+        ACTUAL_RESULT.scoreA !== null && ACTUAL_RESULT.scoreA !== undefined &&
+        ACTUAL_RESULT.scoreB !== null && ACTUAL_RESULT.scoreB !== undefined
+    ) {
         // 유저가 예측한 A팀과 B팀의 스코어를 실제 결과 국가(teamA, teamB)에 맞게 재정렬
         let predScoreA = null;
         let predScoreB = null;
@@ -66,7 +67,7 @@ function calculateScore(pred) {
             predScoreB = pred.score_a;
         }
 
-        // 유저가 예측한 팀들이 결승에 실제로 진출했을 때만 스코어 점수 계산 시작
+        // 유저가 예측한 두 팀이 결승에 실제로 모두 진출했을 때만 스코어 세부 점수 계산 시작
         if (predScoreA !== null && predScoreB !== null) {
             
             // ① 승무패 및 골득실 차이 적중 여부 계산 (+15점)
@@ -74,7 +75,6 @@ function calculateScore(pred) {
             const predDiff = predScoreA - predScoreB;
             
             // 양수/음수/0의 방향이 같고, 골득실 차이의 절대값까지 같아야 함
-            // (ex: 실제 3:1(+2) 이고 예측 2:0(+2) 이면 적중)
             const isOutcomeMatch = (Math.sign(actualDiff) === Math.sign(predDiff)) && (actualDiff === predDiff);
             
             if (isOutcomeMatch) {
@@ -89,7 +89,6 @@ function calculateScore(pred) {
             if (isTeamBMatch) score += 10;
 
             // ③ 올킬 보너스 (+5점)
-            // 승무패도 맞고, 두 팀의 스코어도 모두 완벽하게 맞은 경우
             if (isOutcomeMatch && isTeamAMatch && isTeamBMatch) {
                 score += 5;
             }
@@ -147,7 +146,7 @@ app.post('/api/predict', async (req, res) => {
     }
 });
 
-// 2. 전체 결과 및 실시간 랭킹 조회 API
+// 2. 전체 결과 및 실시간 랭킹 조회 API (단계별 진행 상황 플래그 추가)
 app.get('/api/results', async (req, res) => {
     try {
         const { data: predictions, error } = await supabase
@@ -156,7 +155,7 @@ app.get('/api/results', async (req, res) => {
 
         if (error) throw error;
 
-        // 새로운 100점 만점 계산기(calculateScore)를 적용하여 데이터 매핑
+        // 고도화된 단계별 점수 계산기를 적용하여 데이터 매핑
         const resultsWithScores = predictions.map(p => ({
             nickname: p.nickname,
             finalistA: p.finalist_a,
@@ -176,8 +175,16 @@ app.get('/api/results', async (req, res) => {
             return new Date(a.timestamp) - new Date(b.timestamp);
         });
 
+        // 📊 [트렌디한 추가 플래그] 관리자가 실제 경기 결과를 어디까지 입력했는지 상태 확인
+        const progress = {
+            finalistsDetermined: ACTUAL_RESULT.finalists && ACTUAL_RESULT.finalists.length > 0,
+            winnerDetermined: ACTUAL_RESULT.winner !== null && ACTUAL_RESULT.winner !== undefined,
+            scoresDetermined: ACTUAL_RESULT.scoreA !== null && ACTUAL_RESULT.scoreB !== null
+        };
+
         res.json({
             deadlinePassed: new Date() > DEADLINE,
+            progress: progress, // 💡 프론트엔드에서 안내 메시지 분기 처리용 데이터
             actualResult: ACTUAL_RESULT,
             results: resultsWithScores
         });
