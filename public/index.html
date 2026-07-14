@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 월드컵 예측 게임</title>
-    <!-- Tailwind CSS 최신 브라우저 컴파일러 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        /* 1. 배경 이미지에만 투명도 20% 적용하기 위한 가상 요소 처리 */
         body {
             position: relative;
             height: 100vh;
@@ -24,17 +22,16 @@
             background-position: center center !important;
             background-repeat: no-repeat !important;
             background-attachment: fixed !important;
-            opacity: 0.2; /* 투명도 20%로 수정 완료 */
+            opacity: 0.2;
             z-index: -1;
         }
     </style>
 </head>
 <body class="antialiased text-slate-800 flex items-center justify-center p-3 sm:p-4">
 
-    <!-- 메인 대시보드 컨테이너 (스크롤이 필요 없는 한 화면 콤팩트 레이아웃) -->
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-5xl w-full overflow-hidden z-10 grid grid-cols-1 lg:grid-cols-12 relative">
         
-        <!-- 🎯 [왼쪽 사이드] 타이틀 및 게임 안내 / 4강 매치 정보 -->
+        <!-- 🎯 [왼쪽 사이드] 안내 / 일정 보드 -->
         <div class="lg:col-span-5 bg-gradient-to-b from-blue-700 to-indigo-900 p-5 text-white flex flex-col justify-between shadow-inner">
             <div>
                 <span class="inline-block bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full mb-1">
@@ -46,7 +43,6 @@
                 <p class="text-blue-200 text-xs mt-1 font-medium">토너먼트 대진을 보고 최종 시나리오를 완성하세요.</p>
             </div>
             
-            <!-- ⚽ 게임 소개 및 규칙 상황판 -->
             <div class="bg-blue-950/70 rounded-xl p-4 border border-blue-500/40 shadow-xs mt-4 lg:mt-0 space-y-3">
                 <div class="flex items-center gap-1.5 border-b border-blue-500/30 pb-2">
                     <span class="flex h-1.5 w-1.5 relative">
@@ -56,13 +52,11 @@
                     <h2 class="font-bold text-amber-300 text-xs tracking-tight">안내 및 포인트 계산 방식</h2>
                 </div>
                 
-                <!-- 게임 소개 -->
                 <div class="text-[11px] text-blue-100 leading-relaxed bg-blue-900/30 p-2.5 rounded border border-blue-500/20">
                     <p class="font-bold text-white mb-0.5">📢 게임 소개</p>
-                    2026 월드컵의 주인공을 내 손으로 예측해보세요! 4강 진출국을 바탕으로 결승 대진과 최종 스코어를 맞히는 실시간 챌린지입니다.
+                    4강 진출국을 바탕으로 결승 대진과 최종 스코어를 맞히는 실시간 챌린지입니다.
                 </div>
 
-                <!-- 점수 계산 방식 -->
                 <div class="text-[11px] text-blue-100 space-y-1">
                     <p class="font-bold text-white mb-1">🔢 승리 포인트 계산법 (최대 100점)</p>
                     <div class="flex justify-between items-center bg-blue-950/60 px-2.5 py-1.5 rounded border border-blue-500/20">
@@ -74,7 +68,6 @@
                         <span class="text-amber-300 font-bold">30점</span>
                     </div>
                     
-                    <!-- 세부 스코어 보너스 규칙 -->
                     <div class="bg-blue-900/40 p-2 rounded-lg border border-indigo-500/30 space-y-1 mt-1.5">
                         <p class="text-[10px] font-bold text-amber-400 mb-1">⚽ 결승 필드 스코어 상세 (최대 40점)</p>
                         <div class="flex justify-between text-[10px] px-1">
@@ -86,17 +79,15 @@
                             <span class="text-white font-semibold">최대 +20점</span>
                         </div>
                         <div class="flex justify-between text-[10px] px-1">
-                            <span class="text-slate-300">└ 스코어 완벽 적중 (올킬 보너스)</span>
+                            <span class="text-slate-300">└ 스코어 완벽 적중 (보너스)</span>
                             <span class="text-white font-semibold">+5점</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 📅 토너먼트 일정 -->
                 <div class="border-t border-blue-500/30 pt-3 space-y-2">
                     <p class="font-bold text-white text-[11px] mb-1 flex items-center gap-1">🗓️ 토너먼트 경기 일정</p>
                     
-                    <!-- 준결승 1 매치 -->
                     <div class="bg-gradient-to-r from-blue-900/80 to-indigo-950/80 rounded-lg p-2 border border-blue-500/20 flex flex-col gap-1.5">
                         <div class="flex justify-between text-[9px] text-blue-300 font-bold px-0.5">
                             <span>MATCH 1 (준결승 1)</span>
@@ -115,7 +106,6 @@
                         </div>
                     </div>
 
-                    <!-- 준결승 2 매치 -->
                     <div class="bg-gradient-to-r from-blue-900/80 to-indigo-950/80 rounded-lg p-2 border border-blue-500/20 flex flex-col gap-1.5">
                         <div class="flex justify-between text-[9px] text-blue-300 font-bold px-0.5">
                             <span>MATCH 2 (준결승 2)</span>
@@ -123,34 +113,13 @@
                         </div>
                         <div class="flex items-center justify-center gap-3 py-0.5 bg-black/20 rounded-md">
                             <div class="flex items-center gap-1.5 w-24 justify-end">
-                                <span class="text-xs font-bold text-white whitespace-nowrap">잉글랜드</span>
+                                <span class="text-xs font-bold text-white">잉글랜드</span>
                                 <img src="https://flagcdn.com/w40/gb-eng.png" alt="England" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
                             </div>
-                            
                             <span class="text-[10px] font-black text-blue-400">VS</span>
-                            
                             <div class="flex items-center gap-1.5 w-24 justify-start">
                                 <img src="https://flagcdn.com/w40/ar.png" alt="Argentina" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
-                                <span class="text-xs font-bold text-white whitespace-nowrap">아르헨티나</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 결승전 매치 -->
-                    <div class="bg-gradient-to-r from-amber-950/40 to-indigo-950/90 rounded-lg p-2 border border-amber-500/30 flex flex-col gap-1.5">
-                        <div class="flex justify-between text-[9px] text-amber-300 font-bold px-0.5">
-                            <span>MATCH 3 (최종 결승전)</span>
-                            <span class="text-amber-400">7월 20일 04:00</span>
-                        </div>
-                        <div class="flex items-center justify-center gap-3 py-0.5 bg-black/30 rounded-md">
-                            <div class="flex items-center gap-1.5 w-20 justify-start">
-                                <span class="text-xs font-bold text-white">스페인</span>
-                                <img src="https://flagcdn.com/w40/es.png" alt="Spain" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
-                            </div>
-                            <span class="text-[10px] font-black text-amber-400 animate-pulse">VS</span>
-                            <div class="flex items-center gap-1.5 w-20 justify-start">
-                                <div class="h-3.5 w-5 bg-slate-700 rounded-sm border border-slate-600 flex items-center justify-center text-[8px] text-slate-400 font-bold">?</div>
-                                <span class="text-xs font-bold text-slate-300">미정</span>
+                                <span class="text-xs font-bold text-white">아르헨티나</span>
                             </div>
                         </div>
                     </div>
@@ -159,11 +128,10 @@
             </div>
         </div>
 
-        <!-- 📝 [오른쪽 메인 보드] 예측 입력 폼 구역 -->
+        <!-- 📝 [오른쪽 메인 보드] 예측 폼 -->
         <div class="lg:col-span-7 p-5 sm:p-6 flex flex-col justify-between space-y-4">
             <form id="predictForm" class="space-y-4">
                 
-                <!-- 🟧 1. 닉네임 입력 -->
                 <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs">
                     <label class="block font-bold text-orange-950 text-xs mb-1.5 tracking-tight">🔥 예측 참가자 닉네임 입력</label>
                     <input type="text" id="nickname" required disabled
@@ -171,9 +139,8 @@
                            placeholder="제출이 마감되어 입력할 수 없습니다.">
                 </div>
 
-                <!-- 🟧 2. 결승 진출국 선택 -->
                 <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs opacity-60 pointer-events-none">
-                    <label class="block font-bold text-orange-950 text-xs mb-2 tracking-tight">📢 4강 매치별 결승 진출국 선택 (각 15점)</label>
+                    <label class="block font-bold text-orange-950 text-xs mb-2 tracking-tight">📢 결승 진출국 선택 (각 15점)</label>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold text-orange-800 mb-1">준결승 1 승자</label>
@@ -194,43 +161,32 @@
                     </div>
                 </div>
 
-                <!-- 🟧 3. 결승전 필드 스코어 및 최종 우승팀 선택 -->
                 <div id="finalSection" class="p-4 bg-orange-50 border border-orange-200 rounded-xl shadow-xs opacity-50 pointer-events-none transition-all duration-300">
-                    <h3 class="font-bold text-xs text-orange-950 mb-2.5 tracking-tight">
-                        ⚽ 결승전 스코어 및 최종 우승국 예측
-                    </h3>
+                    <h3 class="font-bold text-xs text-orange-950 mb-2.5 tracking-tight">⚽ 스코어 및 최종 우승국 예측</h3>
                     
-                    <!-- 스코어 입력창 -->
                     <div class="grid grid-cols-2 gap-3 mb-3">
                         <div>
                             <label id="labelTeamA" class="block text-[10px] font-bold text-slate-600 mb-1">결승 팀 A 스코어</label>
-                            <input type="number" id="scoreA" min="0" max="99" placeholder="0" required
-                                   class="w-full p-2 text-xs border border-slate-300 bg-white rounded-lg font-bold text-center focus:outline-none transition">
+                            <input type="number" id="scoreA" min="0" max="99" placeholder="0" required class="w-full p-2 text-xs border border-slate-300 bg-white rounded-lg font-bold text-center">
                         </div>
                         <div>
                             <label id="labelTeamB" class="block text-[10px] font-bold text-slate-600 mb-1">결승 팀 B 스코어</label>
-                            <input type="number" id="scoreB" min="0" max="99" placeholder="0" required
-                                   class="w-full p-2 text-xs border border-slate-300 bg-white rounded-lg font-bold text-center focus:outline-none transition">
+                            <input type="number" id="scoreB" min="0" max="99" placeholder="0" required class="w-full p-2 text-xs border border-slate-300 bg-white rounded-lg font-bold text-center">
                         </div>
                     </div>
 
-                    <!-- 우승국 선택 -->
                     <div>
                         <label class="block text-[10px] font-bold text-orange-800 mb-1">최종 우승팀 선택 (30점)</label>
-                        <select id="winner" class="w-full p-2 text-xs border border-orange-300 bg-white rounded-lg font-bold text-orange-950 focus:outline-none transition" required>
+                        <select id="winner" class="w-full p-2 text-xs border border-orange-300 bg-white rounded-lg font-bold text-orange-950 focus:outline-none" required>
                             <option value="">결승 진출국을 먼저 고르세요</option>
                         </select>
-                        <p class="text-[10px] text-slate-400 mt-1">* 연장전 포함 스코어입니다. 무승부(승부차기행) 입력 시 우승팀을 자유롭게 지정할 수 있습니다.</p>
                     </div>
                 </div>
 
-                <!-- 제출 버튼 및 마감 상태 안내 카드 영역 -->
                 <div class="space-y-2">
                     <button type="submit" id="submitBtn" disabled class="w-full bg-gradient-to-r from-slate-400 to-slate-500 text-white p-3 rounded-xl font-bold cursor-not-allowed text-sm shadow-md">
                         제출이 마감되었습니다
                     </button>
-                    
-                    <!-- ⏱️ 마감 완료 고정 안내 카드 (기존 실시간 타이머 대체) -->
                     <div class="bg-slate-100 border border-slate-300 rounded-xl p-3 text-center shadow-inner">
                         <p class="text-xs font-black text-slate-500 tracking-wide font-mono flex items-center justify-center gap-1.5">
                             ⏱️ 4강 1경기 시작으로 예측 제출이 마감되었습니다.
@@ -239,23 +195,19 @@
                 </div>
             </form>
             
-            <!-- 하단 네비게이션 링크 -->
             <div class="text-center pt-2 border-t border-slate-100 flex justify-between items-center text-xs">
                 <p class="text-slate-400 font-medium">* 대진 규칙에 맞는 국가만 매칭됩니다.</p>
                 <a href="dashboard.html" class="inline-flex items-center gap-0.5 font-bold text-blue-600 hover:text-blue-700 hover:underline group">
-                    📊 대시보드 보기
-                    <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+                    📊 대시보드 보기 <span class="group-hover:translate-x-0.5 transition-transform">→</span>
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- 비즈니스 로직 스크립트 구역 (마감 스크립트 삭제 및 안전장치 유지) -->
     <script>
         const finalistASelect = document.getElementById('finalistA');
         const finalistBSelect = document.getElementById('finalistB');
         const finalSection = document.getElementById('finalSection');
-        
         const labelTeamA = document.getElementById('labelTeamA');
         const labelTeamB = document.getElementById('labelTeamB');
         const scoreAInput = document.getElementById('scoreA');
@@ -297,19 +249,14 @@
 
             if (isNaN(sA) || isNaN(sB)) return;
 
-            if (sA > sB) {
-                winnerSelect.value = teamA;
-            } else if (sB > sA) {
-                winnerSelect.value = teamB;
-            } else {
-                winnerSelect.value = "";
-            }
+            if (sA > sB) winnerSelect.value = teamA;
+            else if (sB > sA) winnerSelect.value = teamB;
+            else winnerSelect.value = "";
         }
 
         scoreAInput.addEventListener('input', handleScoreChange);
         scoreBInput.addEventListener('input', handleScoreChange);
 
-        // 프론트엔드 안전장치: 버튼이 풀리더라도 제출을 원천 차단
         document.getElementById('predictForm').addEventListener('submit', (e) => {
             e.preventDefault();
             alert("예측 제출 시간이 이미 마감되었습니다.");
