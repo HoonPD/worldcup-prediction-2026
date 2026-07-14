@@ -476,16 +476,16 @@
         // 🕰️ 실시간 카운트다운 로직 함수 (새로 추가된 부분)
         function startCountdown() {
             // 마감 시각: 2026년 7월 15일 오전 4시 (KST)
-            const targetDate = new Date("2026-07-15T04:00:00+09:00");
+            const targetDate = new Date("2026-07-15T04:00:00+09:00").getTime();
             const timeLeftEl = document.getElementById("timeLeft");
             const navBtn = document.getElementById("navPredictionBtn");
             const countdownArea = document.getElementById("countdownArea");
 
             function updateDisplay() {
-                const now = new Date();
+                const now = new Date().getTime();
                 const diff = targetDate - now;
 
-                if (diff <= 0) {
+                if (isNaN(diff) || diff <= 0) {
                     timeLeftEl.innerText = "예측이 마감되었습니다.";
                     countdownArea.className = "flex items-center justify-center gap-1.5 bg-gray-100 border border-gray-200 px-4 py-2.5 rounded-lg text-gray-500 text-xs sm:text-sm font-bold shadow-sm";
                     if(navBtn) {
@@ -587,6 +587,9 @@
             if(timeSorted.length > 0) {
                 document.getElementById('fastestUserNickname').innerText = `👤 ${timeSorted[0].nickname}`;
                 document.getElementById('fastestUserTime').innerText = formatDate(timeSorted[0].submittedAt || timeSorted[0].timestamp);
+            } else {
+                document.getElementById('fastestUserNickname').innerText = '데이터 없음';
+                document.getElementById('fastestUserTime').innerText = '-';
             }
 
             // 4) 🤖 AI_Predictor와 가장 가까운 1인 & 가장 먼 1인 추출
@@ -656,7 +659,7 @@
                     scoreA: 2,
                     scoreB: 1,
                     winner: "스페인",
-                    submittedAt: new String(new Date().toISOString())
+                    submittedAt: new Date().toISOString() // 💡 래퍼 객체 String() 제거하여 완벽한 문자열로 변경 (파싱 에러 원천 차단)
                 };
 
                 // AI 데이터 상단 바 매핑
@@ -676,7 +679,9 @@
                 // 동점 시간 정렬
                 predictions.sort((a, b) => {
                     if (b.score !== a.score) return b.score - a.score;
-                    return new Date(a.submittedAt || a.timestamp) - new Date(b.submittedAt || b.timestamp);
+                    const dateA = new Date(a.submittedAt || a.timestamp);
+                    const dateB = new Date(b.submittedAt || b.timestamp);
+                    return dateA - dateB;
                 });
 
                 // 🤖 AI 성능 순위 백분위 계산
