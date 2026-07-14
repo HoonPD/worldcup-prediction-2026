@@ -18,7 +18,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // 호스팅 서버의 로컬 시간대에 영향받지 않도록 밀리초(ms) 절대값으로 환산하여 관리합니다.
 const DEADLINE_MS = new Date('2026-07-15T04:00:00+09:00').getTime();
 
-// 🏆 [실시간 경기 결과 입력창] 
+// 🏆 [실시간 경기 결과 입력창]
 // 경기 진행 상황에 따라 확정된 값만 채워 넣으시면 실시간으로 점수가 순차 반영됩니다!
 const ACTUAL_RESULT = {
     finalists: ["스페인"],      // 1단계: 결승 진출국 확정 시 입력 (예: ["프랑스", "아르헨티나"])
@@ -56,22 +56,22 @@ function calculateScore(pred) {
         if (pred.finalist_a === ACTUAL_RESULT.teamA) {
             predScoreA = pred.score_a;
             predScoreB = pred.score_b;
-        } 
-        // 유저 예측 A가 실제 teamB인 경우 (순서가 뒤바뀐 경우)
-        else if (pred.finalist_a === ACTUAL_RESULT.teamB) {
+        }
+        // [수정] 유저 예측 A가 실제 teamB인 경우 (teamB가 null이 아닐 때만)
+        else if (ACTUAL_RESULT.teamB && pred.finalist_a === ACTUAL_RESULT.teamB) {
             predScoreA = pred.score_b;
             predScoreB = pred.score_a;
         }
 
         // 유저가 예측한 두 팀이 결승에 실제로 모두 진출했을 때만 스코어 세부 점수 계산 시작
         if (predScoreA !== null && predScoreB !== null) {
-            
+
             // ① 승무패 및 골득실 차이 적중 여부 계산 (+15점)
             const actualDiff = ACTUAL_RESULT.scoreA - ACTUAL_RESULT.scoreB;
             const predDiff = predScoreA - predScoreB;
-            
+
             const isOutcomeMatch = (Math.sign(actualDiff) === Math.sign(predDiff)) && (actualDiff === predDiff);
-            
+
             if (isOutcomeMatch) {
                 score += 15;
             }
@@ -89,7 +89,7 @@ function calculateScore(pred) {
             }
         }
     }
-    
+
     return score;
 }
 
@@ -101,7 +101,7 @@ app.post('/api/predict', async (req, res) => {
     }
 
     const { nickname, finalistA, finalistB, winner, scoreA, scoreB, submittedAt } = req.body;
-    
+
     if (!nickname || !finalistA || !finalistB || !winner || scoreA === undefined || scoreB === undefined) {
         return res.status(400).json({ success: false, message: "모든 항목을 올바르게 입력해주세요." });
     }
