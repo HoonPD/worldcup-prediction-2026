@@ -215,21 +215,12 @@
                             <th class="px-4 py-3.5 text-center font-bold text-blue-600">총점</th>
                             <th class="px-4 py-3.5 text-center">제출 시간</th>
                             <!-- ⓘ 아이콘 및 마우스 오버 시 뜨는 툴팁(말풍선) 적용 컬럼 -->
-                            <th class="px-4 py-3.5 text-center relative group cursor-help w-32">
+                            <th class="px-4 py-3.5 text-center cursor-help w-32" 
+                                onmouseenter="showGlobalTooltip(event)" 
+                                onmouseleave="hideGlobalTooltip()" 
+                                onclick="showGlobalTooltip(event)">
                                 <span class="border-b border-dashed border-gray-400">실시간 1등 확률</span>
                                 <span class="text-blue-500 font-bold ml-1">ⓘ</span>
-                                
-                                <!-- Tooltip HTML 구조 -->
-                                <div class="absolute bottom-full right-1/2 translate-x-1/2 mb-2 hidden group-hover:block w-64 p-3 bg-slate-900 text-white text-[11px] leading-relaxed rounded-xl shadow-xl z-50 pointer-events-none font-normal">
-                                    <p class="font-bold text-amber-400 mb-1">🎯 실시간 1등 당첨 확률 예측 로직</p>
-                                    <ul class="list-disc list-inside space-y-1 text-slate-300">
-                                        <li><strong class="text-white">네이버 스포츠 분석 가중치:</strong> 확정된 스페인/아르헨티나의 전술 지표 및 실시간 배당률 적용</li>
-                                        <li><strong class="text-white">AI 시뮬레이션 동기화:</strong> 스페인 우승(58%)과 유저 예측 스코어의 일치 편차 분석</li>
-                                        <li><strong class="text-white">동점 규칙 보정:</strong> 현재 실시간 점수와 타이 브레이커인 빠른 제출 시간 가중치 통합 연산</li>
-                                    </ul>
-                                    <!-- 말풍선 꼬리표 -->
-                                    <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900"></div>
-                                </div>
                             </th>
                         </tr>
                     </thead>
@@ -868,6 +859,60 @@
         }
 
         window.onload = loadDashboard;
+
+        // 전역 변수로 말풍선 타이머 관리 (모바일 클릭 대응)
+        let tooltipTimer;
+        
+        function showGlobalTooltip(event) {
+            // 이벤트 전파 방지
+            event.stopPropagation();
+            
+            const tooltip = document.getElementById('globalTooltip');
+            if (!tooltip) return;
+        
+            // 마우스 혹은 터치된 타겟 요소의 절대 좌표 구하기
+            const rect = event.currentTarget.getBoundingClientRect();
+            
+            // 말풍선을 화면 중앙에 정렬하기 위한 계산
+            const tooltipWidth = 256; // w-64 = 256px
+            const leftPosition = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+            const topPosition = rect.top - 140; // 말풍선 높이만큼 위로 띄움 (픽셀 조정 가능)
+        
+            // 위치 주입 및 노출
+            tooltip.style.left = `${leftPosition}px`;
+            tooltip.style.top = `${topPosition}px`;
+            tooltip.classList.remove('hidden');
+        
+            // 모바일 사용자를 위해 클릭했을 경우 3.5초 뒤 자동 초기화 세팅
+            clearTimeout(tooltipTimer);
+            if (event.type === 'click') {
+                tooltipTimer = setTimeout(() => {
+                    tooltip.classList.add('hidden');
+                }, 3500);
+            }
+        }
+        
+        function hideGlobalTooltip() {
+            const tooltip = document.getElementById('globalTooltip');
+            if (tooltip) {
+                tooltip.classList.add('hidden');
+            }
+        }
+        
+        // 화면 어디든 다른 곳을 누르면 말풍선이 닫히도록 바디 이벤트 추가 (모바일 방어코드)
+        document.addEventListener('click', hideGlobalTooltip);
     </script>
+    
+    <!-- HTML 맨 아래 body 닫히기 전에 넣어주세요 -->
+    <div id="globalTooltip" class="fixed hidden w-64 p-3 bg-slate-900 text-white text-[11px] leading-relaxed rounded-xl shadow-xl z-50 pointer-events-none font-normal">
+        <p class="font-bold text-amber-400 mb-1">🎯 실시간 1등 당첨 확률 예측 로직</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-300">
+            <li><strong class="text-white">네이버 스포츠 분석 가중치:</strong> 확정된 스페인/아르헨티나의 전술 지표 및 실시간 배당률 적용</li>
+            <li><strong class="text-white">AI 시뮬레이션 동기화:</strong> 스페인 우승(58%)과 유저 예측 스코어의 일치 편차 분석</li>
+            <li><strong class="text-white">동점 규칙 보정:</strong> 현재 실시간 점수와 타이 브레이커인 빠른 제출 시간 가중치 통합 연산</li>
+        </ul>
+        <!-- 말풍선 꼬리표 -->
+        <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900"></div>
+    </div>
 </body>
 </html>
