@@ -484,28 +484,55 @@
         function calculateUserScore(user, actual) {
             let total = 0;
             
-            // 안전망: actual이나 finalists 배열 구조가 유효하지 않으면 0점 처리
             if (!actual || !actual.finalists || !Array.isArray(actual.finalists)) {
                 return 0;
             }
-
-            // 1. 결승 진출국 적중 계산 (각 15점, 최대 30점)
+        
+            // 1. 준결승 승자(결승 진출국) 적중 계산 (각 15점, 최대 30점)
             if (user.finalistA && actual.finalists.includes(user.finalistA)) total += 15;
             if (user.finalistB && actual.finalists.includes(user.finalistB)) total += 15;
-
-            // 2. 결승전 최종 정밀 스코어 적중 계산 (40점) - 배치 순서 유연화 검증 포함
-            if (actual.scoreA !== null && actual.scoreB !== null && actual.scoreA !== undefined && actual.scoreB !== undefined) {
-                const isScoreMatch = 
-                    (user.finalistA === actual.finalists[0] && user.scoreA === actual.scoreA && user.scoreB === actual.scoreB) ||
-                    (user.finalistA === actual.finalists[1] && user.scoreA === actual.scoreB && user.scoreB === actual.scoreA);
-                if (isScoreMatch) total += 40;
-            }
-
-            // 3. 최종 우승국 적중 계산 (30점)
+        
+            // 2. 최종 우승국 적중 계산 (30점)
             if (actual.winner && user.winner === actual.winner) {
                 total += 30;
             }
-
+        
+            // 3. 결승전 필드 스코어 상세 계산 (최대 40점)
+            if (actual.scoreA !== null && actual.scoreB !== null && actual.scoreA !== undefined && actual.scoreB !== undefined) {
+                
+                // 유저가 예측한 팀 배치 순서가 실제 결과 배치와 같은지 여부 확인
+                const isNormalOrder = (user.finalistA === actual.finalists[0] && user.finalistB === actual.finalists[1]);
+                const isReverseOrder = (user.finalistA === actual.finalists[1] && user.finalistB === actual.finalists[0]);
+        
+                if (isNormalOrder || isReverseOrder) {
+                    // 유저 예측 스코어와 실제 스코어를 매칭 (순서 정렬)
+                    const userScoreA = user.scoreA;
+                    const userScoreB = user.scoreB;
+                    const actualScoreA = isNormalOrder ? actual.scoreA : actual.scoreB;
+                    const actualScoreB = isNormalOrder ? actual.scoreB : actual.scoreA;
+        
+                    let scoreSectionPoints = 0;
+        
+                    // ① 승무패 및 골득실 차이 적중 (+15점)
+                    const userDiff = userScoreA - userScoreB;
+                    const actualDiff = actualScoreA - actualScoreB;
+                    if (userDiff === actualDiff) {
+                        scoreSectionPoints += 15;
+                    }
+        
+                    // ② 각 팀별 골 수 적중 (각 10점, 최대 +20점)
+                    if (userScoreA === actualScoreA) scoreSectionPoints += 10;
+                    if (userScoreB === actualScoreB) scoreSectionPoints += 10;
+        
+                    // ③ 스코어 완벽 적중 보너스 (+5점)
+                    if (userScoreA === actualScoreA && userScoreB === actualScoreB) {
+                        scoreSectionPoints += 5;
+                    }
+        
+                    total += scoreSectionPoints;
+                }
+            }
+        
             return total;
         }
 
