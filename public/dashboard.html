@@ -55,14 +55,10 @@
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">📊 2026 월드컵 예측 현황 대시보드</h1>
                 <p class="text-gray-500 text-sm mt-1">실시간 경기 결과와 참가자들의 실시간 스코어를 확인하세요.</p>
             </div>
-            <!-- 실시간 카운트다운 및 이동 버튼 영역 (수정된 부분) -->
+            <!-- 실시간 카운트다운 제거 및 이동 버튼 활성화 영역 -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto shrink-0">
-                <div id="countdownArea" class="flex items-center justify-center gap-1.5 bg-rose-50 border border-rose-100 px-4 py-2.5 rounded-lg text-rose-700 text-xs sm:text-sm font-bold shadow-sm">
-                    <span>⏰ 예측 마감까지</span>
-                    <span id="timeLeft" class="font-mono text-sm sm:text-base text-rose-600 font-extrabold">-시간 -분 -초</span>
-                </div>
                 <a id="navPredictionBtn" href="index.html" class="text-center bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md text-sm whitespace-nowrap">
-                    ↩ 내 예측 수정/참여하기
+                    ↩ 메인으로 이동하기
                 </a>
             </div>
         </div>
@@ -118,7 +114,7 @@
             </div>
         </div>
 
-        <!-- 🤖 [NEW] AI 예측 시나리오 요약 섹션 -->
+        <!-- 🤖 AI 예측 시나리오 요약 섹션 -->
         <div class="bg-gradient-to-r from-purple-900 to-indigo-950 text-white p-5 rounded-xl shadow-md">
             <div class="flex items-center gap-2 mb-2">
                 <span class="bg-purple-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider animate-pulse">AI Insights</span>
@@ -145,7 +141,7 @@
             </div>
         </div>
 
-        <!-- 📋 AI 예측 데이터 및 사이트 기반 분석 근거 카드 (추가된 영역) -->
+        <!-- 📋 AI 예측 데이터 및 사이트 기반 분석 근거 카드 -->
         <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
             <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
                 <span class="text-lg">🔍</span>
@@ -229,7 +225,7 @@
             </div>
         </div>
 
-        <!-- 📊 [NEW] 참여자 데이터 기반 인사이트 통계 섹션 -->
+        <!-- 📊 참여자 데이터 기반 인사이트 통계 섹션 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- 1) 최다 우승 예측 국가 그래프 -->
             <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
@@ -473,41 +469,6 @@
     </div>
 
     <script>
-        // 🕰️ 실시간 카운트다운 로직 함수 (새로 추가된 부분)
-        function startCountdown() {
-            // 마감 시각: 2026년 7월 15일 오전 4시 (KST)
-            const targetDate = new Date("2026-07-15T04:00:00+09:00").getTime();
-            const timeLeftEl = document.getElementById("timeLeft");
-            const navBtn = document.getElementById("navPredictionBtn");
-            const countdownArea = document.getElementById("countdownArea");
-
-            function updateDisplay() {
-                const now = new Date().getTime();
-                const diff = targetDate - now;
-
-                if (isNaN(diff) || diff <= 0) {
-                    timeLeftEl.innerText = "예측이 마감되었습니다.";
-                    countdownArea.className = "flex items-center justify-center gap-1.5 bg-gray-100 border border-gray-200 px-4 py-2.5 rounded-lg text-gray-500 text-xs sm:text-sm font-bold shadow-sm";
-                    if(navBtn) {
-                        navBtn.innerText = "🔒 예측 마감됨";
-                        navBtn.href = "javascript:void(0)";
-                        navBtn.className = "text-center bg-gray-400 text-white px-5 py-2.5 rounded-lg font-semibold cursor-not-allowed shadow-md text-sm whitespace-nowrap";
-                    }
-                    clearInterval(intervalId);
-                    return;
-                }
-
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                timeLeftEl.innerText = `${hours}시간 ${minutes}분 ${seconds}초`;
-            }
-
-            updateDisplay();
-            const intervalId = setInterval(updateDisplay, 1000);
-        }
-
         function formatDate(isoString) {
             if (!isoString) return "-";
             const date = new Date(isoString);
@@ -519,17 +480,32 @@
             return `${month}/${day} ${hours}:${minutes}`;
         }
 
+        // [1단계] ACTUAL_RESULT 배열 매핑 규칙 및 방어 연산이 적용된 점수 산출 로직
         function calculateUserScore(user, actual) {
             let total = 0;
-            if (actual.finalistA && [user.finalistA, user.finalistB].includes(actual.finalistA)) total += 15;
-            if (actual.finalistB && [user.finalistA, user.finalistB].includes(actual.finalistB)) total += 15;
-            if (actual.scoreA !== null && actual.scoreB !== null) {
+            
+            // 안전망: actual이나 finalists 배열 구조가 유효하지 않으면 0점 처리
+            if (!actual || !actual.finalists || !Array.isArray(actual.finalists)) {
+                return 0;
+            }
+
+            // 1. 결승 진출국 적중 계산 (각 15점, 최대 30점)
+            if (user.finalistA && actual.finalists.includes(user.finalistA)) total += 15;
+            if (user.finalistB && actual.finalists.includes(user.finalistB)) total += 15;
+
+            // 2. 결승전 최종 정밀 스코어 적중 계산 (40점) - 배치 순서 유연화 검증 포함
+            if (actual.scoreA !== null && actual.scoreB !== null && actual.scoreA !== undefined && actual.scoreB !== undefined) {
                 const isScoreMatch = 
-                    (user.finalistA === actual.finalistA && user.scoreA === actual.scoreA && user.scoreB === actual.scoreB) ||
-                    (user.finalistA === actual.finalistB && user.scoreA === actual.scoreB && user.scoreB === actual.scoreA);
+                    (user.finalistA === actual.finalists[0] && user.scoreA === actual.scoreA && user.scoreB === actual.scoreB) ||
+                    (user.finalistA === actual.finalists[1] && user.scoreA === actual.scoreB && user.scoreB === actual.scoreA);
                 if (isScoreMatch) total += 40;
             }
-            if (actual.winner && user.winner === actual.winner) total += 30;
+
+            // 3. 최종 우승국 적중 계산 (30점)
+            if (actual.winner && user.winner === actual.winner) {
+                total += 30;
+            }
+
             return total;
         }
 
@@ -580,7 +556,7 @@
                     </div>`;
             }).join('') || '<p class="text-gray-400 text-xs text-center py-4">집계된 데이터가 없습니다.</p>';
 
-            // 3) 가장 빠르게 참여한 사람 추출 (rawPredictions 전체 DB 타임스탬프 기준 최소값)
+            // 3) 가장 빠르게 참여한 사람 추출
             const timeSorted = [...rawPredictions].filter(p => (p.submittedAt || p.timestamp) && p.nickname !== '🤖 AI_Predictor')
                 .sort((a,b) => new Date(a.submittedAt || a.timestamp) - new Date(b.submittedAt || b.timestamp));
             
@@ -599,10 +575,10 @@
                     let diffScore = 0;
                     
                     const aiFinalists = [aiPredictor.finalistA, aiPredictor.finalistB];
-                    if (aiFinalists.includes(user.finalistA)) diffScore += 15;
-                    if (aiFinalists.includes(user.finalistB)) diffScore += 15;
+                    if (user.finalistA && aiFinalists.includes(user.finalistA)) diffScore += 15;
+                    if (user.finalistB && aiFinalists.includes(user.finalistB)) diffScore += 15;
                     
-                    if (user.winner === aiPredictor.winner) diffScore += 30;
+                    if (user.winner && user.winner === aiPredictor.winner) diffScore += 30;
                     
                     const isScoreMatch = 
                         (user.finalistA === aiPredictor.finalistA && user.scoreA === aiPredictor.scoreA && user.scoreB === aiPredictor.scoreB) ||
@@ -626,9 +602,6 @@
         }
 
         async function loadDashboard() {
-            // 카운트다운 시작 처리 (새로 추가된 호출선)
-            startCountdown();
-
             const myNickname = localStorage.getItem('worldcup_nickname');
             const tbody = document.getElementById('leaderboardBody');
 
@@ -638,15 +611,17 @@
 
                 let rawPredictions = data.results || []; 
                 
+                // ACTUAL_RESULT 배열 기반의 데이터 구조 매핑 처리
                 const actual = data.actualResult || { 
-                    finalistA: "", finalistB: "", scoreA: null, scoreB: null, winner: "", runnerUp: "" 
+                    finalists: [], scoreA: null, scoreB: null, winner: null, runnerUp: null 
                 };
 
                 // 상단 오피셜 카드 업데이트
                 document.getElementById('officialWinner').innerText = actual.winner ? `🎉 ${actual.winner}` : '결정 대기 중';
                 document.getElementById('officialRunnerUp').innerText = actual.runnerUp ? actual.runnerUp : '결정 대기 중';
-                if (actual.scoreA !== null && actual.scoreB !== null) {
-                    document.getElementById('officialScore').innerText = `${actual.finalistA} ${actual.scoreA} : ${actual.scoreB} ${actual.finalistB}`;
+                
+                if (actual.finalists && actual.finalists.length >= 2 && actual.scoreA !== null && actual.scoreB !== null) {
+                    document.getElementById('officialScore').innerText = `${actual.finalists[0]} ${actual.scoreA} : ${actual.scoreB} ${actual.finalists[1]}`;
                 } else {
                     document.getElementById('officialScore').innerText = '결전 대기 중';
                 }
@@ -659,7 +634,7 @@
                     scoreA: 2,
                     scoreB: 1,
                     winner: "스페인",
-                    submittedAt: new Date().toISOString() // 💡 래퍼 객체 String() 제거하여 완벽한 문자열로 변경 (파싱 에러 원천 차단)
+                    submittedAt: new Date().toISOString()
                 };
 
                 // AI 데이터 상단 바 매핑
@@ -670,9 +645,12 @@
                 // 랭킹 테이블 내 순위 비교를 위해 참여자 어레이에 AI 오브젝트 추가 삽입
                 rawPredictions.push(aiPredictMock);
 
-                // 실시간 스코어 계산 매핑
+                // 실시간 스코어 계산 매핑 (클라이언트 단 동적 계산 주입)
                 const predictions = rawPredictions.map(user => {
-                    return { ...user }; // 서버에서 받은 score 값을 그대로 사용
+                    return { 
+                        ...user,
+                        score: calculateUserScore(user, actual)
+                    };
                 });
 
                 // 동점 시간 정렬
@@ -705,8 +683,8 @@
                     document.getElementById('myTotalScoreDisplay').innerText = `${myData.score}점`;
                     
                     let hitFinalists = [];
-                    if (actual.finalistA && [myData.finalistA, myData.finalistB].includes(actual.finalistA)) hitFinalists.push(actual.finalistA);
-                    if (actual.finalistB && [myData.finalistA, myData.finalistB].includes(actual.finalistB)) hitFinalists.push(actual.finalistB);
+                    if (actual.finalists && actual.finalists.includes(myData.finalistA)) hitFinalists.push(myData.finalistA);
+                    if (actual.finalists && actual.finalists.includes(myData.finalistB)) hitFinalists.push(myData.finalistB);
                     
                     document.getElementById('myMatchingFinalists').innerHTML = hitFinalists.length > 0 
                         ? `${hitFinalists.join(', ')} <span class="text-[10px] text-green-300">(+${hitFinalists.length * 15}점)</span>` 
@@ -716,8 +694,8 @@
                         document.getElementById('myScoreStatus').innerText = `대기 중 (${myData.scoreA}:${myData.scoreB})`;
                     } else {
                         const isScoreMatch = 
-                            (myData.finalistA === actual.finalistA && myData.scoreA === actual.scoreA && myData.scoreB === actual.scoreB) ||
-                            (myData.finalistA === actual.finalistB && myData.scoreA === actual.scoreB && myData.scoreB === actual.scoreA);
+                            (myData.finalistA === actual.finalists[0] && myData.scoreA === actual.scoreA && myData.scoreB === actual.scoreB) ||
+                            (myData.finalistA === actual.finalists[1] && myData.scoreA === actual.scoreB && myData.scoreB === actual.scoreA);
                         document.getElementById('myScoreStatus').innerHTML = isScoreMatch
                             ? `🎯 정밀 적중 <span class="text-[10px] text-green-300">(+40점)</span>`
                             : `❌ 불일치 (내 예측 ${myData.scoreA}:${myData.scoreB})`;
@@ -751,15 +729,15 @@
 
                     const rankBadge = index === 0 ? '🥇 1등' : index === 1 ? '🥈 2등' : index === 2 ? '🥉 3등' : `${index + 1}등`;
                     
-                    const isFinAHit = actual.finalistA && [user.finalistA, user.finalistB].includes(actual.finalistA);
-                    const isFinBHit = actual.finalistB && [user.finalistA, user.finalistB].includes(actual.finalistB);
+                    const isFinAHit = actual.finalists && actual.finalists.includes(user.finalistA);
+                    const isFinBHit = actual.finalists && actual.finalists.includes(user.finalistB);
                     
                     const finAMarkup = isFinAHit ? `<span class="text-green-600 font-bold">✓ ${user.finalistA}</span>` : `<span>${user.finalistA || '-'}</span>`;
                     const finBMarkup = isFinBHit ? `<span class="text-green-600 font-bold">✓ ${user.finalistB}</span>` : `<span>${user.finalistB || '-'}</span>`;
 
-                    const isScoreMatch = actual.scoreA !== null && 
-                        ((user.finalistA === actual.finalistA && user.scoreA === actual.scoreA && user.scoreB === actual.scoreB) ||
-                         (user.finalistA === actual.finalistB && user.scoreA === actual.scoreB && user.scoreB === actual.scoreA));
+                    const isScoreMatch = actual.scoreA !== null && actual.finalists && actual.finalists.length >= 2 &&
+                        ((user.finalistA === actual.finalists[0] && user.scoreA === actual.scoreA && user.scoreB === actual.scoreB) ||
+                         (user.finalistA === actual.finalists[1] && user.scoreA === actual.scoreB && user.scoreB === actual.scoreA));
                     
                     const scoreMarkup = isScoreMatch ? `<span class="text-green-600 font-black">🎯 ${user.scoreA} : ${user.scoreB}</span>` : `<span>${user.scoreA} : ${user.scoreB}</span>`;
                     const winnerMarkup = actual.winner && user.winner === actual.winner ? `<span class="text-green-600 font-black">✓ ${user.winner}</span>` : `<span>${user.winner || '-'}</span>`;
