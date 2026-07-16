@@ -59,6 +59,7 @@
 
                 <div class="text-[11px] text-blue-100 space-y-1">
                     <p class="font-bold text-white mb-1">🔢 승리 포인트 계산법 (최대 100점)</p>
+                    
                     <div class="flex justify-between items-center bg-blue-950/60 px-2.5 py-1.5 rounded border border-blue-500/20">
                         <span class="text-blue-300">준결승 승자 예측 (각)</span>
                         <span class="text-amber-300 font-bold">15점</span>
@@ -68,10 +69,11 @@
                         <span class="text-amber-300 font-bold">30점</span>
                     </div>
                     
+                    <!-- 결승 필드 스코어 상세 -->
                     <div class="bg-blue-900/40 p-2 rounded-lg border border-indigo-500/30 space-y-1 mt-1.5">
                         <p class="text-[10px] font-bold text-amber-400 mb-1">⚽ 결승 필드 스코어 상세 (최대 40점)</p>
                         <div class="flex justify-between text-[10px] px-1">
-                            <span class="text-slate-300">└ 승무패/골득실 차이 적중</span>
+                            <span class="text-slate-300">└ 승무패/골득실 차이 적중 <span class="text-slate-400 text-[9px]">(대진 완타 시)</span></span>
                             <span class="text-white font-semibold">+15점</span>
                         </div>
                         <div class="flex justify-between text-[10px] px-1">
@@ -79,8 +81,13 @@
                             <span class="text-white font-semibold">최대 +20점</span>
                         </div>
                         <div class="flex justify-between text-[10px] px-1">
-                            <span class="text-slate-300">└ 스코어 완벽 적중 (보너스)</span>
+                            <span class="text-slate-300">└ 스코어 완벽 적중 <span class="text-slate-400 text-[9px]">(보너스)</span></span>
                             <span class="text-white font-semibold">+5점</span>
+                        </div>
+                
+                        <!-- 💡 한 팀만 맞춘 경우에 대한 안내 문구 추가 -->
+                        <div class="mt-1.5 pt-1 border-t border-indigo-500/20 text-[9px] text-blue-200/90 leading-relaxed">
+                            <span class="text-amber-300 font-semibold">※ 단독 적중 예외:</span> 결승 진출국 중 <strong class="text-white">한 팀만 맞춘 경우</strong>에도, 그 팀의 예측 골 수가 실제 골 수와 일치하면 <strong class="text-amber-300">10점</strong>이 부여됩니다. (단, 득실차 및 보너스는 미적용)
                         </div>
                     </div>
                 </div>
