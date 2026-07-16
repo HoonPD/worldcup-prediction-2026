@@ -69,86 +69,75 @@
                 <span class="text-xl">🎁</span>
                 <h2 class="text-base font-bold text-emerald-900">최종 예측 성공 경품 안내</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto my-8">
-    
+            
+            <!-- 1등, 2등 상품 그리드 (모바일 1열, 태블릿 이상 2열) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
                 <!-- 🥇 1등 상품 카드 -->
-                <div class="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm flex flex-col justify-between">
-                    <div>
-                        <!-- 상품 정보 (기존에 작성하신 코드가 있다면 대체 가능) -->
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">🥇 1등 경품</span>
-                            <span class="text-xs text-slate-400">최종 스코어 적중자</span>
-                        </div>
-                        <div class="text-center my-6">
-                            <!-- 상품 이미지 들어갈 자리 -->
-                            <div class="text-5xl mb-3">📱</div>
-                            <h4 class="font-bold text-lg text-slate-800">아이폰 16 Pro Max</h4>
-                            <p class="text-xs text-slate-500 mt-1">예측 스코어를 가장 완벽하게 맞춘 단 1인</p>
+                <div class="bg-white p-4 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-sm">
+                    <!-- 상단: 상품 정보 -->
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-3xl shrink-0">🥇</span>
+                        <div>
+                            <span class="text-xs font-bold text-emerald-600 block">최종 1등 상품</span>
+                            <span class="text-sm font-extrabold text-gray-800">디저트 커피 세트 쿠폰 <span class="text-xs font-normal text-gray-400">(15,000원 상당)</span></span>
                         </div>
                     </div>
-            
-                    <!-- ✨ [추가] 1등 획득 기대 참가자 카드 -->
-                    <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">현재 이 경품의 우승 후보 🏆</p>
+                    
+                    <!-- 하단: 우승 후보 참가자 정보 -->
+                    <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100/80">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">현재 이 경품의 우승 후보 🏆</p>
                         <div class="flex items-center justify-between">
-                            <!-- 왼쪽: 캐릭터 & 닉네임 -->
-                            <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-lg shadow-sm border border-amber-200">
-                                    🦁 <!-- 귀여운 캐릭터 이모지 (또는 캐릭터 이미지) -->
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs border border-amber-200 shadow-sm">
+                                    🦁
                                 </div>
                                 <div>
-                                    <div class="text-xs font-bold text-slate-700">드리블대왕김철수</div>
-                                    <span class="text-[10px] text-slate-400">제출 시간: 10분 전</span>
+                                    <span class="text-xs font-bold text-slate-700 block leading-tight">드리블대왕김철수</span>
+                                    <span class="text-[9px] text-slate-400 leading-none">제출: 10분 전</span>
                                 </div>
                             </div>
-                            <!-- 오른쪽: 실시간 1등 확률 -->
                             <div class="text-right">
-                                <span class="text-[10px] block text-slate-400">실시간 1등 확률</span>
-                                <span class="text-xs font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/50">84.2%</span>
+                                <span class="text-[8px] text-slate-400 block leading-none">실시간 1등 확률</span>
+                                <span class="text-[11px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50">84.2%</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            
+        
                 <!-- 🥈 2등 상품 카드 -->
-                <div class="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm flex flex-col justify-between">
-                    <div>
-                        <!-- 상품 정보 -->
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="px-2.5 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded-full">🥈 2등 경품</span>
-                            <span class="text-xs text-slate-400">차점자 추첨</span>
-                        </div>
-                        <div class="text-center my-6">
-                            <!-- 상품 이미지 들어갈 자리 -->
-                            <div class="text-5xl mb-3">🎧</div>
-                            <h4 class="font-bold text-lg text-slate-800">에어팟 프로 2세대</h4>
-                            <p class="text-xs text-slate-500 mt-1">간발의 차이로 순위를 놓친 아쉬운 실력자</p>
+                <div class="bg-white p-4 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-sm">
+                    <!-- 상단: 상품 정보 -->
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-3xl shrink-0">🥈</span>
+                        <div>
+                            <span class="text-xs font-bold text-emerald-600 block">최종 2등 상품</span>
+                            <span class="text-sm font-extrabold text-gray-800">아메리카노 단품 커피 쿠폰 <span class="text-xs font-normal text-gray-400">(5,000원 상당)</span></span>
                         </div>
                     </div>
-            
-                    <!-- ✨ [추가] 2등 획득 기대 참가자 카드 -->
-                    <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">현재 이 경품의 우승 후보 🥈</p>
+                    
+                    <!-- 하단: 우승 후보 참가자 정보 -->
+                    <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100/80">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">현재 이 경품의 우승 후보 🥈</p>
                         <div class="flex items-center justify-between">
-                            <!-- 왼쪽: 캐릭터 & 닉네임 -->
-                            <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-lg shadow-sm border border-blue-100">
-                                    🐰 <!-- 귀여운 캐릭터 이모지 -->
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-xs border border-blue-100 shadow-sm">
+                                    🐰
                                 </div>
                                 <div>
-                                    <div class="text-xs font-bold text-slate-700">골대만세번맞춤</div>
-                                    <span class="text-[10px] text-slate-400">제출 시간: 1시간 전</span>
+                                    <span class="text-xs font-bold text-slate-700 block leading-tight">골대만세번맞춤</span>
+                                    <span class="text-[9px] text-slate-400 leading-none">제출: 1시간 전</span>
                                 </div>
                             </div>
-                            <!-- 오른쪽: 실시간 2등 확률 (또는 1등 확률) -->
                             <div class="text-right">
-                                <span class="text-[10px] block text-slate-400">실시간 1등 확률</span>
-                                <span class="text-xs font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">62.8%</span>
+                                <span class="text-[8px] text-slate-400 block leading-none">실시간 1등 확률</span>
+                                <span class="text-[11px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">62.8%</span>
                             </div>
                         </div>
                     </div>
                 </div>
-             </div>
+        
+            </div>
         </div>
 
         <!-- 🏆 실시간 오피셜 결과 하이라이트 카드 섹션 -->
