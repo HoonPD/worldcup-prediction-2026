@@ -367,7 +367,7 @@
             </div>
         </div>
 
-        <!-- 📊 [추가할 UI 영역] 결승전 가상 시나리오 시뮬레이터 카드 (UI 상단 적절한 곳에 배치하세요) -->
+        <!-- 🔮 결승전 가상 시나리오 시뮬레이터 카드 -->
         <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
             <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
                 <span class="text-lg">🔮</span>
@@ -426,90 +426,6 @@
             </div>
         </div>
         
-        <script>
-            /**
-             * 전역 변수로 참가자 원래 데이터 리스트 백업 보관
-             */
-            let originalPredictionsData = [];
-        
-            /**
-             * 가상 시나리오 기반으로 가상 총점을 계산하고 가상 1, 2위를 실시간 렌더링하는 함수
-             */
-            function runScenarioSimulation() {
-                if (!originalPredictionsData || originalPredictionsData.length === 0) return;
-        
-                // 1. 입력 폼의 값 가져오기
-                const simScoreSpain = parseInt(document.getElementById('simScoreSpain').value) || 0;
-                const simScoreArgentina = parseInt(document.getElementById('simScoreArgentina').value) || 0;
-                let simWinner = document.getElementById('simWinner').value;
-        
-                // 💡 방어 코드: 90분 정규 시간 점수가 무승부가 아님에도 우승자가 점수 상황과 모순될 경우 자동 보정
-                if (simScoreSpain > simScoreArgentina) {
-                    simWinner = "스페인";
-                    document.getElementById('simWinner').value = "스페인";
-                } else if (simScoreArgentina > simScoreSpain) {
-                    simWinner = "아르헨티나";
-                    document.getElementById('simWinner').value = "아르헨티나";
-                }
-        
-                // 2. 가상의 오피셜 결과 개체(actual) 생성
-                const virtualActual = {
-                    finalists: ["스페인", "아르헨티나"],
-                    scoreA: simScoreSpain,
-                    scoreB: simScoreArgentina,
-                    winner: simWinner,
-                    runnerUp: simWinner === "스페인" ? "아르헨티나" : "스페인"
-                };
-        
-                // 3. 기존 대시보드 점수 계산 함수(calculateUserScore)를 활용하여 시뮬레이션 복제 리스트 연산
-                const simResults = originalPredictionsData.map(user => {
-                    return {
-                        ...user,
-                        simulatedScore: calculateUserScore(user, virtualActual)
-                    };
-                });
-        
-                // 4. 동점자 룰(점수 내림차순 -> 제출일 오름차순) 적용하여 정렬
-                simResults.sort((a, b) => {
-                    if (b.simulatedScore !== a.simulatedScore) {
-                        return b.simulatedScore - a.simulatedScore;
-                    }
-                    const dateA = new Date(a.submittedAt || a.timestamp);
-                    const dateB = new Date(b.submittedAt || b.timestamp);
-                    return dateA - dateB;
-                });
-        
-                // 5. 가상 1등, 2등을 UI에 주입
-                if (simResults.length > 0) {
-                    document.getElementById('simTop1Nickname').innerText = simResults[0].nickname;
-                    document.getElementById('simTop1Score').innerText = `${simResults[0].simulatedScore}점`;
-                }
-                
-                if (simResults.length > 1) {
-                    document.getElementById('simTop2Nickname').innerText = simResults[1].nickname;
-                    document.getElementById('simTop2Score').innerText = `${simResults[1].simulatedScore}점`;
-                } else {
-                    document.getElementById('simTop2Nickname').innerText = "참가자 없음";
-                    document.getElementById('simTop2Score').innerText = "0점";
-                }
-            }
-        
-            // 💡 기존 loadDashboard 함수 내부의 로직과 해당 시뮬레이션을 동기화하는 구조 설계
-            // 기존 loadDashboard() 내의 try 구문 마지막 줄(window.onload 직전 등)에 아래의 3줄을 병합해 주세요:
-            /*
-                // 1. 기존 loadDashboard 안에서 계산이 완료된 predictions 데이터를 전역 변수에 깊은 복사하여 백업합니다.
-                originalPredictionsData = JSON.parse(JSON.stringify(predictions));
-                
-                // 2. 가상 시뮬레이션을 최초 1회 실행합니다.
-                runScenarioSimulation();
-        
-                // 3. 인풋 값들이 변할 때마다 실시간 연산 이벤트 연결
-                document.getElementById('simScoreSpain').addEventListener('input', runScenarioSimulation);
-                document.getElementById('simScoreArgentina').addEventListener('input', runScenarioSimulation);
-                document.getElementById('simWinner').addEventListener('change', runScenarioSimulation);
-            */
-        </script>
-
         <!-- 📜 피파 월드컵 전체 우승 역사 요약 -->
         <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
             <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
@@ -691,6 +607,11 @@
     </div>
 
     <script>
+        /**
+         * 전역 변수로 참가자 원래 데이터 리스트 백업 보관
+         */
+        let originalPredictionsData = [];
+
         function formatDate(isoString) {
             if (!isoString) return "-";
             const date = new Date(isoString);
@@ -766,7 +687,6 @@
             let weight = 0;
 
             // 1. 결승 진출 대진 일치 가중치 (최대 40%)
-            // 현재 실제 진출국(스페인, 아르헨티나)에 대한 유저 예측 상태 대조
             const actualFinals = actual.finalists || ["스페인", "아르헨티나"]; 
             const hasA = user.finalistA && actualFinals.includes(user.finalistA);
             const hasB = user.finalistB && actualFinals.includes(user.finalistB);
@@ -775,7 +695,6 @@
             else if (hasA || hasB) weight += 15; // 1개팀만 맞춤
 
             // 2. 최종 우승팀 시뮬레이션 가중치 (최대 30%)
-            // 네이버 전략분석 및 AI 우승 예측 1순위인 '스페인' 우승 예측 시 메인 가중치 부여
             if (user.winner === "스페인") {
                 weight += 30; // 스페인 우승 예측 (시뮬레이션 승률 58% 반영)
             } else if (user.winner === "아르헨티나") {
@@ -783,7 +702,6 @@
             }
 
             // 3. 필드 스코어 정교성 가중치 (최대 20%)
-            // AI 시뮬레이터 스코어(스페인 2 : 1) 및 골득실 차이의 수렴성 대조
             const predictedDiff = user.scoreA - user.scoreB;
             if (predictedDiff === 1 && user.winner === "스페인") {
                 weight += 20; // 1골 차 승리 (예: 2:1, 3:2)
@@ -794,7 +712,6 @@
             }
 
             // 4. 리더보드 순위 및 동점자 규칙 보정 가중치 (최대 10%)
-            // 현재 순위가 높고(즉, 동점자 타이브레이커가 될 확률이 높고) 제출 시간이 빠를수록 가점
             const rankBonus = Math.max(0, 10 * ((totalUsers - index) / totalUsers));
             weight += rankBonus;
 
@@ -815,18 +732,7 @@
             currentPredictions.forEach(p => {
                 if(p.winner && p.nickname !== '🤖 AI_Predictor') winnerCounts[p.winner] = (winnerCounts[p.winner] || 0) + 1;
             });
-            // [★ 추가할 부분]
-            originalPredictionsData = JSON.parse(JSON.stringify(predictions));
-            runScenarioSimulation();
-            
-            document.getElementById('simScoreSpain').addEventListener('input', runScenarioSimulation);
-            document.getElementById('simScoreArgentina').addEventListener('input', runScenarioSimulation);
-            document.getElementById('simWinner').addEventListener('change', runScenarioSimulation);
-            // [★ 추가할 부분 끝]
-            
-            } catch (error) {
-                console.error("대시보드 인사이트 연산 에러:", error);
-            // ...
+
             const sortedWinners = Object.entries(winnerCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
             const totalWinnerVotes = currentPredictions.filter(p => p.winner && p.nickname !== '🤖 AI_Predictor').length || 1;
 
@@ -1078,9 +984,79 @@
                     `;
                 });
 
+                // 💡 [수정 완료] 기존 loadDashboard 내 안전한 곳에서 백업 및 이벤트 위임 처리 진행
+                originalPredictionsData = JSON.parse(JSON.stringify(predictions));
+                runScenarioSimulation();
+
+                document.getElementById('simScoreSpain').addEventListener('input', runScenarioSimulation);
+                document.getElementById('simScoreArgentina').addEventListener('input', runScenarioSimulation);
+                document.getElementById('simWinner').addEventListener('change', runScenarioSimulation);
+
             } catch (error) {
-                console.error("대시보드 인사이트 연산 에러:", error);
+                console.error("대시보드 데이터 로드 및 렌더링 에러:", error);
                 tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-red-500 font-semibold">데이터 동적 로드 중 오류가 발생했습니다.</td></tr>`;
+            }
+        }
+
+        /**
+         * 가상 시나리오 기반으로 가상 총점을 계산하고 가상 1, 2위를 실시간 렌더링하는 함수
+         */
+        function runScenarioSimulation() {
+            if (!originalPredictionsData || originalPredictionsData.length === 0) return;
+
+            // 1. 입력 폼의 값 가져오기
+            const simScoreSpain = parseInt(document.getElementById('simScoreSpain').value) || 0;
+            const simScoreArgentina = parseInt(document.getElementById('simScoreArgentina').value) || 0;
+            let simWinner = document.getElementById('simWinner').value;
+
+            // 💡 방어 코드: 90분 정규 시간 점수가 무승부가 아님에도 우승자가 점수 상황과 모순될 경우 자동 보정
+            if (simScoreSpain > simScoreArgentina) {
+                simWinner = "스페인";
+                document.getElementById('simWinner').value = "스페인";
+            } else if (simScoreArgentina > simScoreSpain) {
+                simWinner = "아르헨티나";
+                document.getElementById('simWinner').value = "아르헨티나";
+            }
+
+            // 2. 가상의 오피셜 결과 개체(actual) 생성
+            const virtualActual = {
+                finalists: ["스페인", "아르헨티나"],
+                scoreA: simScoreSpain,
+                scoreB: simScoreArgentina,
+                winner: simWinner,
+                runnerUp: simWinner === "스페인" ? "아르헨티나" : "스페인"
+            };
+
+            // 3. 기존 대시보드 점수 계산 함수(calculateUserScore)를 활용하여 시뮬레이션 복제 리스트 연산
+            const simResults = originalPredictionsData.map(user => {
+                return {
+                    ...user,
+                    simulatedScore: calculateUserScore(user, virtualActual)
+                };
+            });
+
+            // 4. 동점자 룰(점수 내림차순 -> 제출일 오름차순) 적용하여 정렬
+            simResults.sort((a, b) => {
+                if (b.simulatedScore !== a.simulatedScore) {
+                    return b.simulatedScore - a.simulatedScore;
+                }
+                const dateA = new Date(a.submittedAt || a.timestamp);
+                const dateB = new Date(b.submittedAt || b.timestamp);
+                return dateA - dateB;
+            });
+
+            // 5. 가상 1등, 2등을 UI에 주입
+            if (simResults.length > 0) {
+                document.getElementById('simTop1Nickname').innerText = simResults[0].nickname;
+                document.getElementById('simTop1Score').innerText = `${simResults[0].simulatedScore}점`;
+            }
+            
+            if (simResults.length > 1) {
+                document.getElementById('simTop2Nickname').innerText = simResults[1].nickname;
+                document.getElementById('simTop2Score').innerText = `${simResults[1].simulatedScore}점`;
+            } else {
+                document.getElementById('simTop2Nickname').innerText = "참가자 없음";
+                document.getElementById('simTop2Score').innerText = "0점";
             }
         }
 
@@ -1128,87 +1104,70 @@
         // 화면 어디든 다른 곳을 누르면 말풍선이 닫히도록 바디 이벤트 추가 (모바일 방어코드)
         document.addEventListener('click', hideGlobalTooltip);
 
-    /**
-     * 실시간 순위표 테이블에서 1, 2위 정보를 추출하여 상단 경품 카드에 업데이트하는 함수
-     */
-    function updatePrizeCandidates() {
-        // 1. 정확히 id="rankingTable" 내부의 tbody 행들을 가져옵니다.
-        const table = document.getElementById('rankingTable');
-        if (!table) {
-            console.warn("ID가 'rankingTable'인 테이블을 찾을 수 없습니다. HTML 태그를 확인해 주세요.");
-            return;
-        }
+        /**
+         * 실시간 순위표 테이블에서 1, 2위 정보를 추출하여 상단 경품 카드에 업데이트하는 함수
+         */
+        function updatePrizeCandidates() {
+            const table = document.getElementById('rankingTable');
+            if (!table) return;
+            
+            const rows = table.querySelectorAll('tbody tr');
+            if (rows.length === 0 || rows[0].innerText.includes('연산하고 있습니다')) {
+                return;
+            }
         
-        const rows = table.querySelectorAll('tbody tr');
+            const NICKNAME_INDEX = 1; // 닉네임 (2번째 칸)
+            const PROB_INDEX = 7;     // 실시간 1등 확률 (8번째 칸)
         
-        // 테이블에 데이터 행이 하나도 없다면 리턴
-        if (rows.length === 0) {
-            console.log("테이블 내에 아직 데이터 행(Row)이 존재하지 않습니다.");
-            return;
-        }
-    
-        // 💡 열 순서 (0부터 시작)
-        const NICKNAME_INDEX = 1; // 닉네임 (2번째 칸)
-        const PROB_INDEX = 7;     // 실시간 1등 확률 (8번째 칸)
-    
-        // --- 🥇 1위 데이터 추출 및 주입 ---
-        const firstRow = rows[0];
-        if (firstRow && firstRow.cells.length > NICKNAME_INDEX) {
-            const nick1 = firstRow.cells[NICKNAME_INDEX]?.innerText.trim() || "참가자 없음";
-            let prob1 = firstRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
-            prob1 = prob1.replace('ⓘ', '').trim(); // ⓘ 기호 제거
-    
-            // 실제 데이터를 DOM에 주입
-            const nickEl1 = document.getElementById('top1-nickname');
-            const probEl1 = document.getElementById('top1-prob');
-            if (nickEl1) nickEl1.innerText = nick1;
-            if (probEl1) probEl1.innerText = prob1;
-        }
-    
-        // --- 🥈 2위 데이터 추출 및 주입 ---
-        if (rows.length > 1) {
-            const secondRow = rows[1];
-            if (secondRow && secondRow.cells.length > NICKNAME_INDEX) {
-                const nick2 = secondRow.cells[NICKNAME_INDEX]?.innerText.trim() || "참가자 없음";
-                let prob2 = secondRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
-                prob2 = prob2.replace('ⓘ', '').trim();
-    
+            // --- 🥇 1위 데이터 추출 및 주입 ---
+            const firstRow = rows[0];
+            if (firstRow && firstRow.cells.length > NICKNAME_INDEX) {
+                const nick1 = firstRow.cells[NICKNAME_INDEX]?.innerText.replace('MY', '').replace('AI', '').trim() || "참가자 없음";
+                let prob1 = firstRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
+                prob1 = prob1.replace('ⓘ', '').trim();
+        
+                const nickEl1 = document.getElementById('top1-nickname');
+                const probEl1 = document.getElementById('top1-prob');
+                if (nickEl1) nickEl1.innerText = nick1;
+                if (probEl1) probEl1.innerText = prob1;
+            }
+        
+            // --- 🥈 2위 데이터 추출 및 주입 ---
+            if (rows.length > 1) {
+                const secondRow = rows[1];
+                if (secondRow && secondRow.cells.length > NICKNAME_INDEX) {
+                    const nick2 = secondRow.cells[NICKNAME_INDEX]?.innerText.replace('MY', '').replace('AI', '').trim() || "참가자 없음";
+                    let prob2 = secondRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
+                    prob2 = prob2.replace('ⓘ', '').trim();
+        
+                    const nickEl2 = document.getElementById('top2-nickname');
+                    const probEl2 = document.getElementById('top2-prob');
+                    if (nickEl2) nickEl2.innerText = nick2;
+                    if (probEl2) probEl2.innerText = prob2;
+                }
+            } else {
                 const nickEl2 = document.getElementById('top2-nickname');
                 const probEl2 = document.getElementById('top2-prob');
-                if (nickEl2) nickEl2.innerText = nick2;
-                if (probEl2) probEl2.innerText = prob2;
-            }
-        } else {
-            const nickEl2 = document.getElementById('top2-nickname');
-            const probEl2 = document.getElementById('top2-prob');
-            if (nickEl2) nickEl2.innerText = "참가자 없음";
-            if (probEl2) probEl2.innerText = "0.0%";
-        }
-    }
-    
-    // --------------------------------------------------
-    // ✨ 실시간 데이터 변화 감지기 (핵심 방어 코드)
-    // --------------------------------------------------
-    document.addEventListener('DOMContentLoaded', () => {
-        // 1. 페이지 로드 직후 1차 실행 시도
-        updatePrizeCandidates();
-    
-        // 2. 테이블 내부(tbody)에 데이터가 동적으로 추가/변경되는 것을 감지하는 옵저버 설정
-        const targetTable = document.getElementById('rankingTable');
-        if (targetTable) {
-            const tbody = targetTable.querySelector('tbody');
-            if (tbody) {
-                const observer = new MutationObserver((mutationsList) => {
-                    // tbody 내부에 무언가 변화가 일어날 때마다 자동으로 상단 후보 갱신 실행!
-                    console.log("테이블 데이터 변화 감지 -> 경품 후보 자동 업데이트 실행");
-                    updatePrizeCandidates();
-                });
-    
-                // 자식 노드(tr 등)의 추가/삭제 및 변화 감지 활성화
-                observer.observe(tbody, { childList: true, subtree: true });
+                if (nickEl2) nickEl2.innerText = "참가자 없음";
+                if (probEl2) probEl2.innerText = "0.0%";
             }
         }
-    });
+        
+        // ✨ 실시간 데이터 변화 감지기 (DOM 관찰 및 동적 렌더링 매핑)
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePrizeCandidates();
+        
+            const targetTable = document.getElementById('rankingTable');
+            if (targetTable) {
+                const tbody = targetTable.querySelector('tbody');
+                if (tbody) {
+                    const observer = new MutationObserver(() => {
+                        updatePrizeCandidates();
+                    });
+                    observer.observe(tbody, { childList: true, subtree: true });
+                }
+            }
+        });
     </script>
     
     <!-- HTML 맨 아래 body 닫히기 전에 넣어주세요 -->
