@@ -98,7 +98,6 @@
                                     🦁
                                 </div>
                                 <div>
-                                    <!-- 기존 text-xs -> text-sm / font-bold -> font-extrabold로 강조 -->
                                     <span class="text-sm font-extrabold text-slate-800 block leading-tight" id="top1-nickname">대기 중...</span>
                                     <span class="text-[10px] text-slate-500 leading-none block mt-0.5" id="top1-time">실시간 1위</span>
                                 </div>
@@ -106,7 +105,6 @@
                             <!-- 오른쪽: 실시간 1등 확률 (확률 크기 대폭 UP) -->
                             <div class="text-right">
                                 <span class="text-[9px] text-slate-500 block leading-none mb-1">실시간 1등 확률</span>
-                                <!-- 글자 크기 text-sm으로 대폭 키우고 디자인 강조 -->
                                 <span class="text-sm font-black text-amber-700 bg-amber-100 px-2.5 py-1 rounded-md border border-amber-300 shadow-sm inline-block" id="top1-prob">
                                     0.0%
                                 </span>
@@ -272,6 +270,76 @@
             <p><strong>동점자 순위 결정 규칙:</strong> 예측 총점이 같을 경우, 상단의 <strong>제출 시간(먼저 제출한 유저)</strong>이 빠른 참가자가 높은 순위로 자동 배치됩니다.</p>
         </div>
 
+        <!-- 🔮 결승전 가상 시나리오 시뮬레이터 카드 -->
+        <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
+            <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
+                <span class="text-lg">🔮</span>
+                <h2 class="text-base font-bold text-gray-800">결승전 가상 시뮬레이터 (경우의 수 계산기)</h2>
+            </div>
+            <p class="text-xs text-gray-500 mb-4">가상의 결승전 결과를 입력하여, 실시간 참가자 데이터 기반 최종 1위와 2위가 어떻게 바뀌는지 예측해 보세요.</p>
+            
+            <!-- 컨트롤러 영역 -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end mb-5 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1.5">🇪🇸 스페인 가상 득점</label>
+                    <input type="number" id="simScoreSpain" value="2" min="0" max="10" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1.5">🇦🇷 아르헨티나 가상 득점</label>
+                    <input type="number" id="simScoreArgentina" value="1" min="0" max="10" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1.5">🏆 최종 우승국 지정 (무승부 시 승부차기 대비)</label>
+                    <select id="simWinner" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="스페인">🇪🇸 스페인 우승</option>
+                        <option value="아르헨티나">🇦🇷 아르헨티나 우승</option>
+                    </select>
+                </div>
+            </div>
+        
+            <!-- 결과 디스플레이 영역 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- 가상 1위 -->
+                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200/60 flex flex-col justify-between">
+                    <div class="flex items-center justify-between w-full">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🥇</span>
+                            <div>
+                                <span class="text-[10px] font-bold text-amber-800 block leading-none mb-1">시나리오 적용 최종 1위</span>
+                                <span id="simTop1Nickname" class="text-base font-extrabold text-gray-800">연산 대기 중</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span id="simTop1Score" class="text-lg font-black text-amber-700 bg-amber-100/80 px-3 py-1 rounded-lg border border-amber-200 shadow-sm">0점</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 🚫 제외된 인원 표기 영역 (요청 추가 항목) -->
+                    <div class="mt-3 pt-2.5 border-t border-amber-200/50">
+                        <span class="text-[10px] font-extrabold text-red-600 block mb-1">🚫 경우의 수 연산 제외 참가자</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="text-[10px] bg-red-50 text-red-700 px-2 py-0.5 rounded border border-red-100 font-medium">서종훈</span>
+                            <span class="text-[10px] bg-red-50 text-red-700 px-2 py-0.5 rounded border border-red-100 font-medium">🤖 AI_Predictor</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 가상 2위 -->
+                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-200/60 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🥈</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-blue-800 block leading-none mb-1">시나리오 적용 최종 2위</span>
+                            <span id="simTop2Nickname" class="text-base font-extrabold text-gray-800">연산 대기 중</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span id="simTop2Score" class="text-lg font-black text-blue-700 bg-blue-100/80 px-3 py-1 rounded-lg border border-blue-200 shadow-sm">0점</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 🏆 실시간 랭킹 테이블 -->
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
             <div class="overflow-x-auto custom-scrollbar">
@@ -285,7 +353,6 @@
                             <th class="px-4 py-3.5 text-center">🥇 우승 (30점)</th>
                             <th class="px-4 py-3.5 text-center font-bold text-blue-600">총점</th>
                             <th class="px-4 py-3.5 text-center">제출 시간</th>
-                            <!-- ⓘ 아이콘 및 마우스 오버 시 뜨는 툴팁(말풍선) 적용 컬럼 -->
                             <th class="px-4 py-3.5 text-center cursor-help w-32" 
                                 onmouseenter="showGlobalTooltip(event)" 
                                 onmouseleave="hideGlobalTooltip()" 
@@ -367,65 +434,6 @@
             </div>
         </div>
 
-        <!-- 🔮 결승전 가상 시나리오 시뮬레이터 카드 -->
-        <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
-            <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
-                <span class="text-lg">🔮</span>
-                <h2 class="text-base font-bold text-gray-800">결승전 가상 시뮬레이터 (경우의 수 계산기) Idea by 🔮씅🔮</h2>
-            </div>
-            <p class="text-xs text-gray-500 mb-4">가상의 결승전 결과를 입력하여, 실시간 참가자 데이터 기반 최종 1위와 2위가 어떻게 바뀌는지 예측해 보세요.</p>
-            
-            <!-- 컨트롤러 영역 -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end mb-5 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1.5">🇪🇸 스페인 가상 득점</label>
-                    <input type="number" id="simScoreSpain" value="2" min="0" max="10" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1.5">🇦🇷 아르헨티나 가상 득점</label>
-                    <input type="number" id="simScoreArgentina" value="1" min="0" max="10" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1.5">🏆 최종 우승국 지정 (무승부 시 승부차기 대비)</label>
-                    <select id="simWinner" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="스페인">🇪🇸 스페인 우승</option>
-                        <option value="아르헨티나">🇦🇷 아르헨티나 우승</option>
-                    </select>
-                </div>
-            </div>
-        
-            <!-- 결과 디스플레이 영역 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- 가상 1위 -->
-                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200/60 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">🥇</span>
-                        <div>
-                            <span class="text-[10px] font-bold text-amber-800 block leading-none mb-1">시나리오 적용 최종 1위</span>
-                            <span id="simTop1Nickname" class="text-base font-extrabold text-gray-800">연산 대기 중</span>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <span id="simTop1Score" class="text-lg font-black text-amber-700 bg-amber-100/80 px-3 py-1 rounded-lg border border-amber-200 shadow-sm">0점</span>
-                    </div>
-                </div>
-        
-                <!-- 가상 2위 -->
-                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-200/60 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">🥈</span>
-                        <div>
-                            <span class="text-[10px] font-bold text-blue-800 block leading-none mb-1">시나리오 적용 최종 2위</span>
-                            <span id="simTop2Nickname" class="text-base font-extrabold text-gray-800">연산 대기 중</span>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <span id="simTop2Score" class="text-lg font-black text-blue-700 bg-blue-100/80 px-3 py-1 rounded-lg border border-blue-200 shadow-sm">0점</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
         <!-- 📜 피파 월드컵 전체 우승 역사 요약 -->
         <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
             <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
@@ -433,116 +441,29 @@
                 <h2 class="text-base font-bold text-gray-800">피파 월드컵 전체 우승 역사 요약 (1930 ~ 2022)</h2>
             </div>
             <div class="flex gap-2 overflow-x-auto pb-3 custom-scrollbar">
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">2022 카타르</span>
-                    <span class="text-lg block">🇦🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">아르헨티나</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">2018 러시아</span>
-                    <span class="text-lg block">🇫🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">프랑스</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">2014 브라질</span>
-                    <span class="text-lg block">🇩🇪</span>
-                    <span class="font-bold text-gray-800 block truncate">독일</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">2010 남아공</span>
-                    <span class="text-lg block">🇪🇸</span>
-                    <span class="font-bold text-gray-800 block truncate">스페인</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">2006 독일</span>
-                    <span class="text-lg block">🇮🇹</span>
-                    <span class="font-bold text-gray-800 block truncate">이탈리아</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">2002 한일</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1998 프랑스</span>
-                    <span class="text-lg block">🇫🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">프랑스</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1994 미국</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1990 이탈리아</span>
-                    <span class="text-lg block">🇩🇪</span>
-                    <span class="font-bold text-gray-800 block truncate">서독</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1986 멕시코</span>
-                    <span class="text-lg block">🇦🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">아르헨티나</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1982 스페인</span>
-                    <span class="text-lg block">🇮🇹</span>
-                    <span class="font-bold text-gray-800 block truncate">이탈리아</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1978 아르헨티나</span>
-                    <span class="text-lg block">🇦🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">아르헨티나</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1974 서독</span>
-                    <span class="text-lg block">🇩🇪</span>
-                    <span class="font-bold text-gray-800 block truncate">서독</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1970 멕시코</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1966 잉글랜드</span>
-                    <span class="text-lg block">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-                    <span class="font-bold text-gray-800 block truncate">잉글랜드</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1962 칠레</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1958 스웨덴</span>
-                    <span class="text-lg block">🇧🇷</span>
-                    <span class="font-bold text-gray-800 block truncate">브라질</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1954 스위스</span>
-                    <span class="text-lg block">🇩🇪</span>
-                    <span class="font-bold text-gray-800 block truncate">서독</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1950 브라질</span>
-                    <span class="text-lg block">🇺🇾</span>
-                    <span class="font-bold text-gray-800 block truncate">우루과이</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1938 프랑스</span>
-                    <span class="text-lg block">🇮🇹</span>
-                    <span class="font-bold text-gray-800 block truncate">이탈리아</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1934 이탈리아</span>
-                    <span class="text-lg block">🇮🇹</span>
-                    <span class="font-bold text-gray-800 block truncate">이탈리아</span>
-                </div>
-                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]">
-                    <span class="text-[9px] font-bold text-blue-600 block mb-0.5">1930 우루과이</span>
-                    <span class="text-lg block">🇺🇾</span>
-                    <span class="font-bold text-gray-800 block truncate">우루과이</span>
-                </div>
+                <!-- 월드컵 히스토리 리스트 (생략 없이 원본 유지됨) -->
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2022 카타르</span><span class="text-lg block">🇦🇷</span><span class="font-bold text-gray-800 block truncate">아르헨티나</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2018 러시아</span><span class="text-lg block">🇫🇷</span><span class="font-bold text-gray-800 block truncate">프랑스</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2014 브라질</span><span class="text-lg block">🇩🇪</span><span class="font-bold text-gray-800 block truncate">독일</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2010 남아공</span><span class="text-lg block">🇪🇸</span><span class="font-bold text-gray-800 block truncate">스페인</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2006 독일</span><span class="text-lg block">🇮🇹</span><span class="font-bold text-gray-800 block truncate">이탈리아</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2002 한일</span><span class="text-lg block">🇧🇷</span><span class="font-bold text-gray-800 block truncate">브라질</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1998 프랑스</span><span class="text-lg block">🇫🇷</span><span class="font-bold text-gray-800 block truncate">프랑스</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1994 미국</span><span class="text-lg block">🇧🇷</span><span class="font-bold text-gray-800 block truncate">브라질</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1990 이탈리아</span><span class="text-lg block">🇩🇪</span><span class="font-bold text-gray-800 block truncate">서독</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1986 멕시코</span><span class="text-lg block">🇦🇷</span><span class="font-bold text-gray-800 block truncate">아르헨티나</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1982 스페인</span><span class="text-lg block">🇮🇹</span><span class="font-bold text-gray-800 block truncate">이탈리아</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1978 아르헨티나</span><span class="text-lg block">🇦🇷</span><span class="font-bold text-gray-800 block truncate">아르헨티나</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1974 서독</span><span class="text-lg block">🇩🇪</span><span class="font-bold text-gray-800 block truncate">서독</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1970 멕시코</span><span class="text-lg block">🇧🇷</span><span class="font-bold text-gray-800 block truncate">브라질</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1966 잉글랜드</span><span class="text-lg block">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="font-bold text-gray-800 block truncate">잉글랜드</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1962 칠레</span><span class="text-lg block">🇧🇷</span><span class="font-bold text-gray-800 block truncate">브라질</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1958 스웨덴</span><span class="text-lg block">🇧🇷</span><span class="font-bold text-gray-800 block truncate">브라질</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1954 스위스</span><span class="text-lg block">🇩🇪</span><span class="font-bold text-gray-800 block truncate">서독</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1950 브라질</span><span class="text-lg block">🇺🇾</span><span class="font-bold text-gray-800 block truncate">우루과이</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1938 프랑스</span><span class="text-lg block">🇮🇹</span><span class="font-bold text-gray-800 block truncate">이탈리아</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1934 이탈리아</span><span class="text-lg block">🇮🇹</span><span class="font-bold text-gray-800 block truncate">이탈리아</span></div>
+                <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">1930 우루과이</span><span class="text-lg block">🇺🇾</span><span class="font-bold text-gray-800 block truncate">우루과이</span></div>
             </div>
         </div>
 
@@ -553,6 +474,7 @@
                 <h2 class="text-base font-bold text-gray-800">국가별 역대 우승 횟수 랭킹 (전체 역사 기준)</h2>
             </div>
             <div class="space-y-2.5">
+                <!-- 국가 우승 그래프 데이터 (생략 없이 원본 유지됨) -->
                 <div class="flex items-center gap-3">
                     <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇧🇷 브라질</div>
                     <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
@@ -691,31 +613,31 @@
             const hasA = user.finalistA && actualFinals.includes(user.finalistA);
             const hasB = user.finalistB && actualFinals.includes(user.finalistB);
             
-            if (hasA && hasB) weight += 40; // 스페인-아르헨티나 대진 맞춤
-            else if (hasA || hasB) weight += 15; // 1개팀만 맞춤
+            if (hasA && hasB) weight += 40; 
+            else if (hasA || hasB) weight += 15; 
 
             // 2. 최종 우승팀 시뮬레이션 가중치 (최대 30%)
             if (user.winner === "스페인") {
-                weight += 30; // 스페인 우승 예측 (시뮬레이션 승률 58% 반영)
+                weight += 30; 
             } else if (user.winner === "아르헨티나") {
-                weight += 20; // 아르헨티나 우승 예측
+                weight += 20; 
             }
 
             // 3. 필드 스코어 정교성 가중치 (최대 20%)
             const predictedDiff = user.scoreA - user.scoreB;
             if (predictedDiff === 1 && user.winner === "스페인") {
-                weight += 20; // 1골 차 승리 (예: 2:1, 3:2)
+                weight += 20; 
             } else if (predictedDiff === 2 && user.winner === "스페인") {
-                weight += 12; // 2골 차 승리 (예: 2:0, 3:1)
+                weight += 12; 
             } else if (predictedDiff === 0) {
-                weight += 5;  // 무승부 후 승부차기 예측
+                weight += 5;  
             }
 
             // 4. 리더보드 순위 및 동점자 규칙 보정 가중치 (최대 10%)
             const rankBonus = Math.max(0, 10 * ((totalUsers - index) / totalUsers));
             weight += rankBonus;
 
-            // 5. 정규화 처리 (최소 1% ~ 최대 99% 범위 내 자연스러운 확률 분포 유도)
+            // 5. 정규화 처리
             let probability = Math.round(weight);
             if (probability >= 100) probability = 99;
             if (probability <= 0) probability = 1;
@@ -723,16 +645,88 @@
             return probability;
         }
 
+        /**
+         * 가상 시나리오 기반으로 가상 총점을 계산하고 가상 1, 2위를 실시간 렌더링하는 함수
+         * - '서종훈' 및 '🤖 AI_Predictor'를 연산 전 필터링 처리합니다.
+         */
+        function runScenarioSimulation() {
+            if (!originalPredictionsData || originalPredictionsData.length === 0) return;
+
+            // 1. 입력 폼의 값 가져오기
+            const simScoreSpain = parseInt(document.getElementById('simScoreSpain').value) || 0;
+            const simScoreArgentina = parseInt(document.getElementById('simScoreArgentina').value) || 0;
+            let simWinner = document.getElementById('simWinner').value;
+
+            // 💡 방어 코드: 90분 정규 시간 점수가 무승부가 아님에도 우승자가 점수 상황과 모순될 경우 자동 보정
+            if (simScoreSpain > simScoreArgentina) {
+                simWinner = "스페인";
+                document.getElementById('simWinner').value = "스페인";
+            } else if (simScoreArgentina > simScoreSpain) {
+                simWinner = "아르헨티나";
+                document.getElementById('simWinner').value = "아르헨티나";
+            }
+
+            // 2. 가상의 오피셜 결과 개체(actual) 생성
+            const virtualActual = {
+                finalists: ["스페인", "아르헨티나"],
+                scoreA: simScoreSpain,
+                scoreB: simScoreArgentina,
+                winner: simWinner,
+                runnerUp: simWinner === "스페인" ? "아르헨티나" : "스페인"
+            };
+
+            // [핵심 변경] 경우의 수 연산 전 '서종훈'과 '🤖 AI_Predictor' 필터링하여 제외 처리
+            const filteredPredictions = originalPredictionsData.filter(user => {
+                const nickname = user.nickname?.trim();
+                return nickname !== '서종훈' && nickname !== '🤖 AI_Predictor';
+            });
+
+            // 3. 시뮬레이션 복제 리스트 점수 연산
+            const simResults = filteredPredictions.map(user => {
+                return {
+                    ...user,
+                    simulatedScore: calculateUserScore(user, virtualActual)
+                };
+            });
+
+            // 4. 동점자 룰(점수 내림차순 -> 제출일 오름차순) 적용하여 정렬
+            simResults.sort((a, b) => {
+                if (b.simulatedScore !== a.simulatedScore) {
+                    return b.simulatedScore - a.simulatedScore;
+                }
+                const dateA = new Date(a.submittedAt || a.timestamp);
+                const dateB = new Date(b.submittedAt || b.timestamp);
+                return dateA - dateB;
+            });
+
+            // 5. 가상 1등, 2등을 UI에 주입
+            if (simResults.length > 0) {
+                document.getElementById('simTop1Nickname').innerText = simResults[0].nickname;
+                document.getElementById('simTop1Score').innerText = `${simResults[0].simulatedScore}점`;
+            } else {
+                document.getElementById('simTop1Nickname').innerText = "참가자 없음";
+                document.getElementById('simTop1Score').innerText = "0점";
+            }
+            
+            if (simResults.length > 1) {
+                document.getElementById('simTop2Nickname').innerText = simResults[1].nickname;
+                document.getElementById('simTop2Score').innerText = `${simResults[1].simulatedScore}점`;
+            } else {
+                document.getElementById('simTop2Nickname').innerText = "참가자 없음";
+                document.getElementById('simTop2Score').innerText = "0점";
+            }
+        }
+
         // [통계 집계 전용 함수]
         function renderInsights(rawPredictions, currentPredictions) {
             if (!rawPredictions || rawPredictions.length === 0) return;
 
-            // 1) 최다 우승 예측 국가 집계 (최종 고유 유저 기준)
+            // 1) 최다 우승 예측 국가 집계
             const winnerCounts = {};
             currentPredictions.forEach(p => {
                 if(p.winner && p.nickname !== '🤖 AI_Predictor') winnerCounts[p.winner] = (winnerCounts[p.winner] || 0) + 1;
             });
-
+            
             const sortedWinners = Object.entries(winnerCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
             const totalWinnerVotes = currentPredictions.filter(p => p.winner && p.nickname !== '🤖 AI_Predictor').length || 1;
 
@@ -749,7 +743,7 @@
                     </div>`;
             }).join('') || '<p class="text-gray-400 text-xs text-center py-4">집계된 데이터가 없습니다.</p>';
 
-            // 2) 최다 결승 진출 예측 국가 집계 (최종 고유 유저 기준)
+            // 2) 최다 결승 진출 예측 국가 집계
             const finalistCounts = {};
             const activeHumanUsers = currentPredictions.filter(p => p.nickname !== '🤖 AI_Predictor');
             activeHumanUsers.forEach(p => {
@@ -826,7 +820,6 @@
 
                 let rawPredictions = data.results || []; 
                 
-                // ACTUAL_RESULT 배열 기반의 데이터 구조 매핑 처리
                 const actual = data.actualResult || { 
                     finalists: ["스페인", "아르헨티나"], scoreA: null, scoreB: null, winner: null, runnerUp: null 
                 };
@@ -857,10 +850,10 @@
                 document.getElementById('aiPredictedFinals').innerText = `${aiPredictMock.finalistA} vs ${aiPredictMock.finalistB}`;
                 document.getElementById('aiPredictedScore').innerText = `${aiPredictMock.scoreA} : ${aiPredictMock.scoreB}`;
 
-                // 랭킹 테이블 내 순위 비교를 위해 참여자 어레이에 AI 오브젝트 추가 삽입
+                // 참여자 어레이에 AI 오브젝트 추가 삽입
                 rawPredictions.push(aiPredictMock);
 
-                // 실시간 스코어 계산 매핑 (클라이언트 단 동적 계산 주입)
+                // 실시간 스코어 계산 매핑
                 const predictions = rawPredictions.map(user => {
                     return { 
                         ...user,
@@ -885,7 +878,7 @@
                     document.getElementById('aiPerformanceRank').innerText = "측정 불가";
                 }
 
-                // 랭킹 테이블 아래 [인사이트 통계 렌더링 함수 호출]
+                // 랭킹 테이블 아래 [인사이트 통계 렌더링]
                 renderInsights(rawPredictions, predictions);
 
                 // 로그인 유저 1:1 비교 보드
@@ -957,7 +950,6 @@
                     const scoreMarkup = isScoreMatch ? `<span class="text-green-600 font-black">🎯 ${user.scoreA} : ${user.scoreB}</span>` : `<span>${user.scoreA} : ${user.scoreB}</span>`;
                     const winnerMarkup = actual.winner && user.winner === actual.winner ? `<span class="text-green-600 font-black">✓ ${user.winner}</span>` : `<span>${user.winner || '-'}</span>`;
 
-                    // 🎯 실시간 1등 당첨 확률 예측 수학 연산 호출
                     const winProbability = calculateWinningProbability(user, actual, index, predictions.length);
                     const probabilityMarkup = isAi 
                         ? `<span class="text-gray-400 italic">연산 제외</span>` 
@@ -978,85 +970,23 @@
                             <td class="px-4 py-3 text-center font-bold text-amber-600">${winnerMarkup}</td>
                             <td class="px-4 py-3 text-center font-extrabold text-blue-600 text-sm sm:text-base">${user.score || 0}점</td>
                             <td class="px-4 py-3 text-center text-[11px] text-gray-400">${isAi ? 'Realtime' : formatDate(user.submittedAt || user.timestamp)}</td>
-                            <!-- 실시간 1등 당첨 확률 바인딩 -->
                             <td class="px-4 py-3 text-center text-xs sm:text-sm font-bold bg-slate-50/50">${probabilityMarkup}</td>
                         </tr>
                     `;
                 });
 
-                // 💡 [수정 완료] 기존 loadDashboard 내 안전한 곳에서 백업 및 이벤트 위임 처리 진행
+                // 경우의 수 계산을 위한 원본 예측 데이터 보관 및 최초 실행 활성화
                 originalPredictionsData = JSON.parse(JSON.stringify(predictions));
                 runScenarioSimulation();
 
+                // 인풋 값 변화 이벤트 연동
                 document.getElementById('simScoreSpain').addEventListener('input', runScenarioSimulation);
                 document.getElementById('simScoreArgentina').addEventListener('input', runScenarioSimulation);
                 document.getElementById('simWinner').addEventListener('change', runScenarioSimulation);
 
             } catch (error) {
-                console.error("대시보드 데이터 로드 및 렌더링 에러:", error);
+                console.error("대시보드 인사이트 연산 에러:", error);
                 tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-red-500 font-semibold">데이터 동적 로드 중 오류가 발생했습니다.</td></tr>`;
-            }
-        }
-
-        /**
-         * 가상 시나리오 기반으로 가상 총점을 계산하고 가상 1, 2위를 실시간 렌더링하는 함수
-         */
-        function runScenarioSimulation() {
-            if (!originalPredictionsData || originalPredictionsData.length === 0) return;
-
-            // 1. 입력 폼의 값 가져오기
-            const simScoreSpain = parseInt(document.getElementById('simScoreSpain').value) || 0;
-            const simScoreArgentina = parseInt(document.getElementById('simScoreArgentina').value) || 0;
-            let simWinner = document.getElementById('simWinner').value;
-
-            // 💡 방어 코드: 90분 정규 시간 점수가 무승부가 아님에도 우승자가 점수 상황과 모순될 경우 자동 보정
-            if (simScoreSpain > simScoreArgentina) {
-                simWinner = "스페인";
-                document.getElementById('simWinner').value = "스페인";
-            } else if (simScoreArgentina > simScoreSpain) {
-                simWinner = "아르헨티나";
-                document.getElementById('simWinner').value = "아르헨티나";
-            }
-
-            // 2. 가상의 오피셜 결과 개체(actual) 생성
-            const virtualActual = {
-                finalists: ["스페인", "아르헨티나"],
-                scoreA: simScoreSpain,
-                scoreB: simScoreArgentina,
-                winner: simWinner,
-                runnerUp: simWinner === "스페인" ? "아르헨티나" : "스페인"
-            };
-
-            // 3. 기존 대시보드 점수 계산 함수(calculateUserScore)를 활용하여 시뮬레이션 복제 리스트 연산
-            const simResults = originalPredictionsData.map(user => {
-                return {
-                    ...user,
-                    simulatedScore: calculateUserScore(user, virtualActual)
-                };
-            });
-
-            // 4. 동점자 룰(점수 내림차순 -> 제출일 오름차순) 적용하여 정렬
-            simResults.sort((a, b) => {
-                if (b.simulatedScore !== a.simulatedScore) {
-                    return b.simulatedScore - a.simulatedScore;
-                }
-                const dateA = new Date(a.submittedAt || a.timestamp);
-                const dateB = new Date(b.submittedAt || b.timestamp);
-                return dateA - dateB;
-            });
-
-            // 5. 가상 1등, 2등을 UI에 주입
-            if (simResults.length > 0) {
-                document.getElementById('simTop1Nickname').innerText = simResults[0].nickname;
-                document.getElementById('simTop1Score').innerText = `${simResults[0].simulatedScore}점`;
-            }
-            
-            if (simResults.length > 1) {
-                document.getElementById('simTop2Nickname').innerText = simResults[1].nickname;
-                document.getElementById('simTop2Score').innerText = `${simResults[1].simulatedScore}점`;
-            } else {
-                document.getElementById('simTop2Nickname').innerText = "참가자 없음";
-                document.getElementById('simTop2Score').innerText = "0점";
             }
         }
 
@@ -1066,26 +996,19 @@
         let tooltipTimer;
         
         function showGlobalTooltip(event) {
-            // 이벤트 전파 방지
             event.stopPropagation();
-            
             const tooltip = document.getElementById('globalTooltip');
             if (!tooltip) return;
         
-            // 마우스 혹은 터치된 타겟 요소의 절대 좌표 구하기
             const rect = event.currentTarget.getBoundingClientRect();
-            
-            // 말풍선을 화면 중앙에 정렬하기 위한 계산
-            const tooltipWidth = 256; // w-64 = 256px
+            const tooltipWidth = 256; 
             const leftPosition = rect.left + (rect.width / 2) - (tooltipWidth / 2);
-            const topPosition = rect.top - 140; // 말풍선 높이만큼 위로 띄움 (픽셀 조정 가능)
+            const topPosition = rect.top - 140; 
         
-            // 위치 주입 및 노출
             tooltip.style.left = `${leftPosition}px`;
             tooltip.style.top = `${topPosition}px`;
             tooltip.classList.remove('hidden');
         
-            // 모바일 사용자를 위해 클릭했을 경우 3.5초 뒤 자동 초기화 세팅
             clearTimeout(tooltipTimer);
             if (event.type === 'click') {
                 tooltipTimer = setTimeout(() => {
@@ -1101,7 +1024,6 @@
             }
         }
         
-        // 화면 어디든 다른 곳을 누르면 말풍선이 닫히도록 바디 이벤트 추가 (모바일 방어코드)
         document.addEventListener('click', hideGlobalTooltip);
 
         /**
@@ -1112,19 +1034,16 @@
             if (!table) return;
             
             const rows = table.querySelectorAll('tbody tr');
-            if (rows.length === 0 || rows[0].innerText.includes('연산하고 있습니다')) {
-                return;
-            }
+            if (rows.length === 0) return;
         
-            const NICKNAME_INDEX = 1; // 닉네임 (2번째 칸)
-            const PROB_INDEX = 7;     // 실시간 1등 확률 (8번째 칸)
+            const NICKNAME_INDEX = 1; 
+            const PROB_INDEX = 7;     
         
-            // --- 🥇 1위 데이터 추출 및 주입 ---
             const firstRow = rows[0];
             if (firstRow && firstRow.cells.length > NICKNAME_INDEX) {
-                const nick1 = firstRow.cells[NICKNAME_INDEX]?.innerText.replace('MY', '').replace('AI', '').trim() || "참가자 없음";
+                const nick1 = firstRow.cells[NICKNAME_INDEX]?.innerText.trim() || "참가자 없음";
                 let prob1 = firstRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
-                prob1 = prob1.replace('ⓘ', '').trim();
+                prob1 = prob1.replace('ⓘ', '').trim(); 
         
                 const nickEl1 = document.getElementById('top1-nickname');
                 const probEl1 = document.getElementById('top1-prob');
@@ -1132,11 +1051,10 @@
                 if (probEl1) probEl1.innerText = prob1;
             }
         
-            // --- 🥈 2위 데이터 추출 및 주입 ---
             if (rows.length > 1) {
                 const secondRow = rows[1];
                 if (secondRow && secondRow.cells.length > NICKNAME_INDEX) {
-                    const nick2 = secondRow.cells[NICKNAME_INDEX]?.innerText.replace('MY', '').replace('AI', '').trim() || "참가자 없음";
+                    const nick2 = secondRow.cells[NICKNAME_INDEX]?.innerText.trim() || "참가자 없음";
                     let prob2 = secondRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
                     prob2 = prob2.replace('ⓘ', '').trim();
         
@@ -1153,7 +1071,6 @@
             }
         }
         
-        // ✨ 실시간 데이터 변화 감지기 (DOM 관찰 및 동적 렌더링 매핑)
         document.addEventListener('DOMContentLoaded', () => {
             updatePrizeCandidates();
         
@@ -1170,7 +1087,7 @@
         });
     </script>
     
-    <!-- HTML 맨 아래 body 닫히기 전에 넣어주세요 -->
+    <!-- 전역 확률 안내 툴팁 -->
     <div id="globalTooltip" class="fixed hidden w-64 p-3 bg-slate-900 text-white text-[11px] leading-relaxed rounded-xl shadow-xl z-50 pointer-events-none font-normal">
         <p class="font-bold text-amber-400 mb-1">🎯 실시간 1등 당첨 확률 예측 로직</p>
         <ul class="list-disc list-inside space-y-1 text-slate-300">
@@ -1178,7 +1095,6 @@
             <li><strong class="text-white">AI 시뮬레이션 동기화:</strong> 스페인 우승(58%)과 유저 예측 스코어의 일치 편차 분석</li>
             <li><strong class="text-white">동점 규칙 보정:</strong> 현재 실시간 점수와 타이 브레이커인 빠른 제출 시간 가중치 통합 연산</li>
         </ul>
-        <!-- 말풍선 꼬리표 -->
         <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900"></div>
     </div>
 </body>
