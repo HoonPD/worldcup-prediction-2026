@@ -70,12 +70,11 @@
                 <h2 class="text-base font-bold text-emerald-900">최종 예측 성공 경품 안내</h2>
             </div>
             
-            <!-- 1등, 2등 상품 그리드 (모바일 1열, 태블릿 이상 2열) -->
+            <!-- 1등, 2등 상품 그리드 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 <!-- 🥇 1등 상품 카드 -->
                 <div class="bg-white p-4 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-sm">
-                    <!-- 상단: 상품 정보 -->
                     <div class="flex items-center gap-3 mb-4">
                         <span class="text-3xl shrink-0">🥇</span>
                         <div>
@@ -84,22 +83,24 @@
                         </div>
                     </div>
                     
-                    <!-- 하단: 우승 후보 참가자 정보 -->
+                    <!-- 하단: 우승 후보 참가자 정보 (동적 데이터 반영 대상) -->
                     <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100/80">
                         <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">현재 이 경품의 우승 후보 🏆</p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-1.5">
-                                <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs border border-amber-200 shadow-sm">
+                                <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs border border-amber-200 shadow-sm" id="top1-avatar">
                                     🦁
                                 </div>
                                 <div>
-                                    <span class="text-xs font-bold text-slate-700 block leading-tight">드리블대왕김철수</span>
-                                    <span class="text-[9px] text-slate-400 leading-none">제출: 10분 전</span>
+                                    <!-- JS에서 이름을 채웁니다 -->
+                                    <span class="text-xs font-bold text-slate-700 block leading-tight" id="top1-nickname">대기 중...</span>
+                                    <span class="text-[9px] text-slate-400 leading-none" id="top1-time">실시간 1위</span>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <span class="text-[8px] text-slate-400 block leading-none">실시간 1등 확률</span>
-                                <span class="text-[11px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50">84.2%</span>
+                                <!-- JS에서 확률을 채웁니다 -->
+                                <span class="text-[11px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50" id="top1-prob">0.0%</span>
                             </div>
                         </div>
                     </div>
@@ -107,7 +108,6 @@
         
                 <!-- 🥈 2등 상품 카드 -->
                 <div class="bg-white p-4 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-sm">
-                    <!-- 상단: 상품 정보 -->
                     <div class="flex items-center gap-3 mb-4">
                         <span class="text-3xl shrink-0">🥈</span>
                         <div>
@@ -116,22 +116,24 @@
                         </div>
                     </div>
                     
-                    <!-- 하단: 우승 후보 참가자 정보 -->
+                    <!-- 하단: 우승 후보 참가자 정보 (동적 데이터 반영 대상) -->
                     <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100/80">
                         <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">현재 이 경품의 우승 후보 🥈</p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-1.5">
-                                <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-xs border border-blue-100 shadow-sm">
+                                <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-xs border border-blue-100 shadow-sm" id="top2-avatar">
                                     🐰
                                 </div>
                                 <div>
-                                    <span class="text-xs font-bold text-slate-700 block leading-tight">골대만세번맞춤</span>
-                                    <span class="text-[9px] text-slate-400 leading-none">제출: 1시간 전</span>
+                                    <!-- JS에서 이름을 채웁니다 -->
+                                    <span class="text-xs font-bold text-slate-700 block leading-tight" id="top2-nickname">대기 중...</span>
+                                    <span class="text-[9px] text-slate-400 leading-none" id="top2-time">실시간 2위</span>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <span class="text-[8px] text-slate-400 block leading-none">실시간 1등 확률</span>
-                                <span class="text-[11px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">62.8%</span>
+                                <!-- JS에서 확률을 채웁니다 -->
+                                <span class="text-[11px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100" id="top2-prob">0.0%</span>
                             </div>
                         </div>
                     </div>
@@ -954,6 +956,48 @@
         
         // 화면 어디든 다른 곳을 누르면 말풍선이 닫히도록 바디 이벤트 추가 (모바일 방어코드)
         document.addEventListener('click', hideGlobalTooltip);
+
+    /**
+     * 실시간 순위표 테이블에서 1, 2위 정보를 긁어와서 경품 카드에 업데이트하는 함수
+     */
+    function updatePrizeCandidates() {
+        // 1. 테이블의 모든 데이터 행(Row) 셀렉트 (예: tbody 내의 tr 태그들)
+        // 프로젝트 구조에 맞게 '#rankingTable tbody tr' 등으로 셀렉터를 수정해 주세요.
+        const rows = document.querySelectorAll('table tbody tr'); 
+        
+        if (rows.length === 0) return;
+    
+        // --- 🥇 1위 데이터 추출 및 주입 ---
+        const firstRow = rows[0];
+        // 예: 닉네임이 2번째(index 1) td에 있고, 1등 확률이 6번째(index 5) td에 있다면 아래와 같이 접근합니다.
+        const nick1 = firstRow.cells[1]?.innerText || "참가자 없음";
+        const prob1 = firstRow.cells[5]?.innerText || "0.0%";
+    
+        document.getElementById('top1-nickname').innerText = nick1;
+        document.getElementById('top1-prob').innerText = prob1;
+    
+    
+        // --- 🥈 2위 데이터 추출 및 주입 ---
+        if (rows.length > 1) {
+            const secondRow = rows[1];
+            const nick2 = secondRow.cells[1]?.innerText || "참가자 없음";
+            const prob2 = secondRow.cells[5]?.innerText || "0.0%";
+    
+            document.getElementById('top2-nickname').innerText = nick2;
+            document.getElementById('top2-prob').innerText = prob2;
+        } else {
+            // 2위 데이터가 없을 경우 초기화
+            document.getElementById('top2-nickname').innerText = "참가자 없음";
+            document.getElementById('top2-prob').innerText = "0.0%";
+        }
+    }
+    
+    // 최초 페이지 로드 시 및 데이터 갱신 시 함수를 실행합니다.
+    document.addEventListener('DOMContentLoaded', () => {
+        // 만약 ajax 등으로 데이터를 비동기 처리하신다면, 데이터를 받아와 화면에 그린 다음에 실행해 주세요!
+        updatePrizeCandidates(); 
+    });
+        
     </script>
     
     <!-- HTML 맨 아래 body 닫히기 전에 넣어주세요 -->
