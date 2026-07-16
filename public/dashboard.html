@@ -238,6 +238,80 @@
             </div>
         </div>
 
+        <!-- 📊 결승전 전략 및 글로벌 예측 지표 (추가할 코드 영역) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs mt-4">
+            
+            <!-- 1) 역대 전적 -->
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <span class="text-base">⚔️</span>
+                        <span class="font-bold text-gray-800">1. 역대 전적 (Main경기)</span>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        양 팀은 통산 <strong>14전 6승 2무 6패</strong>로 역사상 유례없는 완벽한 균형(백중세)을 이루고 있습니다. 가장 최근 친선 대결(2018년)에서는 스페인이 6:1 대승을 거두었으나, 토너먼트의 중압감과 스쿼드 변화를 고려할 때 글로벌 지표는 두 팀의 전력을 호각세로 분류합니다.
+                    </p>
+                </div>
+                <div class="mt-3 pt-2 border-t border-gray-100 flex justify-between text-[11px] font-semibold text-slate-500">
+                    <span>스페인 6승</span>
+                    <span class="text-gray-400">vs</span>
+                    <span>아르헨티나 6승</span>
+                </div>
+            </div>
+        
+            <!-- 2) Key Player 능력 -->
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <span class="text-base">👑</span>
+                        <span class="font-bold text-gray-800">2. Key Player 능력 분석</span>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        <strong>리오넬 메시(39)</strong>는 준결승에서 천금 같은 도움 2개로 결승행을 이끌며 그라운드 장악력을 여전히 과시 중입니다. 이에 맞서는 스페인의 신성 <strong>라민 야말(19)</strong>은 우측 면을 완전히 허무는 폭발력과 xG 전환율로 세대교체의 중심에 서 있습니다.
+                    </p>
+                </div>
+                <div class="mt-3 pt-2 border-t border-gray-100 flex justify-between text-[11px] font-semibold text-slate-500">
+                    <span>메시 (대회 8골 득점선두)</span>
+                    <span>야말 (경기당 기회 창출 1위)</span>
+                </div>
+            </div>
+        
+            <!-- 3) 선발 명단 기준 연봉/몸값 비교 -->
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <span class="text-base">💰</span>
+                        <span class="font-bold text-gray-800">3. 2026 월드컵 기준 몸값 비교</span>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        스페인은 야말(2억 유로)을 비롯해 로드리, 페드리 등 젊고 가치가 높은 스쿼드로 약 <strong>10억 4,000만 유로</strong>의 최고 수준 시장 가치를 보입니다. 아르헨티나는 엔소 페르난데스, 라우타로를 주축으로 약 <strong>7억 9,000만 유로</strong>의 탄탄한 밸런스를 구축하고 있습니다.
+                    </p>
+                </div>
+                <div class="mt-3 pt-2 border-t border-gray-100 flex justify-between text-[11px] font-semibold text-slate-500">
+                    <span class="text-red-500">스페인: 약 10.4억 €</span>
+                    <span class="text-cyan-600">아르헨티나: 약 7.9억 €</span>
+                </div>
+            </div>
+        
+            <!-- 4) 결승전 스코어 예상 -->
+            <div class="bg-indigo-950 p-4 rounded-xl border border-indigo-900 shadow-sm text-white flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <span class="text-base">🎯</span>
+                        <span class="font-bold text-indigo-300">4. 최종 결승전 스코어 예상</span>
+                    </div>
+                    <p class="text-indigo-100/90 leading-relaxed">
+                        글로벌 분석 기관들과 네이버 스포츠의 매치 예측은 연장전 혹은 승부차기까지 갈 수 있는 매우 치열한 접전을 전망합니다. 90분 정규 시간 기준으로는 스페인의 기동력이 근소한 우위를 점해 <strong>스페인 2 : 1 아르헨티나</strong> 혹은 후반 극적인 동점으로 <strong>2 : 2 무승부 후 승부차기</strong> 가능성이 가장 높게 도출되었습니다.
+                    </p>
+                </div>
+                <div class="mt-3 pt-2 border-t border-indigo-900 flex justify-between text-[11px] font-extrabold text-yellow-300">
+                    <span>주요 시나리오 1: [2:1 스페인 승]</span>
+                    <span>시나리오 2: [2:2 무승부 후 승차]</span>
+                </div>
+            </div>
+        
+        </div>
+
         <!-- 🔍 내 예측 vs 오피셜 결과 실시간 일대일 비교 보드 -->
         <div id="myComparisonBoard" class="bg-blue-600 text-white p-5 rounded-xl shadow-md hidden">
             <div class="flex items-center gap-2 mb-2">
