@@ -74,66 +74,82 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 <!-- 🥇 1등 상품 카드 -->
-                <div class="bg-white p-4 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-sm">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-3xl shrink-0">🥇</span>
+                <div class="bg-white p-5 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-md">
+                    <!-- 상단: 상품 정보 -->
+                    <div class="flex items-center gap-3.5 mb-5">
+                        <span class="text-4xl shrink-0">🥇</span>
                         <div>
-                            <span class="text-xs font-bold text-emerald-600 block">최종 1등 상품</span>
-                            <span class="text-sm font-extrabold text-gray-800">디저트 커피 세트 쿠폰 <span class="text-xs font-normal text-gray-400">(15,000원 상당)</span></span>
+                            <span class="text-xs font-bold text-emerald-600 block mb-0.5">최종 1등 상품</span>
+                            <span class="text-base font-black text-gray-900 leading-tight">
+                                디저트 커피 세트 쿠폰 <span class="text-xs font-normal text-gray-500 block sm:inline sm:ml-1">(15,000원 상당)</span>
+                            </span>
                         </div>
                     </div>
                     
-                    <!-- 하단: 우승 후보 참가자 정보 (동적 데이터 반영 대상) -->
-                    <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100/80">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">현재 이 경품의 우승 후보 🏆</p>
+                    <!-- 하단: 우승 후보 참가자 정보 (대폭 강화된 UI) -->
+                    <div class="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/80 shadow-inner">
+                        <p class="text-[11px] font-extrabold text-amber-800 uppercase tracking-wider mb-2.5 flex items-center gap-1">
+                            <span>🏆</span> 현재 이 경품의 우승 후보
+                        </p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-1.5">
-                                <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs border border-amber-200 shadow-sm" id="top1-avatar">
+                            <!-- 왼쪽: 캐릭터 & 닉네임 (글자 크기 UP) -->
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center text-xl border-2 border-white shadow-md" id="top1-avatar">
                                     🦁
                                 </div>
                                 <div>
-                                    <!-- JS에서 이름을 채웁니다 -->
-                                    <span class="text-xs font-bold text-slate-700 block leading-tight" id="top1-nickname">대기 중...</span>
-                                    <span class="text-[9px] text-slate-400 leading-none" id="top1-time">실시간 1위</span>
+                                    <!-- 기존 text-xs -> text-sm / font-bold -> font-extrabold로 강조 -->
+                                    <span class="text-sm font-extrabold text-slate-800 block leading-tight" id="top1-nickname">대기 중...</span>
+                                    <span class="text-[10px] text-slate-500 leading-none block mt-0.5" id="top1-time">실시간 1위</span>
                                 </div>
                             </div>
+                            <!-- 오른쪽: 실시간 1등 확률 (확률 크기 대폭 UP) -->
                             <div class="text-right">
-                                <span class="text-[8px] text-slate-400 block leading-none">실시간 1등 확률</span>
-                                <!-- JS에서 확률을 채웁니다 -->
-                                <span class="text-[11px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50" id="top1-prob">0.0%</span>
+                                <span class="text-[9px] text-slate-500 block leading-none mb-1">실시간 1등 확률</span>
+                                <!-- 글자 크기 text-sm으로 대폭 키우고 디자인 강조 -->
+                                <span class="text-sm font-black text-amber-700 bg-amber-100 px-2.5 py-1 rounded-md border border-amber-300 shadow-sm inline-block" id="top1-prob">
+                                    0.0%
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
         
                 <!-- 🥈 2등 상품 카드 -->
-                <div class="bg-white p-4 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-sm">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-3xl shrink-0">🥈</span>
+                <div class="bg-white p-5 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-md">
+                    <!-- 상단: 상품 정보 -->
+                    <div class="flex items-center gap-3.5 mb-5">
+                        <span class="text-4xl shrink-0">🥈</span>
                         <div>
-                            <span class="text-xs font-bold text-emerald-600 block">최종 2등 상품</span>
-                            <span class="text-sm font-extrabold text-gray-800">아메리카노 단품 커피 쿠폰 <span class="text-xs font-normal text-gray-400">(5,000원 상당)</span></span>
+                            <span class="text-xs font-bold text-emerald-600 block mb-0.5">최종 2등 상품</span>
+                            <span class="text-base font-black text-gray-900 leading-tight">
+                                아메리카노 단품 커피 쿠폰 <span class="text-xs font-normal text-gray-500 block sm:inline sm:ml-1">(5,000원 상당)</span>
+                            </span>
                         </div>
                     </div>
                     
-                    <!-- 하단: 우승 후보 참가자 정보 (동적 데이터 반영 대상) -->
-                    <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-100/80">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">현재 이 경품의 우승 후보 🥈</p>
+                    <!-- 하단: 우승 후보 참가자 정보 (대폭 강화된 UI) -->
+                    <div class="p-3.5 bg-blue-50/50 rounded-xl border border-blue-200/60 shadow-inner">
+                        <p class="text-[11px] font-extrabold text-blue-800 uppercase tracking-wider mb-2.5 flex items-center gap-1">
+                            <span>🥈</span> 현재 이 경품의 우승 후보
+                        </p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-1.5">
-                                <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-xs border border-blue-100 shadow-sm" id="top2-avatar">
+                            <!-- 왼쪽: 캐릭터 & 닉네임 (글자 크기 UP) -->
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-xl border-2 border-white shadow-md" id="top2-avatar">
                                     🐰
                                 </div>
                                 <div>
-                                    <!-- JS에서 이름을 채웁니다 -->
-                                    <span class="text-xs font-bold text-slate-700 block leading-tight" id="top2-nickname">대기 중...</span>
-                                    <span class="text-[9px] text-slate-400 leading-none" id="top2-time">실시간 2위</span>
+                                    <span class="text-sm font-extrabold text-slate-800 block leading-tight" id="top2-nickname">대기 중...</span>
+                                    <span class="text-[10px] text-slate-500 leading-none block mt-0.5" id="top2-time">실시간 2위</span>
                                 </div>
                             </div>
+                            <!-- 오른쪽: 실시간 1등 확률 (확률 크기 대폭 UP) -->
                             <div class="text-right">
-                                <span class="text-[8px] text-slate-400 block leading-none">실시간 1등 확률</span>
-                                <!-- JS에서 확률을 채웁니다 -->
-                                <span class="text-[11px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100" id="top2-prob">0.0%</span>
+                                <span class="text-[9px] text-slate-500 block leading-none mb-1">실시간 1등 확률</span>
+                                <span class="text-sm font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded-md border border-blue-300 shadow-sm inline-block" id="top2-prob">
+                                    0.0%
+                                </span>
                             </div>
                         </div>
                     </div>
