@@ -274,7 +274,7 @@
         <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
             <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
                 <span class="text-lg">🔮</span>
-                <h2 class="text-base font-bold text-gray-800">결승전 가상 시뮬레이터 (경우의 수 계산기)</h2>
+                <h2 class="text-base font-bold text-gray-800">결승전 가상 시뮬레이터 (경우의 수 계산기) Idea by 씅! </h2>
             </div>
             <p class="text-xs text-gray-500 mb-4">가상의 결승전 결과를 입력하여, 실시간 참가자 데이터 기반 최종 1위와 2위가 어떻게 바뀌는지 예측해 보세요.</p>
             
@@ -298,10 +298,10 @@
             </div>
         
             <!-- 결과 디스플레이 영역 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- 가상 1위 -->
-                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200/60 flex flex-col justify-between">
-                    <div class="flex items-center justify-between w-full">
+            <div class="space-y-2.5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- 가상 1위 -->
+                    <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200/60 flex items-center justify-between min-h-[76px]">
                         <div class="flex items-center gap-3">
                             <span class="text-3xl">🥇</span>
                             <div>
@@ -313,29 +313,29 @@
                             <span id="simTop1Score" class="text-lg font-black text-amber-700 bg-amber-100/80 px-3 py-1 rounded-lg border border-amber-200 shadow-sm">0점</span>
                         </div>
                     </div>
-                    
-                    <!-- 🚫 제외된 인원 표기 영역 (요청 추가 항목) -->
-                    <div class="mt-3 pt-2.5 border-t border-amber-200/50">
-                        <span class="text-[10px] font-extrabold text-red-600 block mb-1">🚫 경우의 수 연산 제외 참가자</span>
-                        <div class="flex flex-wrap gap-1.5">
-                            <span class="text-[10px] bg-red-50 text-red-700 px-2 py-0.5 rounded border border-red-100 font-medium">서종훈</span>
-                            <span class="text-[10px] bg-red-50 text-red-700 px-2 py-0.5 rounded border border-red-100 font-medium">🤖 AI_Predictor</span>
+            
+                    <!-- 가상 2위 -->
+                    <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-200/60 flex items-center justify-between min-h-[76px]">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🥈</span>
+                            <div>
+                                <span class="text-[10px] font-bold text-blue-800 block leading-none mb-1">시나리오 적용 최종 2위</span>
+                                <span id="simTop2Nickname" class="text-base font-extrabold text-gray-800">연산 대기 중</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span id="simTop2Score" class="text-lg font-black text-blue-700 bg-blue-100/80 px-3 py-1 rounded-lg border border-blue-200 shadow-sm">0점</span>
                         </div>
                     </div>
                 </div>
-        
-                <!-- 가상 2위 -->
-                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-200/60 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">🥈</span>
-                        <div>
-                            <span class="text-[10px] font-bold text-blue-800 block leading-none mb-1">시나리오 적용 최종 2위</span>
-                            <span id="simTop2Nickname" class="text-base font-extrabold text-gray-800">연산 대기 중</span>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <span id="simTop2Score" class="text-lg font-black text-blue-700 bg-blue-100/80 px-3 py-1 rounded-lg border border-blue-200 shadow-sm">0점</span>
-                    </div>
+            
+                <!-- 🚫 제외 참가자 안내 문구 (카드 외부 하단 배치) -->
+                <div class="flex items-center gap-1 px-1">
+                    <span class="text-[11px] text-gray-500">
+                        ※ 경우의 수 연산 제외 참가자: 
+                        <span class="font-semibold text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-100/60">서종훈</span>, 
+                        <span class="font-semibold text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-100/60">🤖 AI_Predictor</span>
+                    </span>
                 </div>
             </div>
         </div>
