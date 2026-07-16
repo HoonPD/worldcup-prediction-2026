@@ -773,7 +773,7 @@
                 return dateA - dateB;
             });
 
-            // 5. 가상 1등, 2등을 UI에 주입
+            // 5. 가상 1등, 2등, 3등, 4등을 UI에 주입
             if (simResults.length > 0) {
                 document.getElementById('simTop1Nickname').innerText = simResults[0].nickname;
                 document.getElementById('simTop1Score').innerText = `${simResults[0].simulatedScore}점`;
@@ -788,6 +788,24 @@
             } else {
                 document.getElementById('simTop2Nickname').innerText = "참가자 없음";
                 document.getElementById('simTop2Score').innerText = "0점";
+            }
+
+            // 🟢 [추가] 가상 3위 UI 주입
+            if (simResults.length > 2) {
+                document.getElementById('simTop3Nickname').innerText = simResults[2].nickname;
+                document.getElementById('simTop3Score').innerText = `${simResults[2].simulatedScore}점`;
+            } else {
+                document.getElementById('simTop3Nickname').innerText = "참가자 없음";
+                document.getElementById('simTop3Score').innerText = "0점";
+            }
+
+            // 🟢 [추가] 가상 4위 UI 주입
+            if (simResults.length > 3) {
+                document.getElementById('simTop4Nickname').innerText = simResults[3].nickname;
+                document.getElementById('simTop4Score').innerText = `${simResults[3].simulatedScore}점`;
+            } else {
+                document.getElementById('simTop4Nickname').innerText = "참가자 없음";
+                document.getElementById('simTop4Score').innerText = "0점";
             }
         }
 
