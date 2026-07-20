@@ -1206,8 +1206,8 @@
             const NICKNAME_INDEX = 1; 
             const PROB_INDEX = 7;     
         
-            // 제외할 닉네임 목록 정의 (정확한 이모지 및 공백 매칭 적용)
-            const excludedNicknames = ["서종훈", "🤖 AI_Predictor"];
+            // 제외할 닉네임 조건 정의 (특정 문자열 포함 여부 체크)
+            const excludedKeywords = ["서종훈", "Predictor"];
             const validCandidates = [];
 
             // 랭킹 테이블의 모든 행을 순회하며 대상 필터링
@@ -1217,7 +1217,10 @@
                     // 'MY', 'AI' 등의 서브 태그 텍스트 제거하고 순수 닉네임만 추출
                     let cleanNickname = fullText.replace(/MY|AI/g, '').trim();
                     
-                    if (!excludedNicknames.includes(cleanNickname) && cleanNickname !== "") {
+                    // 제외 키워드 중 하나라도 포함되어 있는지 검사[cite: 2]
+                    const isExcluded = excludedKeywords.some(keyword => cleanNickname.includes(keyword));
+                    
+                    if (!isExcluded && cleanNickname !== "") {
                         let prob = row.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
                         prob = prob.replace('ⓘ', '').trim();
                         validCandidates.push({ nickname: cleanNickname, probability: prob });
