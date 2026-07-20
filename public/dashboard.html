@@ -12,7 +12,7 @@
         /* 1. 배경 이미지에만 투명도 20% 적용하기 위한 가상 요소 처리 */
         body {
             position: relative;
-            min-height: 100vh; /* 컨텐츠가 많아지면 스크롤이 가능하도록 height 대신 min-height 권장 */
+            min-height: 100vh;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -20,13 +20,13 @@
         }
         body::before {
             content: "";
-            position: fixed; /* 페이지 스크롤 시에도 배경이 고정되도록 고정(fixed) 처리 */
+            position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background-image: url('https://raw.githubusercontent.com/HoonPD/worldcup-prediction-2026/refs/heads/main/Gemini_Generated_Image_v1eb3bv1eb3bv1eb.png') !important;
             background-size: cover !important;
             background-position: center center !important;
             background-repeat: no-repeat !important;
-            opacity: 0.2; /* 투명도 20% */
+            opacity: 0.2;
             z-index: -1;
         }
 
@@ -57,7 +57,6 @@
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">📊 2026 월드컵 예측 현황 대시보드</h1>
                 <p class="text-gray-500 text-sm mt-1">실시간 경기 결과와 참가자들의 실시간 스코어를 확인하세요.</p>
             </div>
-            <!-- 실시간 카운트다운 제거 및 이동 버튼 활성화 영역 + 저장 기능 추가 -->
             <div class="flex flex-wrap sm:flex-nowrap items-stretch sm:items-center gap-3 w-full sm:w-auto shrink-0">
                 <button onclick="saveAsHTML()" class="cursor-pointer text-center bg-gray-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-gray-700 transition shadow-md text-sm whitespace-nowrap">
                     💾 HTML 저장
@@ -78,12 +77,9 @@
                 <h2 class="text-base font-bold text-emerald-900">최종 예측 성공 경품 안내</h2>
             </div>
             
-            <!-- 1등, 2등 상품 그리드 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
                 <!-- 🥇 1등 상품 카드 -->
                 <div class="bg-white p-5 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-md">
-                    <!-- 상단: 상품 정보 -->
                     <div class="flex items-center gap-3.5 mb-5">
                         <span class="text-4xl shrink-0">🥇</span>
                         <div>
@@ -94,13 +90,11 @@
                         </div>
                     </div>
                     
-                    <!-- 하단: 우승 후보 참가자 정보 (대폭 강화된 UI) -->
                     <div class="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/80 shadow-inner">
                         <p class="text-[11px] font-extrabold text-amber-800 uppercase tracking-wider mb-2.5 flex items-center gap-1">
                             <span>🏆</span> 현재 이 경품의 우승 후보
                         </p>
                         <div class="flex items-center justify-between">
-                            <!-- 왼쪽: 캐릭터 & 닉네임 (글자 크기 UP) -->
                             <div class="flex items-center gap-2.5">
                                 <div class="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center text-xl border-2 border-white shadow-md" id="top1-avatar">
                                     🦁
@@ -110,7 +104,6 @@
                                     <span class="text-[10px] text-slate-500 leading-none block mt-0.5" id="top1-time">실시간 1위</span>
                                 </div>
                             </div>
-                            <!-- 오른쪽: 실시간 1등 확률 (확률 크기 대폭 UP) -->
                             <div class="text-right">
                                 <span class="text-[9px] text-slate-500 block leading-none mb-1">실시간 1등 확률</span>
                                 <span class="text-sm font-black text-amber-700 bg-amber-100 px-2.5 py-1 rounded-md border border-amber-300 shadow-sm inline-block" id="top1-prob">
@@ -123,7 +116,6 @@
         
                 <!-- 🥈 2등 상품 카드 -->
                 <div class="bg-white p-5 rounded-xl border border-emerald-100 flex flex-col justify-between shadow-md">
-                    <!-- 상단: 상품 정보 -->
                     <div class="flex items-center gap-3.5 mb-5">
                         <span class="text-4xl shrink-0">🥈</span>
                         <div>
@@ -134,13 +126,11 @@
                         </div>
                     </div>
                     
-                    <!-- 하단: 우승 후보 참가자 정보 (대폭 강화된 UI) -->
                     <div class="p-3.5 bg-blue-50/50 rounded-xl border border-blue-200/60 shadow-inner">
                         <p class="text-[11px] font-extrabold text-blue-800 uppercase tracking-wider mb-2.5 flex items-center gap-1">
                             <span>🥈</span> 현재 이 경품의 우승 후보
                         </p>
                         <div class="flex items-center justify-between">
-                            <!-- 왼쪽: 캐릭터 & 닉네임 (글자 크기 UP) -->
                             <div class="flex items-center gap-2.5">
                                 <div class="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-xl border-2 border-white shadow-md" id="top2-avatar">
                                     🐰
@@ -150,7 +140,6 @@
                                     <span class="text-[10px] text-slate-500 leading-none block mt-0.5" id="top2-time">실시간 2위</span>
                                 </div>
                             </div>
-                            <!-- 오른쪽: 실시간 1등 확률 (확률 크기 대폭 UP) -->
                             <div class="text-right">
                                 <span class="text-[9px] text-slate-500 block leading-none mb-1">실시간 1등 확률</span>
                                 <span class="text-sm font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded-md border border-blue-300 shadow-sm inline-block" id="top2-prob">
@@ -160,13 +149,11 @@
                         </div>
                     </div>
                 </div>
-        
             </div>
         </div>
 
         <!-- 🏆 실시간 오피셜 결과 하이라이트 카드 섹션 -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- 우승팀 카드 -->
             <div class="bg-gradient-to-br from-amber-500 to-yellow-600 p-6 rounded-xl shadow-lg text-white relative overflow-hidden">
                 <div class="absolute -right-6 -bottom-6 text-yellow-300/20 text-9xl font-extrabold">🥇</div>
                 <span class="bg-amber-700/40 text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full font-bold">Official Winner</span>
@@ -174,7 +161,6 @@
                 <p id="officialWinner" class="text-3xl font-black mt-1 drop-shadow-sm">결정 대기 중</p>
             </div>
 
-            <!-- 준우승팀 카드 -->
             <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-slate-400 relative overflow-hidden">
                 <div class="absolute -right-4 -bottom-4 text-slate-200 text-7xl font-bold">🥈</div>
                 <span class="bg-slate-100 text-slate-700 text-[10px] px-2.5 py-1 rounded-full font-bold">Runner-Up</span>
@@ -182,7 +168,6 @@
                 <p id="officialRunnerUp" class="text-2xl font-bold text-gray-800 mt-1">결정 대기 중</p>
             </div>
 
-            <!-- 결승전 오피셜 스코어 현황 카드 -->
             <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500 relative overflow-hidden">
                 <div class="absolute -right-4 -bottom-4 text-blue-50 text-7xl font-bold">⚽</div>
                 <span class="bg-blue-50 text-blue-700 text-[10px] px-2.5 py-1 rounded-full font-bold">Match Score</span>
@@ -246,10 +231,8 @@
             </div>
         </div>
 
-        <!-- 📊 결승전 전략 및 글로벌 예측 지표 (추가할 코드 영역) -->
+        <!-- 📊 결승전 전략 및 글로벌 예측 지표 -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs mt-4">
-            
-            <!-- 1) 역대 전적 -->
             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-1.5 mb-2">
@@ -267,7 +250,6 @@
                 </div>
             </div>
         
-            <!-- 2) Key Player 능력 -->
             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-1.5 mb-2">
@@ -284,7 +266,6 @@
                 </div>
             </div>
         
-            <!-- 3) 선발 명단 기준 연봉/몸값 비교 -->
             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-1.5 mb-2">
@@ -301,7 +282,6 @@
                 </div>
             </div>
         
-            <!-- 4) 결승전 스코어 예상 -->
             <div class="bg-indigo-950 p-4 rounded-xl border border-indigo-900 shadow-sm text-white flex flex-col justify-between">
                 <div>
                     <div class="flex items-center gap-1.5 mb-2">
@@ -317,7 +297,6 @@
                     <span>시나리오 2: [2:2 무승부 후 승차]</span>
                 </div>
             </div>
-        
         </div>
 
         <!-- 🔍 내 예측 vs 오피셜 결과 실시간 일대일 비교 보드 -->
@@ -360,7 +339,6 @@
             </div>
             <p class="text-xs text-gray-500 mb-4">가상의 결승전 결과를 입력하여, 실시간 참가자 데이터 기반 최종 순위가 어떻게 바뀌는지 예측해 보세요.</p>
             
-            <!-- 컨트롤러 영역 -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
                 <div>
                     <label class="block text-xs font-bold text-gray-700 mb-1.5">🇪🇸 스페인 가상 득점</label>
@@ -379,12 +357,8 @@
                 </div>
             </div>
         
-            <!-- 결과 디스플레이 영역 -->
             <div class="space-y-4">
-                <!-- 1~4위 4열 레이아웃 (모바일: 1열 / 태블릿: 2열 / 데스크톱: 4열) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    
-                    <!-- 가상 1위 -->
                     <div class="bg-amber-50/60 p-5 rounded-2xl border-2 border-amber-200 flex flex-col justify-between min-h-[105px] shadow-sm hover:shadow-md transition-shadow duration-200">
                         <div class="flex items-start justify-between w-full">
                             <div class="flex items-center gap-3.5">
@@ -400,7 +374,6 @@
                         </div>
                     </div>
         
-                    <!-- 가상 2위 -->
                     <div class="bg-blue-50/60 p-5 rounded-2xl border-2 border-blue-200 flex flex-col justify-between min-h-[105px] shadow-sm hover:shadow-md transition-shadow duration-200">
                         <div class="flex items-start justify-between w-full">
                             <div class="flex items-center gap-3.5">
@@ -416,7 +389,6 @@
                         </div>
                     </div>
         
-                    <!-- 가상 3위 -->
                     <div class="bg-emerald-50/60 p-5 rounded-2xl border-2 border-emerald-200 flex flex-col justify-between min-h-[105px] shadow-sm hover:shadow-md transition-shadow duration-200">
                         <div class="flex items-start justify-between w-full">
                             <div class="flex items-center gap-3.5">
@@ -432,7 +404,6 @@
                         </div>
                     </div>
         
-                    <!-- 가상 4위 -->
                     <div class="bg-slate-50 p-5 rounded-2xl border-2 border-slate-200 flex flex-col justify-between min-h-[105px] shadow-sm hover:shadow-md transition-shadow duration-200">
                         <div class="flex items-start justify-between w-full">
                             <div class="flex items-center gap-3.5">
@@ -447,10 +418,8 @@
                             <span id="simTop4Score" class="text-xl font-black text-slate-700 bg-slate-200 px-3.5 py-1 rounded-xl border border-slate-300 shadow-sm">0점</span>
                         </div>
                     </div>
-        
                 </div>
         
-                <!-- 🚫 제외 참가자 안내 문구 -->
                 <div class="flex items-center gap-1 px-1">
                     <span class="text-[11px] text-gray-500">
                         ※ 경우의 수 연산 제외 참가자: 
@@ -494,7 +463,6 @@
 
         <!-- 📊 참여자 데이터 기반 인사이트 통계 섹션 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- 1) 최다 우승 예측 국가 그래프 -->
             <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
                     <span class="text-lg">🥇</span>
@@ -505,7 +473,6 @@
                 </div>
             </div>
 
-            <!-- 2) 최다 결승 진출 예측 국가 그래프 -->
             <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-100 pb-3">
                     <span class="text-lg">⚽</span>
@@ -516,7 +483,6 @@
                 </div>
             </div>
 
-            <!-- 3) 가장 빠르게 참여한 사람 카드 -->
             <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-xl shadow-md border border-indigo-100 flex flex-col justify-between relative overflow-hidden">
                 <div class="absolute -right-4 -bottom-4 text-indigo-200/40 text-7xl font-extrabold">⚡</div>
                 <div>
@@ -532,7 +498,6 @@
                 </div>
             </div>
 
-            <!-- 4) AI_Predictor 와 싱크로율 비교 카드 -->
             <div class="bg-gradient-to-br from-rose-50 to-orange-50 p-5 rounded-xl shadow-md border border-rose-100 flex flex-col justify-between relative overflow-hidden">
                 <div class="absolute -right-4 -bottom-4 text-rose-200/40 text-7xl font-extrabold">🤖</div>
                 <div>
@@ -562,7 +527,6 @@
                 <h2 class="text-base font-bold text-gray-800">피파 월드컵 전체 우승 역사 요약 (1930 ~ 2022)</h2>
             </div>
             <div class="flex gap-2 overflow-x-auto pb-3 custom-scrollbar">
-                <!-- 월드컵 히스토리 리스트 (생략 없이 원본 유지됨) -->
                 <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2022 카타르</span><span class="text-lg block">🇦🇷</span><span class="font-bold text-gray-800 block truncate">아르헨티나</span></div>
                 <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2018 러시아</span><span class="text-lg block">🇫🇷</span><span class="font-bold text-gray-800 block truncate">프랑스</span></div>
                 <div class="flex-shrink-0 w-24 bg-gray-50 p-2 rounded-lg border border-gray-200 text-center text-[11px]"><span class="text-[9px] font-bold text-blue-600 block mb-0.5">2014 브라질</span><span class="text-lg block">🇩🇪</span><span class="font-bold text-gray-800 block truncate">독일</span></div>
@@ -595,7 +559,6 @@
                 <h2 class="text-base font-bold text-gray-800">국가별 역대 우승 횟수 랭킹 (전체 역사 기준)</h2>
             </div>
             <div class="space-y-2.5">
-                <!-- 국가 우승 그래프 데이터 (생략 없이 원본 유지됨) -->
                 <div class="flex items-center gap-3">
                     <div class="w-24 text-xs font-bold text-gray-700 shrink-0">🇧🇷 브라질</div>
                     <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
@@ -650,9 +613,6 @@
     </div>
 
     <script>
-        /**
-         * 전역 변수로 참가자 원래 데이터 리스트 백업 보관
-         */
         let originalPredictionsData = [];
 
         function formatDate(isoString) {
@@ -666,90 +626,73 @@
             return `${month}/${day} ${hours}:${minutes}`;
         }
 
-        // [1단계] ACTUAL_RESULT 배열 매핑 규칙 및 방어 연산이 적용된 점수 산출 로직
         function calculateUserScore(user, actual) {
             let total = 0;
             
-            // 방어 코드: 실제 데이터 구조가 유효하지 않으면 0점 처리
             if (!actual || !actual.finalists || !Array.isArray(actual.finalists) || actual.finalists.length < 2) {
                 return 0;
             }
         
-            const actualTeam1 = actual.finalists[0]; // 예: 스페인
-            const actualTeam2 = actual.finalists[1]; // 예: 아르헨티나
+            const actualTeam1 = actual.finalists[0];
+            const actualTeam2 = actual.finalists[1];
         
-            // 1. 준결승 승자(결승 진출국) 적중 계산 (각 15점, 최대 30점)
             const isAHit = user.finalistA && actual.finalists.includes(user.finalistA);
             const isBHit = user.finalistB && actual.finalists.includes(user.finalistB);
             
             if (isAHit) total += 15;
             if (isBHit) total += 15;
         
-            // 2. 최종 우승국 적중 계산 (30점)
             if (actual.winner && user.winner === actual.winner) {
                 total += 30;
             }
         
-            // 3. 결승전 필드 스코어 상세 계산 (최대 40점)
             if (actual.scoreA !== null && actual.scoreB !== null && actual.scoreA !== undefined && actual.scoreB !== undefined) {
-                
                 const userScoreA = Number(user.scoreA) || 0;
                 const userScoreB = Number(user.scoreB) || 0;
                 const actualScoreA = Number(actual.scoreA);
                 const actualScoreB = Number(actual.scoreB);
         
-                // [경우의 수 A] 결승 대진 2팀을 모두 맞춘 경우 (순서 일치 혹은 역순)
                 const isNormalOrder = (user.finalistA === actualTeam1 && user.finalistB === actualTeam2);
                 const isReverseOrder = (user.finalistA === actualTeam2 && user.finalistB === actualTeam1);
         
                 if (isNormalOrder || isReverseOrder) {
-                    // 순서가 뒤집힌 경우 실제 점수 매핑도 스왑해 줍니다.
                     const mappedActualScoreA = isNormalOrder ? actualScoreA : actualScoreB;
                     const mappedActualScoreB = isNormalOrder ? actualScoreB : actualScoreA;
         
                     let scoreSectionPoints = 0;
         
-                    // ① 승무패 및 골득실 차이 적중 (+15점)
                     const userDiff = userScoreA - userScoreB;
                     const actualDiff = mappedActualScoreA - mappedActualScoreB;
                     if (userDiff === actualDiff) {
                         scoreSectionPoints += 15;
                     }
         
-                    // ② 각 팀별 골 수 적중 (각 10점, 최대 +20점)
                     if (userScoreA === mappedActualScoreA) scoreSectionPoints += 10;
                     if (userScoreB === mappedActualScoreB) scoreSectionPoints += 10;
         
-                    // ③ 스코어 완벽 적중 보너스 (+5점)
                     if (userScoreA === mappedActualScoreA && userScoreB === mappedActualScoreB) {
                         scoreSectionPoints += 5;
                     }
         
                     total += scoreSectionPoints;
-        
                 } 
-                // [경우의 수 B] 결승 대진 중 "딱 한 팀만" 맞춘 경우
                 else if (isAHit || isBHit) {
                     let scoreSectionPoints = 0;
         
-                    // 유저가 맞춘 유일한 팀이 finalistA인지 finalistB인지 판별하여 실제 팀의 스코어와 1:1 대조
                     if (isAHit) {
-                        // 유저가 적은 finalistA가 실제 결과의 몇 번째 팀인지 찾습니다.
                         const targetActualScore = (user.finalistA === actualTeam1) ? actualScoreA : actualScoreB;
                         if (userScoreA === targetActualScore) {
-                            scoreSectionPoints += 10; // 맞춘 그 팀의 득점을 정확히 예측했으므로 +10점
+                            scoreSectionPoints += 10;
                         }
                     }
                     
                     if (isBHit) {
-                        // 유저가 적은 finalistB가 실제 결과의 몇 번째 팀인지 찾습니다.
                         const targetActualScore = (user.finalistB === actualTeam1) ? actualScoreA : actualScoreB;
                         if (userScoreB === targetActualScore) {
-                            scoreSectionPoints += 10; // 맞춘 그 팀의 득점을 정확히 예측했으므로 +10점
+                            scoreSectionPoints += 10;
                         }
                     }
         
-                    // ※ 한 팀만 맞춘 경우, "양 팀 득점 완벽 일치" 및 "전체 골득실 차이"는 비교가 성립하지 않으므로 보너스 점수 없이 개별 득점 점수만 부여합니다.
                     total += scoreSectionPoints;
                 }
             }
@@ -757,14 +700,10 @@
             return total;
         }
 
-        // 🎯 [실시간 1등 당첨 확률 예측 수학 연산 알고리즘]
         function calculateWinningProbability(user, actual, index, totalUsers) {
-            // 로봇/가상 AI 예측은 확률 산출에서 제외
             if (user.nickname === '🤖 AI_Predictor') return 0;
 
             let weight = 0;
-
-            // 1. 결승 진출 대진 일치 가중치 (최대 40%)
             const actualFinals = actual.finalists || ["스페인", "아르헨티나"]; 
             const hasA = user.finalistA && actualFinals.includes(user.finalistA);
             const hasB = user.finalistB && actualFinals.includes(user.finalistB);
@@ -772,14 +711,12 @@
             if (hasA && hasB) weight += 40; 
             else if (hasA || hasB) weight += 15; 
 
-            // 2. 최종 우승팀 시뮬레이션 가중치 (최대 30%)
             if (user.winner === "스페인") {
                 weight += 30; 
             } else if (user.winner === "아르헨티나") {
                 weight += 20; 
             }
 
-            // 3. 필드 스코어 정교성 가중치 (최대 20%)
             const predictedDiff = user.scoreA - user.scoreB;
             if (predictedDiff === 1 && user.winner === "스페인") {
                 weight += 20; 
@@ -789,11 +726,9 @@
                 weight += 5;  
             }
 
-            // 4. 리더보드 순위 및 동점자 규칙 보정 가중치 (최대 10%)
             const rankBonus = Math.max(0, 10 * ((totalUsers - index) / totalUsers));
             weight += rankBonus;
 
-            // 5. 정규화 처리
             let probability = Math.round(weight);
             if (probability >= 100) probability = 99;
             if (probability <= 0) probability = 1;
@@ -801,19 +736,13 @@
             return probability;
         }
 
-        /**
-         * 가상 시나리오 기반으로 가상 총점을 계산하고 가상 1, 2위를 실시간 렌더링하는 함수
-         * - '서종훈' 및 '🤖 AI_Predictor'를 연산 전 필터링 처리합니다.
-         */
         function runScenarioSimulation() {
             if (!originalPredictionsData || originalPredictionsData.length === 0) return;
 
-            // 1. 입력 폼의 값 가져오기
             const simScoreSpain = parseInt(document.getElementById('simScoreSpain').value) || 0;
             const simScoreArgentina = parseInt(document.getElementById('simScoreArgentina').value) || 0;
             let simWinner = document.getElementById('simWinner').value;
 
-            // 💡 방어 코드: 90분 정규 시간 점수가 무승부가 아님에도 우승자가 점수 상황과 모순될 경우 자동 보정
             if (simScoreSpain > simScoreArgentina) {
                 simWinner = "스페인";
                 document.getElementById('simWinner').value = "스페인";
@@ -822,7 +751,6 @@
                 document.getElementById('simWinner').value = "아르헨티나";
             }
 
-            // 2. 가상의 오피셜 결과 개체(actual) 생성
             const virtualActual = {
                 finalists: ["스페인", "아르헨티나"],
                 scoreA: simScoreSpain,
@@ -831,13 +759,11 @@
                 runnerUp: simWinner === "스페인" ? "아르헨티나" : "스페인"
             };
 
-            // 경우의 수 연산 전 '서종훈'과 '🤖 AI_Predictor' 필터링하여 제외 처리
             const filteredPredictions = originalPredictionsData.filter(user => {
                 const nickname = user.nickname?.trim();
                 return nickname !== '서종훈' && nickname !== '🤖 AI_Predictor';
             });
 
-            // 3. 시뮬레이션 복제 리스트 점수 연산
             const simResults = filteredPredictions.map(user => {
                 return {
                     ...user,
@@ -845,7 +771,6 @@
                 };
             });
 
-            // 4. 동점자 룰(점수 내림차순 -> 제출일 오름차순) 적용하여 정렬
             simResults.sort((a, b) => {
                 if (b.simulatedScore !== a.simulatedScore) {
                     return b.simulatedScore - a.simulatedScore;
@@ -855,7 +780,6 @@
                 return dateA - dateB;
             });
 
-            // 5. 가상 1등, 2등, 3등, 4등을 UI에 주입
             if (simResults.length > 0) {
                 document.getElementById('simTop1Nickname').innerText = simResults[0].nickname;
                 document.getElementById('simTop1Score').innerText = `${simResults[0].simulatedScore}점`;
@@ -872,7 +796,6 @@
                 document.getElementById('simTop2Score').innerText = "0점";
             }
 
-            // 가상 3위 UI 주입
             if (simResults.length > 2) {
                 document.getElementById('simTop3Nickname').innerText = simResults[2].nickname;
                 document.getElementById('simTop3Score').innerText = `${simResults[2].simulatedScore}점`;
@@ -881,7 +804,6 @@
                 document.getElementById('simTop3Score').innerText = "0점";
             }
 
-            // 가상 4위 UI 주입
             if (simResults.length > 3) {
                 document.getElementById('simTop4Nickname').innerText = simResults[3].nickname;
                 document.getElementById('simTop4Score').innerText = `${simResults[3].simulatedScore}점`;
@@ -891,11 +813,9 @@
             }
         }
 
-        // [통계 집계 전용 함수]
         function renderInsights(rawPredictions, currentPredictions) {
             if (!rawPredictions || rawPredictions.length === 0) return;
 
-            // 1) 최다 우승 예측 국가 집계
             const winnerCounts = {};
             currentPredictions.forEach(p => {
                 if(p.winner && p.nickname !== '🤖 AI_Predictor') winnerCounts[p.winner] = (winnerCounts[p.winner] || 0) + 1;
@@ -917,7 +837,6 @@
                     </div>`;
             }).join('') || '<p class="text-gray-400 text-xs text-center py-4">집계된 데이터가 없습니다.</p>';
 
-            // 2) 최다 결승 진출 예측 국가 집계
             const finalistCounts = {};
             const activeHumanUsers = currentPredictions.filter(p => p.nickname !== '🤖 AI_Predictor');
             activeHumanUsers.forEach(p => {
@@ -939,7 +858,6 @@
                     </div>`;
             }).join('') || '<p class="text-gray-400 text-xs text-center py-4">집계된 데이터가 없습니다.</p>';
 
-            // 3) 가장 빠르게 참여한 사람 추출
             const timeSorted = [...rawPredictions].filter(p => (p.submittedAt || p.timestamp) && p.nickname !== '🤖 AI_Predictor')
                 .sort((a,b) => new Date(a.submittedAt || a.timestamp) - new Date(b.submittedAt || b.timestamp));
             
@@ -951,7 +869,6 @@
                 document.getElementById('fastestUserTime').innerText = '-';
             }
 
-            // 4) 🤖 AI_Predictor와 가장 가까운 1인 & 가장 먼 1인 추출
             const aiPredictor = currentPredictions.find(p => p.nickname === '🤖 AI_Predictor');
             if (aiPredictor && activeHumanUsers.length > 0) {
                 const similarityList = activeHumanUsers.map(user => {
@@ -998,7 +915,6 @@
                     finalists: ["스페인", "아르헨티나"], scoreA: 1, scoreB: 0, winner: "스페인", runnerUp: "아르헨티나" 
                 };
 
-                // 상단 오피셜 카드 업데이트 (준우승국 아르헨티나 반영)
                 document.getElementById('officialWinner').innerText = actual.winner ? `🎉 ${actual.winner}` : '결정 대기 중';
                 document.getElementById('officialRunnerUp').innerText = "아르헨티나";
                 
@@ -1008,7 +924,6 @@
                     document.getElementById('officialScore').innerText = '결전 대기 중';
                 }
 
-                // 🤖 [AI 전략 매칭 데이터 반영] 
                 const aiPredictMock = {
                     nickname: "🤖 AI_Predictor",
                     finalistA: "스페인",
@@ -1019,15 +934,12 @@
                     submittedAt: new Date().toISOString()
                 };
 
-                // AI 데이터 상단 바 매핑
                 document.getElementById('aiPredictedWinner').innerText = `🇪🇸 ${aiPredictMock.winner} (58%)`;
                 document.getElementById('aiPredictedFinals').innerText = `${aiPredictMock.finalistA} vs ${aiPredictMock.finalistB}`;
                 document.getElementById('aiPredictedScore').innerText = `${aiPredictMock.scoreA} : ${aiPredictMock.scoreB}`;
 
-                // 참여자 어레이에 AI 오브젝트 추가 삽입
                 rawPredictions.push(aiPredictMock);
 
-                // 실시간 스코어 계산 매핑
                 const predictions = rawPredictions.map(user => {
                     return { 
                         ...user,
@@ -1035,7 +947,6 @@
                     };
                 });
 
-                // 동점 시간 정렬
                 predictions.sort((a, b) => {
                     if (b.score !== a.score) return b.score - a.score;
                     const dateA = new Date(a.submittedAt || a.timestamp);
@@ -1043,7 +954,6 @@
                     return dateA - dateB;
                 });
 
-                // 🤖 AI 성능 순위 백분위 계산
                 const aiCurrentIndex = predictions.findIndex(p => p.nickname === '🤖 AI_Predictor');
                 if (aiCurrentIndex !== -1 && predictions.length > 1) {
                     const percentile = Math.round(((predictions.length - (aiCurrentIndex + 1)) / (predictions.length - 1)) * 100);
@@ -1052,10 +962,8 @@
                     document.getElementById('aiPerformanceRank').innerText = "측정 불가";
                 }
 
-                // 랭킹 테이블 아래 [인사이트 통계 렌더링]
                 renderInsights(rawPredictions, predictions);
 
-                // 로그인 유저 1:1 비교 보드
                 const myData = predictions.find(p => p.nickname === myNickname);
                 const comparisonBoard = document.getElementById('myComparisonBoard');
                 
@@ -1094,7 +1002,6 @@
                     comparisonBoard.classList.add('hidden');
                 }
 
-                // 랭킹 테이블 DOM 렌더링
                 tbody.innerHTML = '';
                 if (predictions.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-gray-500">참여한 유저 데이터가 없습니다.</td></tr>`;
@@ -1149,11 +1056,9 @@
                     `;
                 });
 
-                // 경우의 수 계산을 위한 원본 예측 데이터 보관 및 최초 실행 활성화
                 originalPredictionsData = JSON.parse(JSON.stringify(predictions));
                 runScenarioSimulation();
 
-                // 인풋 값 변화 이벤트 연동
                 document.getElementById('simScoreSpain').addEventListener('input', runScenarioSimulation);
                 document.getElementById('simScoreArgentina').addEventListener('input', runScenarioSimulation);
                 document.getElementById('simWinner').addEventListener('change', runScenarioSimulation);
@@ -1166,7 +1071,6 @@
 
         window.onload = loadDashboard;
 
-        // 전역 변수로 말풍선 타이벌 관리 (모바일 클릭 대응)
         let tooltipTimer;
         
         function showGlobalTooltip(event) {
@@ -1200,10 +1104,6 @@
         
         document.addEventListener('click', hideGlobalTooltip);
 
-        /**
-         * 실시간 순위표 테이블에서 1, 2위 정보를 추출하여 상단 경품 카드에 업데이트하는 함수
-         * - '서종훈' 및 '🤖 AI_Predictor' 닉네임을 완전 제외한 순수 참여자 데이터 기반으로 추출합니다.
-         */
         function updatePrizeCandidates() {
             const table = document.getElementById('rankingTable');
             if (!table) return;
@@ -1214,18 +1114,14 @@
             const NICKNAME_INDEX = 1; 
             const PROB_INDEX = 7;     
         
-            // 제외할 닉네임 조건 정의 (특정 문자열 포함 여부 체크)
             const excludedKeywords = ["서종훈", "Predictor"];
             const validCandidates = [];
 
-            // 랭킹 테이블의 모든 행을 순회하며 대상 필터링
             rows.forEach(row => {
                 if (row.cells.length > NICKNAME_INDEX) {
                     const fullText = row.cells[NICKNAME_INDEX]?.innerText || "";
-                    // 'MY', 'AI' 등의 서브 태그 텍스트 제거하고 순수 닉네임만 추출
                     let cleanNickname = fullText.replace(/MY|AI/g, '').trim();
                     
-                    // 제외 키워드 중 하나라도 포함되어 있는지 검사
                     const isExcluded = excludedKeywords.some(keyword => cleanNickname.includes(keyword));
                     
                     if (!isExcluded && cleanNickname !== "") {
@@ -1236,7 +1132,6 @@
                 }
             });
         
-            // 상단 1등 큰 카드 업데이트
             if (validCandidates.length > 0) {
                 const nickEl1 = document.getElementById('top1-nickname');
                 const probEl1 = document.getElementById('top1-prob');
@@ -1249,7 +1144,6 @@
                 if (probEl1) probEl1.innerText = "0.0%";
             }
         
-            // 상단 2등 큰 카드 업데이트
             if (validCandidates.length > 1) {
                 const nickEl2 = document.getElementById('top2-nickname');
                 const probEl2 = document.getElementById('top2-prob');
@@ -1278,9 +1172,6 @@
             }
         });
 
-        /**
-         * 기능 1: HTML 파일로 로컬 저장하는 함수
-         */
         function saveAsHTML() {
             const htmlContent = document.documentElement.outerHTML;
             const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
@@ -1292,28 +1183,41 @@
         }
 
         /**
-         * 기능 2: 대시보드를 이미지(PNG)로 캡처하여 저장하는 함수
+         * 기능 2: 대시보드를 이미지(PNG)로 캡처하여 저장하는 함수 (오류 해결 버전)
          */
-        function saveAsImage() {
-            // 스크롤 전체를 캡처하기 위해 잠시 스타일 보정 및 캡처 영역 타겟 설정
+        async function saveAsImage() {
             const target = document.querySelector('.max-w-6xl');
-            if(!target) return alert('캡처 대상을 찾을 수 없습니다.');
+            if (!target) return alert('캡처 대상을 찾을 수 없습니다.');
 
-            // html2canvas 옵션 적용하여 투명도 분리 및 고해상도 처리
-            html2canvas(target, {
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: '#f3f4f6', // bg-gray-100 색상과 매칭
-                scale: 2 // 해상도 2배 선명하게
-            }).then(canvas => {
+            // 1. 캡처 전 스크롤을 최상단으로 이동하여 좌표 잘림 방지
+            window.scrollTo(0, 0);
+
+            try {
+                // 2. html2canvas 안정성 강화 옵션 부여
+                const canvas = await html2canvas(target, {
+                    useCORS: true,           // 크로스 도메인 리소스 허용
+                    allowTaint: false,        // Canvas 오염 방지 (true 설정 시 toDataURL 오류 발생 원인 해결)
+                    backgroundColor: '#f3f4f6', // bg-gray-100 색상 명시
+                    scale: 2,                 // 선명한 해상도 (2배)
+                    logging: false,           // 콘솔 로그 억제
+                    windowWidth: document.documentElement.scrollWidth,
+                    windowHeight: document.documentElement.scrollHeight,
+                    foreignObjectRendering: false
+                });
+
+                // 3. 이미지 다운로드 처리
+                const imageURI = canvas.toDataURL('image/png');
                 const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
+                link.href = imageURI;
                 link.download = `worldcup_dashboard_${new Date().toISOString().slice(0,10)}.png`;
+                document.body.appendChild(link);
                 link.click();
-            }).catch(err => {
-                console.error('이미지 저장 중 오류가 발생했습니다:', err);
-                alert('이미지 생성 도중 오류가 발생했습니다.');
-            });
+                document.body.removeChild(link);
+
+            } catch (err) {
+                console.error('이미지 저장 중 오류 발생:', err);
+                alert('이미지 생성 도중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+            }
         }
     </script>
     
