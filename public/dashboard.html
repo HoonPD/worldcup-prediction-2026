@@ -823,7 +823,7 @@
                 runnerUp: simWinner === "스페인" ? "아르헨티나" : "스페인"
             };
 
-            // [핵심 변경] 경우의 수 연산 전 '서종훈'과 '🤖 AI_Predictor' 필터링하여 제외 처리
+            // 경우의 수 연산 전 '서종훈'과 '🤖 AI_Predictor' 필터링하여 제외 처리
             const filteredPredictions = originalPredictionsData.filter(user => {
                 const nickname = user.nickname?.trim();
                 return nickname !== '서종훈' && nickname !== '🤖 AI_Predictor';
@@ -864,7 +864,7 @@
                 document.getElementById('simTop2Score').innerText = "0점";
             }
 
-            // 🟢 [추가] 가상 3위 UI 주입
+            // 가상 3위 UI 주입
             if (simResults.length > 2) {
                 document.getElementById('simTop3Nickname').innerText = simResults[2].nickname;
                 document.getElementById('simTop3Score').innerText = `${simResults[2].simulatedScore}점`;
@@ -873,7 +873,7 @@
                 document.getElementById('simTop3Score').innerText = "0점";
             }
 
-            // 🟢 [추가] 가상 4위 UI 주입
+            // 가상 4위 UI 주입
             if (simResults.length > 3) {
                 document.getElementById('simTop4Nickname').innerText = simResults[3].nickname;
                 document.getElementById('simTop4Score').innerText = `${simResults[3].simulatedScore}점`;
@@ -990,9 +990,9 @@
                     finalists: ["스페인", "아르헨티나"], scoreA: 1, scoreB: 0, winner: "스페인", runnerUp: "아르헨티나" 
                 };
 
-                // 상단 오피셜 카드 업데이트
+                // 상단 오피셜 카드 업데이트 (준우승국 아르헨티나 반영)
                 document.getElementById('officialWinner').innerText = actual.winner ? `🎉 ${actual.winner}` : '결정 대기 중';
-                document.getElementById('officialRunnerUp').innerText = actual.runnerUp ? actual.runnerUp : '결정 대기 중';
+                document.getElementById('officialRunnerUp').innerText = "아르헨티나";
                 
                 if (actual.finalists && actual.finalists.length >= 2 && actual.scoreA !== null && actual.scoreB !== null) {
                     document.getElementById('officialScore').innerText = `${actual.finalists[0]} ${actual.scoreA} : ${actual.scoreB} ${actual.finalists[1]}`;
@@ -1158,7 +1158,7 @@
 
         window.onload = loadDashboard;
 
-        // 전역 변수로 말풍선 타이머 관리 (모바일 클릭 대응)
+        // 전역 변수로 말풍선 타이벌 관리 (모바일 클릭 대응)
         let tooltipTimer;
         
         function showGlobalTooltip(event) {
@@ -1194,6 +1194,7 @@
 
         /**
          * 실시간 순위표 테이블에서 1, 2위 정보를 추출하여 상단 경품 카드에 업데이트하는 함수
+         * - '서종훈' 및 '🤖 AI_Predictor' 닉네임을 완전 제외한 순수 참여자 데이터 기반으로 추출합니다.
          */
         function updatePrizeCandidates() {
             const table = document.getElementById('rankingTable');
@@ -1205,30 +1206,44 @@
             const NICKNAME_INDEX = 1; 
             const PROB_INDEX = 7;     
         
-            const firstRow = rows[0];
-            if (firstRow && firstRow.cells.length > NICKNAME_INDEX) {
-                const nick1 = firstRow.cells[NICKNAME_INDEX]?.innerText.trim() || "참가자 없음";
-                let prob1 = firstRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
-                prob1 = prob1.replace('ⓘ', '').trim(); 
+            // 제외할 닉네임 목록 정의
+            const excludedNicknames = ["서종훈", "🤖 AI_Predictor"];
+            const validCandidates = [];
+
+            // 랭킹 테이블의 모든 행을 순회하며 대상 필터링
+            rows.forEach(row => {
+                if (row.cells.length > NICKNAME_INDEX) {
+                    const fullText = row.cells[NICKNAME_INDEX]?.innerText || "";
+                    // 'MY', 'AI' 등의 서브 태그 텍스트 제거하고 순수 닉네임만 추출
+                    let cleanNickname = fullText.replace(/MY|AI/g, '').trim();
+                    
+                    if (!excludedNicknames.includes(cleanNickname) && cleanNickname !== "") {
+                        let prob = row.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
+                        prob = prob.replace('ⓘ', '').trim();
+                        validCandidates.push({ nickname: cleanNickname, probability: prob });
+                    }
+                }
+            });
         
+            // 상단 1등 큰 카드 업데이트
+            if (validCandidates.length > 0) {
                 const nickEl1 = document.getElementById('top1-nickname');
                 const probEl1 = document.getElementById('top1-prob');
-                if (nickEl1) nickEl1.innerText = nick1;
-                if (probEl1) probEl1.innerText = prob1;
+                if (nickEl1) nickEl1.innerText = validCandidates[0].nickname;
+                if (probEl1) probEl1.innerText = validCandidates[0].probability;
+            } else {
+                const nickEl1 = document.getElementById('top1-nickname');
+                const probEl1 = document.getElementById('top1-prob');
+                if (nickEl1) nickEl1.innerText = "참가자 없음";
+                if (probEl1) probEl1.innerText = "0.0%";
             }
         
-            if (rows.length > 1) {
-                const secondRow = rows[1];
-                if (secondRow && secondRow.cells.length > NICKNAME_INDEX) {
-                    const nick2 = secondRow.cells[NICKNAME_INDEX]?.innerText.trim() || "참가자 없음";
-                    let prob2 = secondRow.cells[PROB_INDEX]?.innerText.trim() || "0.0%";
-                    prob2 = prob2.replace('ⓘ', '').trim();
-        
-                    const nickEl2 = document.getElementById('top2-nickname');
-                    const probEl2 = document.getElementById('top2-prob');
-                    if (nickEl2) nickEl2.innerText = nick2;
-                    if (probEl2) probEl2.innerText = prob2;
-                }
+            // 상단 2등 큰 카드 업데이트
+            if (validCandidates.length > 1) {
+                const nickEl2 = document.getElementById('top2-nickname');
+                const probEl2 = document.getElementById('top2-prob');
+                if (nickEl2) nickEl2.innerText = validCandidates[1].nickname;
+                if (probEl2) probEl2.innerText = validCandidates[1].probability;
             } else {
                 const nickEl2 = document.getElementById('top2-nickname');
                 const probEl2 = document.getElementById('top2-prob');
