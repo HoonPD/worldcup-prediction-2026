@@ -144,22 +144,28 @@
                     </div>
                 </div>
             
-                <!-- FINAL MATCH (스페인 VS 아르헨티나 확정) -->
-                <div class="bg-gradient-to-r from-amber-950/80 to-yellow-950/90 rounded-lg p-2 border-2 border-amber-400/60 flex flex-col gap-1.5 shadow-md shadow-amber-950/50 animate-pulse">
+                <!-- FINAL MATCH (종료 및 결과 반영: 스페인 우승) -->
+                <div class="bg-gradient-to-r from-amber-950/80 to-yellow-950/90 rounded-lg p-2 border-2 border-amber-400/60 flex flex-col gap-1.5 shadow-md shadow-amber-950/50 opacity-85">
                     <div class="flex justify-between text-[9px] text-amber-300 font-black px-0.5 tracking-wider">
                         <span>🔥 FINAL MATCH (결승전)</span>
-                        <span class="text-yellow-400">7월 20일 04:00</span>
+                        <span class="text-slate-400">경기 종료</span>
                     </div>
-                    <div class="flex items-center justify-center gap-3 py-0.5 bg-black/30 rounded-md">
+                    <div class="flex items-center justify-center gap-3 py-0.5 bg-black/30 rounded-md relative">
+                        <!-- 스페인 (승리: 하이라이트 효과) -->
                         <div class="flex items-center gap-1.5 w-24 justify-end">
-                            <span class="text-xs font-black text-amber-300">스페인</span>
-                            <img src="https://flagcdn.com/w40/es.png" alt="Spain" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
+                            <span class="text-xs font-black text-amber-300">스페인 🎉</span>
+                            <img src="https://flagcdn.com/w40/es.png" alt="Spain" class="h-3.5 w-5 object-cover rounded-sm shadow-xs border border-amber-400/50">
                         </div>
-                        <span class="text-[10px] font-black text-amber-400">VS</span>
-                        <!-- 아르헨티나로 대진 확정 -->
-                        <div class="flex items-center gap-1.5 w-24 justify-start">
+                        <!-- 스코어 (1:0) -->
+                        <div class="flex items-center gap-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-black/40 text-white">
+                            <span class="text-amber-400">1</span>
+                            <span class="text-[10px] text-slate-500 font-bold">:</span>
+                            <span class="opacity-50 font-medium">0</span>
+                        </div>
+                        <!-- 아르헨티나 (패배: 투명도 적용) -->
+                        <div class="flex items-center gap-1.5 w-24 justify-start opacity-50">
                             <img src="https://flagcdn.com/w40/ar.png" alt="Argentina" class="h-3.5 w-5 object-cover rounded-sm shadow-xs">
-                            <span class="text-xs font-black text-amber-300">아르헨티나</span>
+                            <span class="text-xs font-bold text-white">아르헨티나</span>
                         </div>
                     </div>
                 </div>
